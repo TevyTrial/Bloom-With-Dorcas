@@ -51,8 +51,10 @@ public enum LandState
         select.SetActive(isSelected);
     }
 
+    //when player presses the interact button
     public void Interact() {
         //interaction
         Debug.Log("Interacted with land");
+        SwitchState(LandState.Tilled);
     }
 }

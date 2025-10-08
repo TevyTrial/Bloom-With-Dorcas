@@ -384,7 +384,7 @@ GameObject:
   - component: {fileID: 552713738}
   - component: {fileID: 552713737}
   - component: {fileID: 552713740}
-  - component: {fileID: 552713741}
+  - component: {fileID: 552713743}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -431,11 +431,11 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
-  far clip plane: 1000
-  field of view: 60
+  near clip plane: 0.2
+  far clip plane: 500
+  field of view: 40
   orthographic: 0
-  orthographic size: 5
+  orthographic size: 10
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -460,7 +460,7 @@ Transform:
   m_GameObject: {fileID: 552713736}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 591, y: 3, z: 172.76}
+  m_LocalPosition: {x: 590.7, y: 2.8864, z: 170.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -510,7 +510,7 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
---- !u!114 &552713741
+--- !u!114 &552713743
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -523,7 +523,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraController
   playerPos: {fileID: 0}
-  offset: {x: 0, y: 5, z: -10}
+  offset: {x: 0, y: 11, z: -15}
   smoothTime: 0.08
   minY: 0.5
 --- !u!1 &734465856
@@ -735,6 +735,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5106783932826154744, guid: fc9746ebffceec5438d8e202a46b65f8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a394e00ef7db7a3489b7d27343cff6b2, type: 2}
     - target: {fileID: 5718486967013898796, guid: fc9746ebffceec5438d8e202a46b65f8, type: 3}
       propertyPath: m_Name
       value: Land (2)
@@ -1035,6 +1039,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5106783932826154744, guid: fc9746ebffceec5438d8e202a46b65f8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a394e00ef7db7a3489b7d27343cff6b2, type: 2}
     - target: {fileID: 5718486967013898796, guid: fc9746ebffceec5438d8e202a46b65f8, type: 3}
       propertyPath: m_Name
       value: Land (3)
@@ -1829,7 +1837,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   speed: 5
   runSpeed: 8
-  walkSpeed: 4
+  walkSpeed: 5
 --- !u!54 &2071925916
 Rigidbody:
   m_ObjectHideFlags: 0

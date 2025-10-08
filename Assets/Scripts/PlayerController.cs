@@ -9,18 +9,37 @@ public class PlayerController : MonoBehaviour
 
     [Header("Movement System")]
     public float runSpeed = 8f;
-    public float walkSpeed = 4f;
+    public float walkSpeed = 5f;
+
+    //Interact components
+    PlayerInteraction PlayerInteraction;
 
     void Start()
     {
         controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
+
+        //get interaction component
+        PlayerInteraction = GetComponentInChildren<PlayerInteraction>();
       
     }
 
     void Update()
     {
+        //runs the movement
         Move();
+
+        //runs the interaction
+        Interact();
+
+    }
+
+    public void Interact() {
+        //left mouse click
+        if(Input.GetButtonDown("Fire1")) {
+            PlayerInteraction.Interact();
+        }
+
     }
 
     void Move()
