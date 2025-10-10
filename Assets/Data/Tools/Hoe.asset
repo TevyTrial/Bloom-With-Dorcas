@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fb7bcf1b2fcb2346ad77f367252afff, type: 3}
   m_Name: Hoe
   m_EditorClassIdentifier: Assembly-CSharp::EquipmentData
-  description: 
+  description: Used to loosen soil and remove weeds. Perfect for preparing the ground
+    before planting new seeds.
   icon: {fileID: 1651196796, guid: eca998b49f535114bacd9d7cc23e4541, type: 3}
   gameModel: {fileID: 0}
   toolType: 0

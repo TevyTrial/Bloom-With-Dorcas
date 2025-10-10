@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fb7bcf1b2fcb2346ad77f367252afff, type: 3}
   m_Name: Pickaxe
   m_EditorClassIdentifier: Assembly-CSharp::EquipmentData
-  description: 
+  description: Designed to break hard soil and stones. Useful when clearing rocky
+    areas or digging deeper for planting beds.
   icon: {fileID: -1143771114, guid: eca998b49f535114bacd9d7cc23e4541, type: 3}
   gameModel: {fileID: 0}
   toolType: 0
