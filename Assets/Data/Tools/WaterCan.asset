@@ -16,4 +16,4 @@ MonoBehaviour:
     your garden hydrated and thriving.
   icon: {fileID: 1937969531, guid: 2199284b2143e0045af49d9f3f40c81c, type: 3}
   gameModel: {fileID: 0}
-  toolType: 0
+  toolType: 1

@@ -55,6 +55,41 @@ public enum LandState
     public void Interact() {
         //interaction
         Debug.Log("Interacted with land");
-        SwitchState(LandState.Tilled);
+        //Check player's equipped tool
+        ItemData toolSlot = InventoryManager.Instance.equippedTool;
+
+        //Try casting the itemdata in the toolslot as equipment data
+        EquipmentData equippedTool = toolSlot as EquipmentData;
+
+        //Check if the equipped tool the type of equipment data
+        if(equippedTool != null) {
+
+            //get the equipment type of the tool
+            EquipmentData.ToolType toolType = equippedTool.toolType;
+            
+            //Check the type of tool
+            switch(toolType) {
+                case EquipmentData.ToolType.Hoe:
+                    //If the land is in soil state, till it
+                    if(landstate == LandState.Soil) {
+                        SwitchState(LandState.Tilled);
+                    }
+                    break;
+                case EquipmentData.ToolType.WaterCan:
+                    //If the land is in tilled state, water it
+                    if(landstate == LandState.Tilled) {
+                        SwitchState(LandState.Watered);
+                    }
+                    break;
+                default:
+                    Debug.Log("Equipped tool is not a hoe or watering can");
+                    break;
+            
+            }
+        }
+        else {
+            Debug.Log("No tool equipped");
+        }
+
     }
 }

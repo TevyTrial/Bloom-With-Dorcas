@@ -16,4 +16,4 @@ MonoBehaviour:
     areas or digging deeper for planting beds.
   icon: {fileID: -1143771114, guid: eca998b49f535114bacd9d7cc23e4541, type: 3}
   gameModel: {fileID: 0}
-  toolType: 0
+  toolType: 3

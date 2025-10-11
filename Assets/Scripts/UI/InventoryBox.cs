@@ -4,11 +4,16 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class InventoryBox : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class InventoryBox : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     ItemData itemToDisplay;
 
-    public Image itemDisplayImage; 
+    public Image itemDisplayImage;
+
+    public enum InventoryBoxType { Tool, Item }; 
+    public InventoryBoxType boxType;
+
+    int boxIndex;
 
     public void Display(ItemData itemToDisplay)
     {
@@ -24,14 +29,22 @@ public class InventoryBox : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
             return; 
         }
 
-        itemDisplayImage.gameObject.SetActive(false);
-
-        
+        itemDisplayImage.gameObject.SetActive(false);     
     }
 
+    public virtual void OnPointerClick(PointerEventData eventData)
+    {
+        InventoryManager.Instance.InventoryToHand(boxIndex, boxType);
+    }
+    
+    //Assign the index of this box in the inventory array
+    public void AssignIndex(int boxIndex)
+    {
+        this.boxIndex = boxIndex; 
+    }
 
     //Display the item info on the item info box when the player mouses over
-    public void OnPointerEnter(PointerEventData eventData)
+    public virtual void OnPointerEnter(PointerEventData eventData)
     {
         UIManager.Instance.DisplayItemInfo(itemToDisplay);
     }

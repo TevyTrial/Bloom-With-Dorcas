@@ -16,4 +16,4 @@ MonoBehaviour:
     Essential for gathering wood around the garden.
   icon: {fileID: -498424668, guid: eca998b49f535114bacd9d7cc23e4541, type: 3}
   gameModel: {fileID: 0}
-  toolType: 0
+  toolType: 2

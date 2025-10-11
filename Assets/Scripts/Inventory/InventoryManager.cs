@@ -22,15 +22,89 @@ public class InventoryManager : MonoBehaviour
 
     [Header("Tools")]
     //Tool Slots
-    public ItemData[] tools = new ItemData[8];
+    public ItemData[] tools = new ItemData[10];
     //Tool in the player's hand
     public ItemData equippedTool = null; 
 
     [Header("Items")]
     //Item Slots
-    public ItemData[] items = new ItemData[8];
+    public ItemData[] items = new ItemData[10];
     //Item in the player's hand
     public ItemData equippedItem = null;
+
+    //Equippe a tool
+
+    //movement of item from inventory to hand
+    public void InventoryToHand(int boxIndex, InventoryBox.InventoryBoxType boxType)
+    {
+        if(boxType == InventoryBox.InventoryBoxType.Tool)
+        {
+            //Store the tool to a temp variable
+            ItemData toolToEquip = tools[boxIndex];
+
+            //Swap the tool in hand with the tool in the inventory array
+            tools [boxIndex] = equippedTool;
+
+            //Change the tool in hand to the new tool
+            equippedTool = toolToEquip;
+        }
+        else
+        {
+            ItemData itemToEquip = items[boxIndex];
+            items[boxIndex] = equippedItem;
+            equippedItem = itemToEquip;
+        }
+
+        //Update the inventory UI
+        UIManager.Instance.RenderInventory();
+    }
+
+    //movement of item from hand to inventory
+    public void HandToInventory(InventoryBox.InventoryBoxType boxType)
+    {
+        if(boxType == InventoryBox.InventoryBoxType.Tool)
+        {
+            if(equippedTool == null)
+            {
+                Debug.Log("No tool equipped to move to inventory.");
+                return;
+            }
+
+            // Find the first empty tool slot
+            for(int i = 0; i < tools.Length; i++)
+            {
+                if(tools[i] == null)
+                {
+                    tools[i] = equippedTool;
+                    equippedTool = null;
+                    return;
+                }
+            }
+
+            Debug.Log("No empty tool slots available in inventory.");
+        }
+        else
+        {
+            if(equippedItem == null)
+            {
+                Debug.Log("No item equipped to move to inventory.");
+                return;
+            }
+
+            // Find the first empty item slot
+            for(int i = 0; i < items.Length; i++)
+            {
+                if(items[i] == null)
+                {
+                    items[i] = equippedItem;
+                    equippedItem = null;
+                    return;
+                }
+            }
+
+            UIManager.Instance.RenderInventory();
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
