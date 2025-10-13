@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 2100000, guid: c7fb5a89d44d3334287bd40a6f264885, type: 2}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 1700716a8dd8948cf8c66ea34a2786d5, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 2304563}
   - component: {fileID: 2304562}
   m_Layer: 5
-  m_Name: Text (TMP) (1)
+  m_Name: TimeText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2101,7 +2101,7 @@ Transform:
   m_GameObject: {fileID: 552713736}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 590.7, y: 2.8864, z: 170.1}
+  m_LocalPosition: {x: 590.7, y: 10, z: 538}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2164,9 +2164,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraController
   playerPos: {fileID: 0}
-  offset: {x: 0, y: 11, z: -15}
   smoothTime: 0.08
   minY: 0.5
+  distance: 19
+  minDistance: 8
+  maxDistance: 31
+  zoomSpeed: 5
+  orbitSpeed: 180
+  minVerticalAngle: 10
+  maxVerticalAngle: 85
+  initialVerticalAngle: 40
+  initialHorizontalAngle: 180
 --- !u!224 &581439960 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2903972624413670673, guid: 74afc65d329e20c4ba0f0e33f6b151de, type: 3}
@@ -2199,8 +2207,9 @@ GameObject:
   - component: {fileID: 676605879}
   - component: {fileID: 676605878}
   - component: {fileID: 676605880}
+  - component: {fileID: 676605881}
   m_Layer: 0
-  m_Name: UIManager
+  m_Name: Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2272,6 +2281,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIManager
   toolEquipSlot: {fileID: 1256964112}
+  timeText: {fileID: 2304562}
+  dateText: {fileID: 866169775}
   inventoryPanel: {fileID: 47892400}
   toolSlots:
   - {fileID: 1756998335}
@@ -2299,6 +2310,35 @@ MonoBehaviour:
   itemEquip: {fileID: 288120296}
   itemTitle: {fileID: 806676952}
   itemDescription: {fileID: 1549003215}
+--- !u!114 &676605881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 676605877}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24581118a8b406b4a9cf2bc6081c8a86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TimeManager
+  currentTime:
+    year: 0
+    season: 0
+    day: 0
+    hour: 0
+    minute: 0
+  timeScale: 1
+  sunTransform: {fileID: 1544223718}
+  skyboxMaterials:
+  - {fileID: 2100000, guid: ab675e6698bde46fd87143fb0d7580cb, type: 2}
+  - {fileID: 2100000, guid: 023808db2bfa00d44929aa2176d29c76, type: 2}
+  - {fileID: 2100000, guid: fa95802f80bd745cfb5e9c89f7e22341, type: 2}
+  - {fileID: 2100000, guid: 6e00f8b39315691449f256740a5cb862, type: 2}
+  - {fileID: 2100000, guid: 1065b432639a84123a07ea43fe5ba4c9, type: 2}
+  - {fileID: 2100000, guid: ab675e6698bde46fd87143fb0d7580cb, type: 2}
+  timeThresholds: 0000000068010000e001000038040000b0040000a0050000
+  skyboxBlendSpeed: 0.5
 --- !u!1001 &678921038
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3258,7 +3298,7 @@ GameObject:
   - component: {fileID: 866169776}
   - component: {fileID: 866169775}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: DateText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6458,7 +6498,7 @@ Light:
   serializedVersion: 11
   m_Type: 1
   m_Color: {r: 1, g: 0.92148834, b: 0.8018868, a: 1}
-  m_Intensity: 1
+  m_Intensity: 1.5
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208

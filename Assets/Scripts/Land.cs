@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Land : MonoBehaviour
+public class Land : MonoBehaviour, ITimeTracker
 {
 public enum LandState
     {
@@ -16,6 +16,8 @@ public enum LandState
 
     public GameObject select;
 
+    GameTimeStamp timeWatered; //time when the land was watered
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -25,6 +27,9 @@ public enum LandState
         SwitchState(LandState.Soil);
 
         select.SetActive(false);
+
+        //Register as a listener to time updates
+        TimeManager.Instance.RegisterListener(this);
     }
 
     public void SwitchState(LandState newstatus) {
@@ -42,6 +47,9 @@ public enum LandState
                 break;
             case LandState.Watered:
                 materialToSwitch = wateredMat;
+                
+                //record the time when watered
+                timeWatered = TimeManager.Instance.GetGameTimeStamp();
                 break;
         }
         renderer.material = materialToSwitch;
@@ -91,5 +99,17 @@ public enum LandState
             Debug.Log("No tool equipped");
         }
 
+    }
+
+    public void ClockUpdate(GameTimeStamp currentTime)
+    {
+        //If the land is watered, check if 4 hours have passed since it was watered
+        if(landstate == LandState.Watered) {
+            int hoursPassed = GameTimeStamp.CompareTimeStamps(timeWatered, currentTime);
+            if(hoursPassed >= 24) {
+                //if 24 or more hours have passed, revert to tilled state
+                SwitchState(LandState.Tilled);
+            }
+        }
     }
 }

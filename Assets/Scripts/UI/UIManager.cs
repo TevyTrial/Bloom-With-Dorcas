@@ -4,12 +4,16 @@ using UnityEngine;
 using UnityEngine.UI; 
 using TMPro;
 
-public class UIManager : MonoBehaviour
+public class UIManager : MonoBehaviour, ITimeTracker
 {
     public static UIManager Instance { get; private set; }
     [Header("Setus Bar")]
     //Tool equip box
     public Image toolEquipSlot;
+
+    //Time display text
+    public TextMeshProUGUI timeText;
+    public TextMeshProUGUI dateText;
 
     [Header("Inventory System")]
     //The inventory panel
@@ -50,6 +54,9 @@ public class UIManager : MonoBehaviour
     {
         RenderInventory();
         AssignBoxIndexes();
+
+        //Register as a listener to time updates
+        TimeManager.Instance.RegisterListener(this);
     }
 
     //iterate and assign indexes to each inventory box
@@ -149,6 +156,34 @@ public class UIManager : MonoBehaviour
 
         itemTitle.text = data.name;
         itemDescription.text = data.description; 
+    }
+
+
+    //Update the time display in the UI
+    public void ClockUpdate(GameTimeStamp currentTime)
+    {
+        // Update the UI elements to reflect the current in-game time
+        // Example: Update a UI text element with currentTime.hour and currentTime.minute
+        
+        //Get the hour and minute 
+        int hour = currentTime.hour;
+        int minute = currentTime.minute;
+
+        //Format the time string (e.g., "HH:MM AM/PM")
+        string period = "AM ";
+        if(hour > 12){
+            period = "PM ";
+            hour -= 12; //Convert to 12-hour format
+        }
+
+        //Update the time text
+        timeText.text = period + hour + ":" + minute.ToString("00");
+        
+        //Update the date text
+        int day = currentTime.day;
+        string season = currentTime.season.ToString().Substring(0,3); //Get first 3 letters of the season
+        string dayOfWeek = currentTime.GetDayOfWeek().ToString().Substring(0,3); //Get first 3 letters of the day of the week
+        dateText.text = season + " " + day + " (" + dayOfWeek + ")" ;
     }
     
 }

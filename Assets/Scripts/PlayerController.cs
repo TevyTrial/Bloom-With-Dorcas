@@ -32,6 +32,17 @@ public class PlayerController : MonoBehaviour
         //runs the interaction
         Interact();
 
+        //TimeFastForward-Debug
+        //Skip the time when pressing the Y key
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            for (int i = 0; i < 30; i++)
+            {
+                TimeManager.Instance.Tick();
+            }
+        }
+        
+
     }
 
     public void Interact() {
