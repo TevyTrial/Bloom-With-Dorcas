@@ -49,11 +49,12 @@ public class CameraController : MonoBehaviour
         {
             yaw = initialHorizontalAngle;
             pitch = initialVerticalAngle;
-            distance = distance; // Reset to default distance
+            distance = 19f; // Reset to default distance
         }
 
         // Orbit controls (right mouse drag)
         if (Input.GetMouseButton(1))
+        //if (Input.GetKey(KeyCode.LeftAlt) && Input.GetMouseButton(0))
         {
             float mouseX = Input.GetAxis("Mouse X");
             float mouseY = Input.GetAxis("Mouse Y");

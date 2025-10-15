@@ -13,6 +13,10 @@ public class PlayerController : MonoBehaviour
 
     //Interact components
     PlayerInteraction PlayerInteraction;
+    
+    //Input cooldown to prevent rapid interactions
+    private float lastInteractionTime = 0f;
+    private float interactionCooldown = 0.1f; // 100ms cooldown
 
     void Start()
     {
@@ -46,9 +50,26 @@ public class PlayerController : MonoBehaviour
     }
 
     public void Interact() {
+        // Prevent input when Alt keys are held (to avoid conflicts)
+        if(Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt)) {
+            return;
+        }
+
+        // Check cooldown to prevent rapid interactions
+        if(Time.time - lastInteractionTime < interactionCooldown) {
+            return;
+        }
+
         //left mouse click
         if(Input.GetButtonDown("Fire1")) {
             PlayerInteraction.Interact();
+            lastInteractionTime = Time.time;
+        }
+
+        //press Q key for item interaction 
+        if(Input.GetKeyDown(KeyCode.Q)) {
+            PlayerInteraction.ItemInteract();
+            lastInteractionTime = Time.time;
         }
 
     }

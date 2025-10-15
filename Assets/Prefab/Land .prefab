@@ -1280,7 +1280,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1875
+  m_VersionIndex: 1878
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -1404,6 +1404,7 @@ MonoBehaviour:
   tilledMat: {fileID: 2100000, guid: 995243a46f04f6e4399de2fca2d95a88, type: 2}
   wateredMat: {fileID: 2100000, guid: 9abb154755e829a46b172c539e98fb45, type: 2}
   select: {fileID: 8580124031328657968}
+  cropObject: {fileID: 6253139027920421721, guid: 43c2e4431c5033744a861bbe6cd1dd73, type: 3}
 --- !u!1 &8580124031328657968
 GameObject:
   m_ObjectHideFlags: 0

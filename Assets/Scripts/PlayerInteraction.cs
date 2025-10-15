@@ -5,6 +5,10 @@ public class PlayerInteraction : MonoBehaviour
     PlayerController playerController;
 
     Land selectedLand = null;
+
+    //The interactable object the player is currently looking at
+    InteractableObject selectedInteractable = null;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -15,7 +19,12 @@ public class PlayerInteraction : MonoBehaviour
     void Update()
     {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, 1)) {
+        // Raycast forward from player position to detect objects in front
+        if (Physics.Raycast(transform.position, transform.forward, out hit, 2f)) {
+            OnInteractWithObject(hit);                    
+        }
+        // Also keep downward raycast for land detection
+        else if (Physics.Raycast(transform.position, Vector3.down, out hit, 1)) {
             OnInteractWithObject(hit);                    
         }
 
@@ -24,12 +33,31 @@ public class PlayerInteraction : MonoBehaviour
     //check if the selection of the land
     void OnInteractWithObject(RaycastHit hit) {
         Collider collider = hit.collider;
-
         if(collider.tag == "Land") {
             Land land = collider.GetComponent<Land>();
             SelectLand(land);
             return;
         }
+
+        //Check if looking at an interactable object
+        if(collider.tag == "Item") {
+            //Set the interactable to the currently looked at object
+            selectedInteractable = collider.GetComponent<InteractableObject>();
+            
+            //Show tooltip for the item
+            if(selectedInteractable != null && selectedInteractable.item != null) {
+                UIManager.Instance.ShowTooltip();
+            }
+
+            return;
+        }
+
+        //Deselect the old interactable
+        if(selectedInteractable != null) {
+            selectedInteractable = null;
+            UIManager.Instance.HideTooltip();
+        }
+
         //deselect the old land
         if(selectedLand != null) {
             selectedLand.Select(false);
@@ -50,12 +78,38 @@ public class PlayerInteraction : MonoBehaviour
     }
     
     public void Interact() {
+        //The player is not using any tool
+        if(InventoryManager.Instance.equippedItem != null) {
+            return;
+        }
+
         //selecting any lands
         if(selectedLand != null){
             selectedLand.Interact();
             return;
         }
-        Debug.Log("Not on any land");
+        Debug.Log("Not on land");
     }
+
+    //interacting with items
+    public void ItemInteract() {
+        
+        //Hand -> Inventory
+        if(InventoryManager.Instance.equippedItem != null) {
+            InventoryManager.Instance.HandToInventory(InventoryBox.InventoryBoxType.Item);
+            return;
+        }
+
+        //Check if looking at an interactable object
+        if(selectedInteractable != null) {
+            //pick up the item
+            selectedInteractable.Pickup();
+            //Hide tooltip after pickup
+            UIManager.Instance.HideTooltip();
+            selectedInteractable = null;
+            return;
+        }
+    }
+
 }
 

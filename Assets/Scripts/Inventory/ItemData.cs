@@ -8,6 +8,11 @@ public class ItemData : ScriptableObject
     //item icon
     public Sprite icon;
 
-    //gameobject to be shown in the screen
-    public GameObject gameModel;
+    [Header("Models")]
+    //gameobject to be shown in the player's hand
+    public GameObject onHandModel;
+    
+    //gameobject to be shown as mature crop in world
+    public GameObject matureCropModel;
+    
 }

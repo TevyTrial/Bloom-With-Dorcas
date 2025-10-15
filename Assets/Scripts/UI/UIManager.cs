@@ -36,6 +36,10 @@ public class UIManager : MonoBehaviour, ITimeTracker
 
     public TextMeshProUGUI itemDescription;
 
+    [Header("Tooltip System")]
+    //Tooltip panel 
+    public GameObject tooltipPanel;
+
     private void Awake()
     {
         //If there is more than one instance, destroy the extra
@@ -156,6 +160,24 @@ public class UIManager : MonoBehaviour, ITimeTracker
 
         itemTitle.text = data.name;
         itemDescription.text = data.description; 
+    }
+
+    //Show tooltip
+    public void ShowTooltip()
+    {
+        if(tooltipPanel != null)
+        {
+            tooltipPanel.SetActive(true);
+        }
+    }
+
+    //Hide tooltip
+    public void HideTooltip()
+    {
+        if(tooltipPanel != null)
+        {
+            tooltipPanel.SetActive(false);
+        }
     }
 
 
