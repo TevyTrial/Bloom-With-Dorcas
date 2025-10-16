@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9147996d92eccb4b8c175b932008c52, type: 3}
+  m_Name: Carrot Seeds
+  m_EditorClassIdentifier: Assembly-CSharp::SeedData
+  description: Carrot
+  icon: {fileID: -1476294837, guid: ab7af8c09d0724c448d524ead916bcd4, type: 3}
+  onHandModel: {fileID: 3654242880184669010, guid: cfb45b707b81a514f87d55ccc2267f65, type: 3}
+  CropToYield: {fileID: 11400000, guid: f4815409f2f207c488111922386e455c, type: 2}
+  growTimeInDays: 3
+  growthStageModels:
+  - {fileID: 857558189176294040, guid: 3a7738bad1e044d4e847818f1e904c9b, type: 3}
+  - {fileID: 2490900442644133163, guid: c7499c1981b4d884d80033e831ce1f7d, type: 3}
+  - {fileID: 6795705778093056344, guid: a8d607942bb5cbb49a932ffb66e4d639, type: 3}
+  - {fileID: 1493645133146298436, guid: c706a025c35c4c74ebca5ad4f74751d1, type: 3}
+  WiltedModel: {fileID: 8861379113781653186, guid: 35ba0983ab2a3be43833199ad1cce6b1, type: 3}

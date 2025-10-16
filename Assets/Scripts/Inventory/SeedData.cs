@@ -8,10 +8,10 @@ public class SeedData : ItemData
 
     //how many days it takes to grow
     public int growTimeInDays;
-    
-    //Seedling Gameobject
-    public GameObject Seedling;
 
-
+    [Header("Growth Stages")]
+    [Tooltip("Define all visual stages for this crop (in order). First stage is always the seed.")]
+    public GameObject[] growthStageModels; 
+    public GameObject WiltedModel;
 
 }

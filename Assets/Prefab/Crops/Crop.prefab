@@ -46,7 +46,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CropBehaviour
   seed: {fileID: 5415414739603770072}
-  currentStage: 0
 --- !u!1001 &4666225790850678848
 PrefabInstance:
   m_ObjectHideFlags: 0

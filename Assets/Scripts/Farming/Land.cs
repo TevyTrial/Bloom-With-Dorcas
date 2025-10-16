@@ -99,6 +99,14 @@ public enum LandState
                         SwitchState(LandState.Watered);
                     }
                     break;
+                case EquipmentData.ToolType.Rake:
+                    //Remove crop
+                    if(cropPlanted != null) {
+                        Destroy(cropPlanted.gameObject);
+                        cropPlanted = null;
+                    }
+                    break;
+                    
                 default:
                     Debug.Log("Equipped tool is not a hoe or watering can");
                     break;
@@ -143,19 +151,29 @@ public enum LandState
     public void ClockUpdate(GameTimeStamp currentTime)
     {
         //If the land is watered, check if 4 hours have passed since it was watered
-        if(landstate == LandState.Watered) {
+        if (landstate == LandState.Watered)
+        {
             int hoursPassed = GameTimeStamp.CompareTimeStamps(timeWatered, currentTime);
             Debug.Log("Hours passed since watered: " + hoursPassed);
 
             //Grow the planted crop
-            if(cropPlanted != null){
+            if (cropPlanted != null)
+            {
                 cropPlanted.grow();
             }
 
-            if(hoursPassed >= 24) {
+            if (hoursPassed >= 24)
+            {
                 //if 24 or more hours have passed, revert to tilled state
                 SwitchState(LandState.Tilled);
             }
         }
+
+        if (landstate == LandState.Tilled && cropPlanted != null)
+            {
+                //if 36 or more hours have passed, the crop wilts
+                    cropPlanted.wilted();
+                
+            }
     }
 }

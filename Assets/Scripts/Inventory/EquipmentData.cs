@@ -7,7 +7,8 @@ public class EquipmentData : ItemData
         Hoe, 
         WaterCan,
         Axe,
-        PickAxe
+        PickAxe,
+        Rake
     }
     public ToolType toolType;
 }

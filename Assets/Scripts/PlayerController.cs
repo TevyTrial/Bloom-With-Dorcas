@@ -11,6 +11,9 @@ public class PlayerController : MonoBehaviour
     public float runSpeed = 8f;
     public float walkSpeed = 5f;
 
+    [Header("Camera")]
+    public Transform cameraTransform; 
+
     //Interact components
     PlayerInteraction PlayerInteraction;
     
@@ -25,6 +28,12 @@ public class PlayerController : MonoBehaviour
 
         //get interaction component
         PlayerInteraction = GetComponentInChildren<PlayerInteraction>();
+
+        //auto-find camera if not assigned
+        if (cameraTransform == null)
+        {
+            cameraTransform = Camera.main.transform;
+        }
       
     }
 
@@ -40,7 +49,7 @@ public class PlayerController : MonoBehaviour
         //Skip the time when pressing the Y key
         if (Input.GetKeyDown(KeyCode.Y))
         {
-            for (int i = 0; i < 30; i++)
+            for (int i = 0; i < 60; i++)
             {
                 TimeManager.Instance.Tick();
             }
@@ -66,8 +75,8 @@ public class PlayerController : MonoBehaviour
             lastInteractionTime = Time.time;
         }
 
-        //press Q key for item interaction 
-        if(Input.GetKeyDown(KeyCode.Q)) {
+        //press F key for item interaction 
+        if(Input.GetKeyDown(KeyCode.F)) {
             PlayerInteraction.ItemInteract();
             lastInteractionTime = Time.time;
         }
@@ -78,8 +87,22 @@ public class PlayerController : MonoBehaviour
     {
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
-
+        /*
         Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
+        Vector3 velocity = speed * Time.deltaTime * direction; // units per second*/
+
+        // Get camera's forward and right directions (flatten to horizontal plane)
+        Vector3 cameraForward = cameraTransform.forward;
+        Vector3 cameraRight = cameraTransform.right;
+        
+        // Remove vertical component to keep movement on ground plane
+        cameraForward.y = 0f;
+        cameraRight.y = 0f;
+        cameraForward.Normalize();
+        cameraRight.Normalize();
+
+        // Calculate movement direction relative to camera
+        Vector3 direction = (cameraForward * vertical + cameraRight * horizontal).normalized;
         Vector3 velocity = speed * Time.deltaTime * direction; // units per second
 
         //shift

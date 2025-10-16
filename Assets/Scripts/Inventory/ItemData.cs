@@ -12,7 +12,4 @@ public class ItemData : ScriptableObject
     //gameobject to be shown in the player's hand
     public GameObject onHandModel;
     
-    //gameobject to be shown as mature crop in world
-    public GameObject matureCropModel;
-    
 }
