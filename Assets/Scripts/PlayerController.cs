@@ -59,10 +59,6 @@ public class PlayerController : MonoBehaviour
     }
 
     public void Interact() {
-        // Prevent input when Alt keys are held (to avoid conflicts)
-        if(Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt)) {
-            return;
-        }
 
         // Check cooldown to prevent rapid interactions
         if(Time.time - lastInteractionTime < interactionCooldown) {
@@ -130,5 +126,12 @@ public class PlayerController : MonoBehaviour
 
         
     }
+    /*
+    public void TriggerWateringAnimation()
+    {
+        animator.SetBool("Watering", true);
+    }
+    */
+
 
 }

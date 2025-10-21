@@ -3,26 +3,41 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
 
 public class InventoryBox : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     ItemData itemToDisplay;
+    int quantity;
 
     public Image itemDisplayImage;
+    public TextMeshProUGUI quantityText;
 
-    public enum InventoryBoxType { Tool, Item }; 
-    public InventoryBoxType boxType;
+    public enum InventoryType { Tool, Item }; 
+    public InventoryType boxType;
 
     int boxIndex;
 
-    public void Display(ItemData itemToDisplay)
+    public void Display(ItemSlotData itemSlot)
     {
+        //Set the variable name
+        itemToDisplay = itemSlot.itemData;
+        quantity = itemSlot.quantity;
+
+        //Default quantity
+        quantityText.text = "";
+
         //Check if there is an item to display
         if(itemToDisplay != null)
         {
             //Switch the icon over
             itemDisplayImage.sprite = itemToDisplay.icon;
-            this.itemToDisplay = itemToDisplay;
+            
+            //Set the quantity text if more than 1
+            if(quantity > 1)
+            {
+                quantityText.text = quantity.ToString();
+            }
 
             itemDisplayImage.gameObject.SetActive(true);
 

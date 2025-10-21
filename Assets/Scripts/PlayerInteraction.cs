@@ -78,27 +78,20 @@ public class PlayerInteraction : MonoBehaviour
     }
     
     public void Interact() {
-        //The player is not using any tool
-        if(InventoryManager.Instance.equippedItem != null) {
-            return;
-        }
+        
+        //Check if player has a tool equipped
+        bool toolEquipped = InventoryManager.Instance.SlotEquipped(InventoryBox.InventoryType.Tool);
 
         //selecting any lands
         if(selectedLand != null){
             selectedLand.Interact();
             return;
         }
-        Debug.Log("Not on land");
+        Debug.Log("[PlayerInteraction] Not on land");
     }
 
     //interacting with items
     public void ItemInteract() {
-        
-        //Hand -> Inventory
-        if(InventoryManager.Instance.equippedItem != null) {
-            InventoryManager.Instance.HandToInventory(InventoryBox.InventoryBoxType.Item);
-            return;
-        }
 
         //Check if looking at an interactable object
         if(selectedInteractable != null) {
@@ -109,6 +102,13 @@ public class PlayerInteraction : MonoBehaviour
             selectedInteractable = null;
             return;
         }
+
+        //Hand -> Inventory
+        if(InventoryManager.Instance.SlotEquipped(InventoryBox.InventoryType.Tool)) {
+            InventoryManager.Instance.HandToInventory(InventoryBox.InventoryType.Item);
+            return;
+        }
+
     }
 
 }

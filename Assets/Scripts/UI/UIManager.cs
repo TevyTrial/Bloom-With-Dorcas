@@ -10,6 +10,7 @@ public class UIManager : MonoBehaviour, ITimeTracker
     [Header("Setus Bar")]
     //Tool equip box
     public Image toolEquipSlot;
+    public TextMeshProUGUI toolEquipQuantityText;
 
     //Time display text
     public TextMeshProUGUI timeText;
@@ -78,12 +79,8 @@ public class UIManager : MonoBehaviour, ITimeTracker
     //Render the inventory screen to reflect the Player's Inventory. 
     public void RenderInventory()
     {
-        //Get the inventory tool slots from Inventory Manager
-        ItemData[] inventoryToolSlots = InventoryManager.Instance.tools;
-
-        //Get the inventory item slots from Inventory Manager
-        ItemData[] inventoryItemSlots = InventoryManager.Instance.items;
-
+        ItemSlotData[] inventoryToolSlots = InventoryManager.Instance.GetInventorySlots(InventoryBox.InventoryType.Tool);
+        ItemSlotData[] inventoryItemSlots = InventoryManager.Instance.GetInventorySlots(InventoryBox.InventoryType.Item);
         //Render the Tool section
         RenderInventoryPanel(inventoryToolSlots, toolSlots);
 
@@ -91,12 +88,15 @@ public class UIManager : MonoBehaviour, ITimeTracker
         RenderInventoryPanel(inventoryItemSlots, itemSlots);
 
         //Render the tool in hand section
-        toolEquip.Display(InventoryManager.Instance.equippedTool);
+        toolEquip.Display(InventoryManager.Instance.GetEquippedSlot(InventoryBox.InventoryType.Tool));
         //Render the item in hand section
-        itemEquip.Display(InventoryManager.Instance.equippedItem);
+        itemEquip.Display(InventoryManager.Instance.GetEquippedSlot(InventoryBox.InventoryType.Item));
 
         //Get Tools from inventory Manager
-        ItemData equippedTool = InventoryManager.Instance.equippedTool;
+        ItemData equippedTool = InventoryManager.Instance.GetEquippedItemSlots(InventoryBox.InventoryType.Tool);
+
+        //Get the quantity of the equipped tool
+        toolEquipQuantityText.text = "";
 
         //check if there is item to display
         if(equippedTool != null) {
@@ -104,6 +104,13 @@ public class UIManager : MonoBehaviour, ITimeTracker
             toolEquipSlot.sprite = equippedTool.icon;
 
             toolEquipSlot.gameObject.SetActive(true);
+
+            //Get quantity
+            int quantity = InventoryManager.Instance.GetEquippedSlot(InventoryBox.InventoryType.Tool).quantity;
+
+            if(quantity > 1) {
+                toolEquipQuantityText.text = quantity.ToString();
+            }
 
             return; 
         }
@@ -113,7 +120,7 @@ public class UIManager : MonoBehaviour, ITimeTracker
     }
 
     //Iterate through a slot in a section and display them in the UI
-    void RenderInventoryPanel(ItemData[] slots, InventoryBox[] uiSlots)
+    void RenderInventoryPanel(ItemSlotData[] slots, InventoryBox[] uiSlots)
     {
         for (int i = 0; i < uiSlots.Length; i++)
         {

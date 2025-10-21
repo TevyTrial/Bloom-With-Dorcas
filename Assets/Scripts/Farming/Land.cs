@@ -38,7 +38,9 @@ public enum LandState
 
     public void SwitchState(LandState newstatus) {
         //set land state and switch material
+        LandState oldState = landstate;
         landstate = newstatus;
+        Debug.Log($"[Land] SwitchState: {oldState} -> {newstatus}");
 
         //decide which material to switch to
         Material materialToSwitch = soilMat;
@@ -67,43 +69,67 @@ public enum LandState
     public void Interact() {
         //interaction
         Debug.Log("Interacted with land");
-        //Check player's equipped tool
-        ItemData toolSlot = InventoryManager.Instance.equippedTool;
-
-        //if no tool is equipped, return
-        if(toolSlot == null) {
-            Debug.Log("No tool equipped");
+        //Check if a tool is equipped first (defensive ordering)
+        bool toolEquipped = InventoryManager.Instance.SlotEquipped(InventoryBox.InventoryType.Tool);
+        Debug.Log($"[Land] SlotEquipped(Tool) = {toolEquipped}");
+        if (!toolEquipped) {
+            Debug.Log("[Land] No tool equipped");
             return;
         }
-        
+
+        //Now retrieve the equipped tool data and log details
+        ItemData toolSlot = InventoryManager.Instance.GetEquippedItemSlots(InventoryBox.InventoryType.Tool);
+        Debug.Log($"[Land] GetEquippedItemSlots(Tool) returned: " + (toolSlot == null ? "null" : toolSlot.name));
+
         //Try casting the itemdata in the toolslot as equipment data
         EquipmentData equippedTool = toolSlot as EquipmentData;
+        Debug.Log("[Land] Equipped item runtime type: " + (toolSlot == null ? "null" : toolSlot.GetType().Name));
 
         //Check if the equipped tool the type of equipment data
         if(equippedTool != null) {
 
             //get the equipment type of the tool
             EquipmentData.ToolType toolType = equippedTool.toolType;
+            Debug.Log("[Land] Equipped toolType: " + toolType);
             
             //Check the type of tool
             switch(toolType) {
                 case EquipmentData.ToolType.Hoe:
+                    Debug.Log($"[Land] Using Hoe - current state: {landstate}");
                     //If the land is in soil state, till it
                     if(landstate == LandState.Soil) {
+                        Debug.Log("[Land] Tilling soil -> tilled");
                         SwitchState(LandState.Tilled);
+                    } else {
+                        Debug.Log($"[Land] Cannot till - land is already {landstate}");
                     }
                     break;
                 case EquipmentData.ToolType.WaterCan:
+                    Debug.Log($"[Land] Using WaterCan - current state: {landstate}");
                     //If the land is in tilled state, water it
                     if(landstate == LandState.Tilled) {
+                        Debug.Log("[Land] Watering tilled land -> watered");
                         SwitchState(LandState.Watered);
+                        /*
+                        //Trigger watering animation
+                        PlayerController player = FindObjectOfType<PlayerController>();
+                        if(player != null) {
+                            player.TriggerWateringAnimation();
+                        }
+                        */
+                    } else {
+                        Debug.Log($"[Land] Cannot water - land must be tilled first (current: {landstate})");
                     }
                     break;
                 case EquipmentData.ToolType.Rake:
+                    Debug.Log($"[Land] Using Rake - current state: {landstate}");
                     //Remove crop
                     if(cropPlanted != null) {
+                        Debug.Log("[Land] Removing crop with rake");
                         Destroy(cropPlanted.gameObject);
                         cropPlanted = null;
+                    } else {
+                        Debug.Log("[Land] No crop to remove");
                     }
                     break;
                     
@@ -143,6 +169,10 @@ public enum LandState
                 return;
             }
             cropPlanted.plant(seedTool);
+
+            //Remove one seed from inventory
+            InventoryManager.Instance.ConsumeItem
+            (InventoryManager.Instance.GetEquippedSlot(InventoryBox.InventoryType.Tool));
         }
     
         

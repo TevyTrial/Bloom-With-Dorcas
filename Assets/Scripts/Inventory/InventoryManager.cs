@@ -18,115 +18,347 @@ public class InventoryManager : MonoBehaviour
             //Set the static instance to this instance
             Instance = this; 
         }
+        // Ensure equipped slots and inventory arrays are initialized to avoid null refs
+        InitializeSlots();
+    }
+
+    // Ensure no null slots exist so methods can call IsEmpty()/Stackable() safely
+    void InitializeSlots()
+    {
+        if (equippedToolSlot == null) equippedToolSlot = new ItemSlotData((ItemData)null, 0);
+        if (equippedItemSlot == null) equippedItemSlot = new ItemSlotData((ItemData)null, 0);
+
+        if (toolSlots == null) toolSlots = new ItemSlotData[10];
+        if (itemSlots == null) itemSlots = new ItemSlotData[10];
+
+        for (int i = 0; i < toolSlots.Length; i++)
+        {
+            if (toolSlots[i] == null) toolSlots[i] = new ItemSlotData((ItemData)null, 0);
+        }
+        for (int i = 0; i < itemSlots.Length; i++)
+        {
+            if (itemSlots[i] == null) itemSlots[i] = new ItemSlotData((ItemData)null, 0);
+        }
     }
 
     [Header("Tools")]
     //Tool Slots
-    public ItemData[] tools = new ItemData[10];
+    [SerializeField] private ItemSlotData[] toolSlots = new ItemSlotData[10];
     //Tool in the player's hand
-    public ItemData equippedTool = null; 
+    [SerializeField] private ItemSlotData equippedToolSlot = null;
 
     [Header("Items")]
     //Item Slots
-    public ItemData[] items = new ItemData[10];
+    [SerializeField] private ItemSlotData[] itemSlots = new ItemSlotData[10];
     //Item in the player's hand
-    public ItemData equippedItem = null;
+    [SerializeField] private ItemSlotData equippedItemSlot = null;
 
     //The transform for the player to hold the item
     public Transform handPoint;
 
     //movement of item from inventory to hand
-    public void InventoryToHand(int boxIndex, InventoryBox.InventoryBoxType boxType)
+    public void InventoryToHand(int boxIndex, InventoryBox.InventoryType boxType)
     {
-        if(boxType == InventoryBox.InventoryBoxType.Tool)
-        {
-            //Store the tool to a temp variable
-            ItemData toolToEquip = tools[boxIndex];
+        Debug.Log($"[InventoryManager] InventoryToHand called index={boxIndex} boxType={boxType}");
+        //The slot data in hand
+        ItemSlotData handEquip = equippedToolSlot;
+        //The array to change
+        ItemSlotData[] inventoryArr = toolSlots;
 
-            //Swap the tool in hand with the tool in the inventory array
-            tools [boxIndex] = equippedTool;
-
-            //Change the tool in hand to the new tool
-            equippedTool = toolToEquip;
-        }
-        else
-        {
-            ItemData itemToEquip = items[boxIndex];
-            items[boxIndex] = equippedItem;
-            equippedItem = itemToEquip;
-            RenderEquippedItem();
+        if(boxType == InventoryBox.InventoryType.Item) {
+            //Store the item to a temp variable
+            handEquip = equippedItemSlot;
+            inventoryArr = itemSlots;
         }
 
+        //Check if stackable
+        if(handEquip.Stackable(inventoryArr[boxIndex])) {
+            ItemSlotData slotToAlter = inventoryArr[boxIndex];
+            
+            //add the quantity to the hand slot
+            handEquip.AddQuantity(slotToAlter.quantity);
+
+            //empty the inventory slot
+            slotToAlter.Empty();
+
+        } else {
+            //not stackable, swap the items
+            //cache the inventory slot
+            ItemSlotData slotToEquip = new ItemSlotData(inventoryArr[boxIndex]);
+
+            //Change the inventory slot to the hand slot
+            inventoryArr[boxIndex] = new ItemSlotData(handEquip);
+
+            EquipHandSlot(slotToEquip);
+
+        }
+        //Update in scenes
+        //Always update hand rendering after a transfer so debug info is visible
+        RenderEquippedItem();
+        Debug.Log($"[InventoryManager] After InventoryToHand - equippedTool='{(equippedToolSlot==null||equippedToolSlot.itemData==null?"null":equippedToolSlot.itemData.name)}' equippedItem='{(equippedItemSlot==null||equippedItemSlot.itemData==null?"null":equippedItemSlot.itemData.name)}'");
         //Update the inventory UI
         UIManager.Instance.RenderInventory();
+
     }
 
     //movement of item from hand to inventory
-    public void HandToInventory(InventoryBox.InventoryBoxType boxType)
+    public void HandToInventory(InventoryBox.InventoryType boxType)
     {
-        if(boxType == InventoryBox.InventoryBoxType.Tool)
-        {
-            if(equippedTool == null)
-            {
-                Debug.Log("No tool equipped to move to inventory.");
-                return;
-            }
+        //The slot data in hand
+        ItemSlotData handEquip = equippedToolSlot;
+        //The array to change
+        ItemSlotData[] inventoryArr = toolSlots;
 
-            // Find the first empty tool slot
-            for(int i = 0; i < tools.Length; i++)
-            {
-                if(tools[i] == null)
-                {
-                    tools[i] = equippedTool;
-                    equippedTool = null;
-                    RenderEquippedItem();
-                    UIManager.Instance.RenderInventory();
-                    return;
+        if(boxType == InventoryBox.InventoryType.Item) {
+            handEquip = equippedItemSlot;
+            inventoryArr = itemSlots;
+        }
+
+        //Check if stackable
+        if(!StackableToInventory(handEquip, inventoryArr)) {
+            //Find an empty slot if not stackable
+            for(int i = 0; i < inventoryArr.Length; i++) {
+                if(inventoryArr[i].IsEmpty()) {
+                    inventoryArr[i] = new ItemSlotData(handEquip);
+                    handEquip.Empty();
+                    break;
                 }
             }
 
-            Debug.Log("No empty tool slots available in inventory.");
         }
-        else
-        {
-            if(equippedItem == null)
-            {
-                Debug.Log("No item equipped to move to inventory.");
-                return;
-            }
 
-            // Find the first empty item slot
-            for(int i = 0; i < items.Length; i++)
-            {
-                if(items[i] == null)
-                {
-                    items[i] = equippedItem;
-                    equippedItem = null;
-                    RenderEquippedItem();
-                    UIManager.Instance.RenderInventory();
-                    return;
-                }
-            }
-
-            UIManager.Instance.RenderInventory();
+         //Update in scenes
+        if(boxType == InventoryBox.InventoryType.Item) {
+            RenderEquippedItem();
         }
+        //Update the inventory UI
+        UIManager.Instance.RenderInventory();
+
+
+       
     }
+
+    //Iterate through the inventory array and check if the item in hand is stackable with any item in the inventory
+    public bool StackableToInventory(ItemSlotData itemSlot,ItemSlotData[] inventoryArr) {
+        for(int i = 0; i < inventoryArr.Length; i++) {
+            if(inventoryArr[i].Stackable(itemSlot)) {
+                inventoryArr[i].AddQuantity(itemSlot.quantity);
+                itemSlot.Empty();
+                return true;
+            }
+        }
+        return false;
+    }
+    
 
     //Render the item in the player's hand
     public void RenderEquippedItem()
     {
+        try
+        {
+            if (handPoint == null)
+            {
+                Debug.LogError("[InventoryManager] RenderEquippedItem: handPoint is null!");
+                return;
+            }
+
         //Reset object in hand
+        Debug.Log($"[InventoryManager] RenderEquippedItem: handPoint childCount={handPoint.childCount}");
         if(handPoint.childCount > 0)
         {
+            Debug.Log("[InventoryManager] RenderEquippedItem: Destroying existing child in handPoint");
             Destroy(handPoint.GetChild(0).gameObject);
         }
 
-        //Check if the player has an item equipped
-        if(equippedItem != null && equippedItem.onHandModel != null)
+        //Check if the player has an tool equipped
+        if(SlotEquipped(InventoryBox.InventoryType.Tool))
         {
-            //Instantiate the item model at the hand point
-            GameObject itemObj = Instantiate(equippedItem.onHandModel, handPoint);
+            //Instantiate the tool model at the hand point (defensive: ensure item and model exist)
+            ItemData data = GetEquippedItemSlots(InventoryBox.InventoryType.Tool);
+            Debug.Log($"[InventoryManager] RenderEquippedItem: Tool slot equipped -> data='{(data==null?"null":data.name)}'");
+            if (data != null)
+            {
+                if (data.onHandModel == null)
+                {
+                    Debug.Log($"[InventoryManager] RenderEquippedItem: No visual model (onHandModel) assigned for '{data.name}' - tool is equipped but invisible");
+                }
+                else
+                {
+                    try
+                    {
+                        GameObject inst = Instantiate(data.onHandModel, handPoint);
+    
+                    }
+                    catch (System.Exception ex)
+                    {
+                        Debug.LogError($"[InventoryManager] Exception instantiating tool onHandModel='{(data.onHandModel==null?"null":data.onHandModel.name)}': {ex}");
+                        // Fallback: create a visible debug cube so hand rendering still shows something
+                        GameObject fallback = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                        fallback.transform.SetParent(handPoint, false);
+                        fallback.transform.localScale = Vector3.one * 0.3f;
+                        Debug.Log("[InventoryManager] RenderEquippedItem: Fallback cube instantiated instead of tool model");
+                    }
+                }
+            }
             return;
+        }
+        //Check if the player has an item equipped
+        if(SlotEquipped(InventoryBox.InventoryType.Item))
+        {
+            //Instantiate the item model at the hand point (defensive: ensure item and model exist)
+            ItemData data = GetEquippedItemSlots(InventoryBox.InventoryType.Item);
+            Debug.Log($"[InventoryManager] RenderEquippedItem: Item slot equipped -> data='{(data==null?"null":data.name)}'");
+            if (data != null)
+            {
+                if (data.onHandModel == null)
+                {
+                    Debug.Log($"[InventoryManager] RenderEquippedItem: No visual model (onHandModel) assigned for '{data.name}' - item is equipped but invisible");
+                }
+                else
+                {
+                    try
+                    {
+                        GameObject inst = Instantiate(data.onHandModel, handPoint);
+                        Debug.Log($"[InventoryManager] RenderEquippedItem: Instantiated item onHandModel='{data.onHandModel.name}'");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        Debug.LogError($"[InventoryManager] Exception instantiating item onHandModel='{(data.onHandModel==null?"null":data.onHandModel.name)}': {ex}");
+                        GameObject fallback = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                        fallback.transform.SetParent(handPoint, false);
+                        fallback.transform.localScale = Vector3.one * 0.3f;
+                        Debug.Log("[InventoryManager] RenderEquippedItem: Fallback cube instantiated instead of item model");
+                    }
+                }
+            }
+            return;
+        }
+        Debug.Log("[InventoryManager] RenderEquippedItem: Nothing equipped");
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError("[InventoryManager] Exception in RenderEquippedItem: " + ex.ToString());
+        }
+    }
+
+    //Inventory slot data accessors
+
+    //Get function for the equipped item slots
+    public ItemData GetEquippedItemSlots(InventoryBox.InventoryType InventoryType)
+    {
+        // Defensive: return null if the slot is null or empty
+        if(InventoryType == InventoryBox.InventoryType.Item)
+        {
+            if (equippedItemSlot.IsEmpty()) return null;
+            return equippedItemSlot.itemData;
+        }
+        if (equippedToolSlot.IsEmpty()) return null;
+        return equippedToolSlot.itemData;
+
+    }
+
+    //Get function for the slots 
+    public ItemSlotData GetEquippedSlot(InventoryBox.InventoryType InventoryType)
+    {
+       if(InventoryType == InventoryBox.InventoryType.Item)
+        {
+            return equippedItemSlot;
+        }
+        return equippedToolSlot;
+    }
+
+    //Get function for the inventory slots
+    public ItemSlotData[] GetInventorySlots(InventoryBox.InventoryType InventoryType)
+    {
+        if(InventoryType == InventoryBox.InventoryType.Item)
+        {
+            return itemSlots;
+        }
+        return toolSlots;
+    }
+
+    //Check if slot in hand is equipped
+    public bool SlotEquipped(InventoryBox.InventoryType inventoryType)
+    {
+        if(inventoryType == InventoryBox.InventoryType.Item)
+        {
+            return equippedItemSlot != null && !equippedItemSlot.IsEmpty();
+        }
+        return equippedToolSlot != null && !equippedToolSlot.IsEmpty();
+    }
+
+    //Check if the item is a tool
+    public bool IsTool(ItemData item) {
+        //Check if the item is of type EquipmentData
+        //Try casting the itemdata as equipment data
+        EquipmentData equipment = item as EquipmentData;
+        if(equipment != null) {
+            return true;
+        }
+
+        //Check if the item is a seed
+        SeedData seed = item as SeedData;
+        return seed != null;
+    }
+
+    //Equip the hand slot with the specified item
+    public void EquipHandSlot(ItemData item)
+    {
+        bool isTool = IsTool(item);
+        Debug.Log($"[InventoryManager] EquipHandSlot(ItemData): equipping '{(item==null?"null":item.name)}' as {(isTool?"Tool":"Item")} ");
+        if(isTool) {
+            equippedToolSlot = new ItemSlotData(item);
+            return;
+        } else {
+            equippedItemSlot = new ItemSlotData(item);
+        }
+    }
+
+    public void EquipHandSlot(ItemSlotData slotData)
+    {
+        //Get the item data from the slot
+        ItemData itemData = slotData.itemData;
+        bool isTool = IsTool(itemData);
+        Debug.Log($"[InventoryManager] EquipHandSlot(ItemSlotData): equipping '{(itemData==null?"null":itemData.name)}' as {(isTool?"Tool":"Item")} (quantity={slotData.quantity})");
+        if(isTool) {
+            equippedToolSlot = new ItemSlotData(slotData);
+            return;
+        } else {
+            equippedItemSlot = new ItemSlotData(slotData);
+        }
+    }
+
+    public void ConsumeItem(ItemSlotData itemSlot) {
+        if(itemSlot.IsEmpty()) {
+            Debug.Log("No item to consume");
+            return;
+        }
+
+        itemSlot.Remove(1);
+        RenderEquippedItem();
+        UIManager.Instance.RenderInventory();
+    }
+
+    public void OnValidate() {
+        //Validate the hand slots
+        ValidateInventorySlots(equippedToolSlot);
+        ValidateInventorySlots(equippedItemSlot);
+
+        //Validate the inventory slots
+        ValidateInventorySlots(toolSlots);
+        ValidateInventorySlots(itemSlots);
+    }
+
+    //When giving the itemData value in the inspector, ensure the ItemSlotData arrays are valid
+    void ValidateInventorySlots(ItemSlotData slot) {
+        if(slot.itemData != null && slot.quantity == 0) {
+            slot.quantity = 1;
+        }
+    }
+
+    void ValidateInventorySlots(ItemSlotData[] array) {
+        foreach(ItemSlotData slot in array) {
+            ValidateInventorySlots(slot);
         }
     }
 

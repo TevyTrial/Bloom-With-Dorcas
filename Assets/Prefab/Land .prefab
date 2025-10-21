@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 722239701071377273}
   - component: {fileID: 1012451590098810612}
   - component: {fileID: 4753461174661012604}
-  - component: {fileID: 628389742119359249}
   - component: {fileID: 7166131418744529568}
+  - component: {fileID: 3113359943203714301}
   m_Layer: 0
   m_Name: 'Land '
   m_TagString: Land
@@ -1365,28 +1365,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1487161639922329002}
   m_Mesh: {fileID: 0}
---- !u!64 &628389742119359249
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1487161639922329002}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!114 &7166131418744529568
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1405,6 +1383,27 @@ MonoBehaviour:
   wateredMat: {fileID: 2100000, guid: 9abb154755e829a46b172c539e98fb45, type: 2}
   select: {fileID: 8580124031328657968}
   cropObject: {fileID: 6253139027920421721, guid: 43c2e4431c5033744a861bbe6cd1dd73, type: 3}
+--- !u!65 &3113359943203714301
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1487161639922329002}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.9971925, y: 1.0023661, z: 0.99896246}
+  m_Center: {x: 0.07574464, y: 0.041090984, z: 0.15237425}
 --- !u!1 &8580124031328657968
 GameObject:
   m_ObjectHideFlags: 0
