@@ -16,7 +16,7 @@ public class InventoryBox : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     public enum InventoryType { Tool, Item }; 
     public InventoryType boxType;
 
-    int boxIndex;
+    protected int boxIndex;
 
     public void Display(ItemSlotData itemSlot)
     {

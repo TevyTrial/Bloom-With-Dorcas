@@ -27,6 +27,10 @@ public class CropBehaviour : MonoBehaviour
     private int maxHealth = GameTimeStamp.ConvertHoursToMinutes(36); // 1.5 days in minutes
     private bool isWilted = false;
 
+    [Header("Instrument Audio")]
+    private AudioSource instrumentSource;
+    private InstrumentTrack assignedInstrument;
+    private bool hasMatureUnparented = false; // Track if we've unparented the mature crop
 
     public void plant(SeedData seedToGrow) {
         this.seedToGrow = seedToGrow;
@@ -36,6 +40,13 @@ public class CropBehaviour : MonoBehaviour
             Debug.LogError($"Seed {seedToGrow.name} has no growth stage models defined!");
             return;
         }
+        
+        // Reset growth state
+        growth = 0;
+        health = maxHealth;
+        currentStageIndex = 0;
+        isWilted = false;
+        hasMatureUnparented = false;
         
         // Total stages = seed (always present) + defined models
         totalStages = seedToGrow.growthStageModels.Length + 1;
@@ -82,7 +93,7 @@ public class CropBehaviour : MonoBehaviour
 
     public void grow()
     {
-        if (isWilted) return; // Do not grow if wilted
+        if (isWilted || hasMatureUnparented) return; // Do not grow if wilted or already matured
 
         //Increase growth points
         growth++;
@@ -107,13 +118,14 @@ public class CropBehaviour : MonoBehaviour
 
     public void wilted()
     {
-        // Don't wilt if it have not germenated yet
-        if (currentStageIndex == 0) return;
+        // Don't wilt if it have not germenated yet or already matured
+        if (currentStageIndex == 0 || hasMatureUnparented) return;
         
         health--;
         if (health <= 0 && !isWilted)
         {
             isWilted = true;
+            StopInstrument(); // Stop playing music when wilted
             SwitchToStage(-1);
         }
         Debug.Log($"Crop {seedToGrow.name} health: {health}/{maxHealth}");
@@ -157,15 +169,29 @@ public class CropBehaviour : MonoBehaviour
         }
         else if (stageIndex == totalStages - 1)
         {
-            // Final stage: Mature (unparent and destroy crop behavior)
+            // Final stage: Mature
             int matureIndex = stageObjects.Length - 1;
             if (stageObjects[matureIndex] != null)
             {
                 stageObjects[matureIndex].SetActive(true);
                 stageObjects[matureIndex].transform.parent = null;
-                Destroy(gameObject);
+
+                // Start playing instrument when crop matures
+                StartInstrument();
+
+                // Add CropInstrumentController to the mature crop so it can stop music when harvested
+                CropInstrumentController controller = stageObjects[matureIndex].AddComponent<CropInstrumentController>();
+                controller.Initialize(instrumentSource);
+
                 // Reset health on mature crop
                 health = maxHealth;
+                
+                // Mark that we've unparented the mature crop
+                hasMatureUnparented = true;
+                
+                // Destroy this CropBehaviour GameObject after a small delay
+                // This allows the tile to be replanted
+                Destroy(gameObject);
             }
         }
         else
@@ -178,126 +204,40 @@ public class CropBehaviour : MonoBehaviour
             }
         }
 
-        
-
         currentStageIndex = stageIndex;
-
-        
     }
 
-}
-/*
-    //Information on what the crop will yield when harvested
-    SeedData seedToGrow;
-
-    [Header("Crop Growth")]
-    public GameObject seed;
-    private GameObject seedling;
-    private GameObject mature;
-
-    public enum GrowthStage { Seed, Seedling, Mature }
-    public GrowthStage currentStage;
-
-    //The growth points of the crop
-    int growth;
-
-    //How many growth points are needed to advance to the next stage
-    int maxGrowth;
-
-    //Initialisation for the crop 
-    //Called when the seed is planted
-    /*
-    public void plant(SeedData seedToGrow) {
-        //save the seed information
-        this.seedToGrow = seedToGrow;
-
-        //instantiate the seed object
-        seedling = Instantiate(seedToGrow.Seedling, transform);
-
-        //get the crop to yield information
-        ItemData CropToYield = seedToGrow.CropToYield;
-
-        //Instantiate the mature crop object
-        mature = Instantiate(CropToYield.matureCropModel, transform);
-
-        //Convert Days to growth points
-        int hoursToGrow = GameTimeStamp.ConvertDaysToHours(seedToGrow.growTimeInDays);
-        //Each growth point is 2 hours
-        maxGrowth = GameTimeStamp.ConvertHoursToMinutes(hoursToGrow); 
-
-        //Set the initial state to seed
-        SwitchState(GrowthStage.Seed);
-    }
-    
-    public void plant(SeedData seedToGrow) {
-    this.seedToGrow = seedToGrow;
-    seedling = Instantiate(seedToGrow.Seedling, transform);
-    ItemData CropToYield = seedToGrow.CropToYield;
-    
-    // Check if matureCropModel exists before instantiating
-    if(CropToYield.matureCropModel != null) {
-        mature = Instantiate(CropToYield.matureCropModel, transform);
-        
-        // Ensure mature object has InteractableObject component
-        InteractableObject interactable = mature.GetComponent<InteractableObject>();
-        if(interactable == null) {
-            interactable = mature.AddComponent<InteractableObject>();
-        }
-        interactable.item = CropToYield;
-        
-
-    }
-    
-    int hoursToGrow = GameTimeStamp.ConvertDaysToHours(seedToGrow.growTimeInDays);
-    maxGrowth = GameTimeStamp.ConvertHoursToMinutes(hoursToGrow);
-    SwitchState(GrowthStage.Seed);
-}
-
-    public void grow() {
-        //Increase growth points
-        growth++;
-
-        //Check if we need to advance to the next stage
-        if (growth >= maxGrowth / 2 && currentStage == GrowthStage.Seed) {
-            //Advance to seedling stage
-            SwitchState(GrowthStage.Seedling);
-        } else if (growth >= maxGrowth && currentStage == GrowthStage.Seedling) {
-            //Advance to mature stage
-            SwitchState(GrowthStage.Mature);
-        }
-
-    }
-
-    //Function to handle the state change of the crop
-    private void SwitchState(GrowthStage stateToSwitch)
+    // Start playing the crop's instrument track
+    private void StartInstrument()
     {
-        //Reset everything and set all to inactive
-        seed.SetActive(false);
-        seedling.SetActive(false);
-        mature.SetActive(false);
+        if (AudioManager.Instance == null) return;
 
-        //Handle the visual representation of each state
-        switch (stateToSwitch)
+        // Get instrument track (specific or random)
+        assignedInstrument = seedToGrow.specificInstrument ?? AudioManager.Instance.GetRandomInstrumentTrack();
+
+        if (assignedInstrument != null && assignedInstrument.audioClip != null)
         {
-            //Enable the seed object
-            case GrowthStage.Seed:
-                seed.SetActive(true);
-                break;
-            //Enable the seedling object
-            case GrowthStage.Seedling:
-                seedling.SetActive(true);
-                break;
-            //Enable the mature object
-            case GrowthStage.Mature:
-                mature.SetActive(true);
-                //Unparent it to crop
-                mature.transform.parent = null;
-                //Destroy the crop object
-                Destroy(gameObject);
-                break;
+            instrumentSource = AudioManager.Instance.RegisterCropInstrument(assignedInstrument);
         }
-
-        //Set the current stage to the new state
-        currentStage = stateToSwitch;
     }
-*/
+
+    // Stop playing the crop's instrument track
+    private void StopInstrument()
+    {
+        if (AudioManager.Instance != null && instrumentSource != null)
+        {
+            AudioManager.Instance.UnregisterCropInstrument(instrumentSource);
+            instrumentSource = null;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        // Only clean up instrument if we haven't unparented (wilted crops, manual destroy)
+        // If we've unparented, the CropInstrumentController handles it
+        if (!hasMatureUnparented)
+        {
+            StopInstrument();
+        }
+    }
+}

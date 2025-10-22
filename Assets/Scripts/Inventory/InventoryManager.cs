@@ -71,6 +71,12 @@ public class InventoryManager : MonoBehaviour
             inventoryArr = itemSlots;
         }
 
+        //Check if nothing is in the inventory slot
+        if(inventoryArr[boxIndex].IsEmpty()) {
+            Debug.Log("[InventoryManager] InventoryToHand: Inventory slot is empty, nothing to equip");
+            return;
+        }
+
         //Check if stackable
         if(handEquip.Stackable(inventoryArr[boxIndex])) {
             ItemSlotData slotToAlter = inventoryArr[boxIndex];
@@ -156,11 +162,6 @@ public class InventoryManager : MonoBehaviour
     {
         try
         {
-            if (handPoint == null)
-            {
-                Debug.LogError("[InventoryManager] RenderEquippedItem: handPoint is null!");
-                return;
-            }
 
         //Reset object in hand
         Debug.Log($"[InventoryManager] RenderEquippedItem: handPoint childCount={handPoint.childCount}");
@@ -170,44 +171,11 @@ public class InventoryManager : MonoBehaviour
             Destroy(handPoint.GetChild(0).gameObject);
         }
 
-        //Check if the player has an tool equipped
-        if(SlotEquipped(InventoryBox.InventoryType.Tool))
-        {
-            //Instantiate the tool model at the hand point (defensive: ensure item and model exist)
-            ItemData data = GetEquippedItemSlots(InventoryBox.InventoryType.Tool);
-            Debug.Log($"[InventoryManager] RenderEquippedItem: Tool slot equipped -> data='{(data==null?"null":data.name)}'");
-            if (data != null)
-            {
-                if (data.onHandModel == null)
-                {
-                    Debug.Log($"[InventoryManager] RenderEquippedItem: No visual model (onHandModel) assigned for '{data.name}' - tool is equipped but invisible");
-                }
-                else
-                {
-                    try
-                    {
-                        GameObject inst = Instantiate(data.onHandModel, handPoint);
-    
-                    }
-                    catch (System.Exception ex)
-                    {
-                        Debug.LogError($"[InventoryManager] Exception instantiating tool onHandModel='{(data.onHandModel==null?"null":data.onHandModel.name)}': {ex}");
-                        // Fallback: create a visible debug cube so hand rendering still shows something
-                        GameObject fallback = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                        fallback.transform.SetParent(handPoint, false);
-                        fallback.transform.localScale = Vector3.one * 0.3f;
-                        Debug.Log("[InventoryManager] RenderEquippedItem: Fallback cube instantiated instead of tool model");
-                    }
-                }
-            }
-            return;
-        }
         //Check if the player has an item equipped
         if(SlotEquipped(InventoryBox.InventoryType.Item))
         {
             //Instantiate the item model at the hand point (defensive: ensure item and model exist)
             ItemData data = GetEquippedItemSlots(InventoryBox.InventoryType.Item);
-            Debug.Log($"[InventoryManager] RenderEquippedItem: Item slot equipped -> data='{(data==null?"null":data.name)}'");
             if (data != null)
             {
                 if (data.onHandModel == null)
@@ -216,23 +184,32 @@ public class InventoryManager : MonoBehaviour
                 }
                 else
                 {
-                    try
-                    {
-                        GameObject inst = Instantiate(data.onHandModel, handPoint);
-                        Debug.Log($"[InventoryManager] RenderEquippedItem: Instantiated item onHandModel='{data.onHandModel.name}'");
-                    }
-                    catch (System.Exception ex)
-                    {
-                        Debug.LogError($"[InventoryManager] Exception instantiating item onHandModel='{(data.onHandModel==null?"null":data.onHandModel.name)}': {ex}");
-                        GameObject fallback = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                        fallback.transform.SetParent(handPoint, false);
-                        fallback.transform.localScale = Vector3.one * 0.3f;
-                        Debug.Log("[InventoryManager] RenderEquippedItem: Fallback cube instantiated instead of item model");
-                    }
+                    GameObject inst = Instantiate(data.onHandModel, handPoint);
+                    
                 }
             }
             return;
         }
+
+        //Check if the player has an tool equipped
+        if(SlotEquipped(InventoryBox.InventoryType.Tool))
+        {
+            //Instantiate the tool model at the hand point (defensive: ensure item and model exist)
+            ItemData data = GetEquippedItemSlots(InventoryBox.InventoryType.Tool);
+            if (data != null)
+            {
+                if (data.onHandModel == null)
+                {
+                    Debug.Log($"[InventoryManager] RenderEquippedItem: No visual model (onHandModel) assigned for '{data.name}' - tool is equipped but invisible");
+                }
+                else
+                {
+                    GameObject inst = Instantiate(data.onHandModel, handPoint);
+                }
+            }
+            return;
+        }
+
         Debug.Log("[InventoryManager] RenderEquippedItem: Nothing equipped");
         }
         catch (System.Exception ex)

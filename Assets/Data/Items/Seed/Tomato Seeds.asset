@@ -16,9 +16,12 @@ MonoBehaviour:
   icon: {fileID: -1884214261, guid: ab7af8c09d0724c448d524ead916bcd4, type: 3}
   onHandModel: {fileID: 0}
   CropToYield: {fileID: 11400000, guid: efa2ca9ceb6b93a43a982ff7830b69c5, type: 2}
-  growTimeInDays: 3
+  growTimeInDays: 1
   growthStageModels:
   - {fileID: 857558189176294040, guid: 3a7738bad1e044d4e847818f1e904c9b, type: 3}
   - {fileID: 1000013410243764, guid: d4a339b6e925b5646aff997b6ed03ae2, type: 3}
   - {fileID: 2879319444710317051, guid: 08acf9f7e4dd07f43b178aead6a778ed, type: 3}
   WiltedModel: {fileID: 2669905090786056823, guid: 48cafe4d4be054f43a97242d00fb4e63, type: 3}
+  specificInstrument:
+    audioClip: {fileID: 8300000, guid: 0d74503bf5e07924e95514a2adf06700, type: 3}
+    volume: 0.7

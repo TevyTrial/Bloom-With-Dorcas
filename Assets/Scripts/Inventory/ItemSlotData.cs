@@ -58,6 +58,11 @@ public class ItemSlotData
     //Check if the item is stackable
     public bool Stackable(ItemSlotData slotToCompare)
     {
+        //Cannot stack with empty slot
+        if (IsEmpty() || slotToCompare == null || slotToCompare.IsEmpty())
+        {
+            return false;
+        }
         return slotToCompare.itemData == itemData;
     
     }
