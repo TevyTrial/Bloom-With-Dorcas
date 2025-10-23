@@ -25,6 +25,7 @@ public class AudioManager : MonoBehaviour
     // Synchronized playback tracking
     private SeasonalSongData currentSong;
     private List<AudioSource> activeInstrumentSources = new List<AudioSource>();
+    private Dictionary<AudioSource, float> originalVolumes = new Dictionary<AudioSource, float>();
     private float songStartTime;
     private bool isSongPlaying = false;
     
@@ -78,21 +79,6 @@ public class AudioManager : MonoBehaviour
                 SyncAllInstruments();
             }
         }
-    }
-
-    // Called when the game season changes
-    public void SetCurrentSeason(GameTimeStamp.Season season)
-    {
-        currentGameSeason = season;
-
-        currentSong = season switch
-        {
-            GameTimeStamp.Season.Spring => springSong,
-            GameTimeStamp.Season.Summer => summerSong,
-            GameTimeStamp.Season.Fall => fallSong,
-            GameTimeStamp.Season.Winter => winterSong,
-            _ => springSong
-        };
     }
 
     // Called when a crop reaches mature state
@@ -189,6 +175,13 @@ public class AudioManager : MonoBehaviour
         {
             Debug.LogError("No seasonal song data assigned to AudioManager!");
             return null;
+        } 
+
+        //Only play instruments for crops of the current season
+        if (cropSeason != currentGameSeason)
+        {
+            Debug.Log($"Crop season {cropSeason} doesn't match current season {currentGameSeason}. Not playing instrument.");
+            return null;
         }
 
         // Create a new AudioSource for this instrument
@@ -212,10 +205,14 @@ public class AudioManager : MonoBehaviour
         source.dopplerLevel = 0f;
 
         // Set initial volume based on current number of mature crops
+        originalVolumes[source] = track.volume;
         source.volume = GetNormalizedVolume(track.volume);
 
         // Add to active instruments list
         activeInstrumentSources.Add(source);
+
+        // Update all instrument volumes
+        UpdateAllInstrumentVolumes();
 
         // Only play if seasonal music is active
         if (isSongPlaying)
@@ -226,12 +223,13 @@ public class AudioManager : MonoBehaviour
             source.time = currentPlaybackTime;
             source.Play();
         }
-        else if (matureCropCounts[cropSeason] == 1)
+        else if (matureCropCounts[currentGameSeason] >= 1)
         {
+            // Start seasonal music if not already playing
             songStartTime = Time.time;
             isSongPlaying = true;
-            source.time = 0f;
-            source.Play();
+            // Sync all instruments including this new one
+            SyncAllInstruments();
         }
         
         return source;
@@ -243,8 +241,11 @@ public class AudioManager : MonoBehaviour
         if (source != null && activeInstrumentSources.Contains(source))
         {
             activeInstrumentSources.Remove(source);
+            originalVolumes.Remove(source);
             Destroy(source.gameObject);
         }
+        // Update all instrument volumes
+        UpdateAllInstrumentVolumes();
     }
 
     // Sync all active instruments to the current timeline
@@ -283,6 +284,39 @@ public class AudioManager : MonoBehaviour
                 source.Stop();
             }
         }
+    }
+
+    // Called when the game season changes
+    public void SetCurrentSeason(GameTimeStamp.Season season)
+    {
+        currentGameSeason = season;
+
+        currentSong = season switch
+        {
+            GameTimeStamp.Season.Spring => springSong,
+            GameTimeStamp.Season.Summer => summerSong,
+            GameTimeStamp.Season.Fall => fallSong,
+            GameTimeStamp.Season.Winter => winterSong,
+            _ => springSong
+        };
+
+        // Stop all out-of-season instruments and restart music system
+        StopAllInstruments();
+
+        // Destroy all audio source game objects
+        foreach (var source in activeInstrumentSources)
+        {
+            if (source != null)
+            {
+                Destroy(source.gameObject);
+            }
+        }
+        isSongPlaying = false;
+        activeInstrumentSources.Clear();
+        originalVolumes.Clear();
+
+        //Check if we should play music for the new season
+        CheckAndPlaySeasonalMusic();
     }
 
     // Volume controls

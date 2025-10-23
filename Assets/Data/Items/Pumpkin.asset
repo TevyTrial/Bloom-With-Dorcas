@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Pumpkin
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   description: 
-  icon: {fileID: 0}
-  onHandModel: {fileID: 0}
+  icon: {fileID: -1781462101, guid: 98cd4abe7df1a024d8f917dc05bdb114, type: 3}
+  onHandModel: {fileID: 9156669541236288519, guid: ebc144b1fa28ff949bf028e83743713b, type: 3}

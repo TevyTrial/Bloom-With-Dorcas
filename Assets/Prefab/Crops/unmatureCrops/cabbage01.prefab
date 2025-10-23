@@ -22,15 +22,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7135862701270539660, guid: dd72732cab1e29742b6f7260eb687c9c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 598.4968
+      value: -0.1
       objectReference: {fileID: 0}
     - target: {fileID: 7135862701270539660, guid: dd72732cab1e29742b6f7260eb687c9c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.16150403
+      value: -0.14
       objectReference: {fileID: 0}
     - target: {fileID: 7135862701270539660, guid: dd72732cab1e29742b6f7260eb687c9c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 580.6599
+      value: 0.13
       objectReference: {fileID: 0}
     - target: {fileID: 7135862701270539660, guid: dd72732cab1e29742b6f7260eb687c9c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -62,9 +62,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7515520405256324918, guid: dd72732cab1e29742b6f7260eb687c9c, type: 3}
       propertyPath: m_Name
-      value: Grass_41 Variant
+      value: cabbage01
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3863110831909234765, guid: dd72732cab1e29742b6f7260eb687c9c, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

@@ -13,9 +13,17 @@ MonoBehaviour:
   m_Name: Wheat Seeds
   m_EditorClassIdentifier: Assembly-CSharp::SeedData
   description: 
-  icon: {fileID: 0}
+  icon: {fileID: 1237870550, guid: ad0170412b9aaba4298aba9934b8c250, type: 3}
   onHandModel: {fileID: 0}
-  CropToYield: {fileID: 0}
-  growTimeInDays: 0
-  growthStageModels: []
-  WiltedModel: {fileID: 0}
+  CropToYield: {fileID: 11400000, guid: 06251e8c05b01fe42abeb9dfa646261d, type: 2}
+  growTimeInDays: 1
+  growthStageModels:
+  - {fileID: 857558189176294040, guid: 3a7738bad1e044d4e847818f1e904c9b, type: 3}
+  - {fileID: 2730191449903874550, guid: 6f7501efe426cbb41b53c2d42c317de8, type: 3}
+  - {fileID: 2505644388528434159, guid: 6e4669f5a482a0248a3707537d732f6e, type: 3}
+  - {fileID: 7032045654328641067, guid: 4d9332aaa8b4788468ff187648aecd3b, type: 3}
+  WiltedModel: {fileID: 8648550851857994122, guid: dea32d316e9eb3443a78657911905afb, type: 3}
+  specificInstrument:
+    audioClip: {fileID: 8300000, guid: 2c12954a9bd9d0c48abb32e5349e0529, type: 3}
+    volume: 0.7
+  cropSeason: 2

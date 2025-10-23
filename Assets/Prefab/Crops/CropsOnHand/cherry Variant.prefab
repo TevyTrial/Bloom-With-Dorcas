@@ -9,6 +9,18 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 6119932256183060547, guid: f9bb09643b8129746991d7aa4ecafaba, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.005
+      objectReference: {fileID: 0}
+    - target: {fileID: 6119932256183060547, guid: f9bb09643b8129746991d7aa4ecafaba, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.005
+      objectReference: {fileID: 0}
+    - target: {fileID: 6119932256183060547, guid: f9bb09643b8129746991d7aa4ecafaba, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.005
+      objectReference: {fileID: 0}
+    - target: {fileID: 6119932256183060547, guid: f9bb09643b8129746991d7aa4ecafaba, type: 3}
       propertyPath: m_LocalPosition.x
       value: 591.2978
       objectReference: {fileID: 0}
@@ -48,9 +60,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6119932256183060547, guid: f9bb09643b8129746991d7aa4ecafaba, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6892070225828598521, guid: f9bb09643b8129746991d7aa4ecafaba, type: 3}
       propertyPath: m_Name
       value: cherry Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 6892070225828598521, guid: f9bb09643b8129746991d7aa4ecafaba, type: 3}
+      propertyPath: m_TagString
+      value: Item
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

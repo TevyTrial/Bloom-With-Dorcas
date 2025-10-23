@@ -14,9 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SeedData
   description: 
   icon: {fileID: -967493864, guid: ab7af8c09d0724c448d524ead916bcd4, type: 3}
-  onHandModel: {fileID: 0}
-  CropToYield: {fileID: 0}
-  growTimeInDays: 0
-  growthStageModels: []
-  WiltedModel: {fileID: 0}
-  matureSound: {fileID: 0}
+  onHandModel: {fileID: 7087567209474455729, guid: 18b8dc8675b387b4884808f1434366ac, type: 3}
+  CropToYield: {fileID: 11400000, guid: b34fc1bc76f06254aa7a3a8910e1e4d2, type: 2}
+  growTimeInDays: 1
+  growthStageModels:
+  - {fileID: 857558189176294040, guid: 3a7738bad1e044d4e847818f1e904c9b, type: 3}
+  - {fileID: 1199961213495498342, guid: e320f6a030aee824bb57e27031ae774e, type: 3}
+  - {fileID: 6024616547219601927, guid: 7dcfc0262ea40ce41892de4befc9a847, type: 3}
+  - {fileID: 8416037257017809515, guid: dcf17dca09b40da408d9055d29925728, type: 3}
+  WiltedModel: {fileID: 7208412574698559031, guid: 6c4e6226c2142bf41857a83cfcbcee5c, type: 3}
+  specificInstrument:
+    audioClip: {fileID: 8300000, guid: 4becafa56ecb6cb48a994413de2973ae, type: 3}
+    volume: 0.7
+  cropSeason: 3

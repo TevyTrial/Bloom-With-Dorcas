@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3592292179363212890, guid: 179272029244a8742b63543f435a1375, type: 3}
       propertyPath: m_Name
-      value: Corn_crops
+      value: Corn
       objectReference: {fileID: 0}
     - target: {fileID: 3592292179363212890, guid: 179272029244a8742b63543f435a1375, type: 3}
       propertyPath: m_IsActive

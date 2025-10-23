@@ -49,15 +49,68 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 07f6166e4cdfa2242b0c8d7054289e41, type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: fa6c45465cde56c4495f6d9109c80326, type: 2}
     - target: {fileID: 919132149155446097, guid: 07f6166e4cdfa2242b0c8d7054289e41, type: 3}
       propertyPath: m_Name
-      value: Farm_Crop_Broccoli_Step_03
+      value: MatureBroccoli
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 07f6166e4cdfa2242b0c8d7054289e41, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 07f6166e4cdfa2242b0c8d7054289e41, type: 3}
+      propertyPath: m_TagString
+      value: Item
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 07f6166e4cdfa2242b0c8d7054289e41, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6394153171457148751}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 07f6166e4cdfa2242b0c8d7054289e41, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -2954014621608616239}
   m_SourcePrefab: {fileID: 100100000, guid: 07f6166e4cdfa2242b0c8d7054289e41, type: 3}
+--- !u!1 &8416037257017809515 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 07f6166e4cdfa2242b0c8d7054289e41, type: 3}
+  m_PrefabInstance: {fileID: 8649915813705475898}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &6394153171457148751
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8416037257017809515}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.7645183, y: 0.63209724, z: 1.8151197}
+  m_Center: {x: -0.044547915, y: 0.2750001, z: -0.0017178059}
+--- !u!114 &-2954014621608616239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8416037257017809515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cef9a8de43b7c364bbd2109dbd56bcbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteractableObject
+  item: {fileID: 11400000, guid: b34fc1bc76f06254aa7a3a8910e1e4d2, type: 2}

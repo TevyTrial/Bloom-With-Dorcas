@@ -15,8 +15,15 @@ MonoBehaviour:
   description: 
   icon: {fileID: -19416753, guid: ab7af8c09d0724c448d524ead916bcd4, type: 3}
   onHandModel: {fileID: 0}
-  CropToYield: {fileID: 0}
-  growTimeInDays: 0
-  growthStageModels: []
-  WiltedModel: {fileID: 0}
-  matureSound: {fileID: 0}
+  CropToYield: {fileID: 11400000, guid: bd5572319b34dc94292ae1d8949ad9c3, type: 2}
+  growTimeInDays: 1
+  growthStageModels:
+  - {fileID: 857558189176294040, guid: 3a7738bad1e044d4e847818f1e904c9b, type: 3}
+  - {fileID: 3177982295653799335, guid: d8449dba764bea44ab90269de06a50d0, type: 3}
+  - {fileID: 6421724360372590781, guid: 37774da3967f68340b832156ac4a51c8, type: 3}
+  - {fileID: 2515096759070014954, guid: 8208b668c3b954947be70fc9690eeb2a, type: 3}
+  WiltedModel: {fileID: 4136111258168405257, guid: fe7e761dd36cfb4449cf4747b181a820, type: 3}
+  specificInstrument:
+    audioClip: {fileID: 8300000, guid: 210c778918086bd419ab54501b575cf2, type: 3}
+    volume: 0.7
+  cropSeason: 3

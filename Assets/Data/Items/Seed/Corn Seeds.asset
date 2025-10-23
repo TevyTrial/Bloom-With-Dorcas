@@ -12,11 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9147996d92eccb4b8c175b932008c52, type: 3}
   m_Name: Corn Seeds
   m_EditorClassIdentifier: Assembly-CSharp::SeedData
-  description: 
+  description: Tall and resilient, thrives under long sunny days. Produces golden
+    kernels.
   icon: {fileID: 774922119, guid: ab7af8c09d0724c448d524ead916bcd4, type: 3}
-  onHandModel: {fileID: 0}
-  CropToYield: {fileID: 0}
-  growTimeInDays: 0
-  growthStageModels: []
-  WiltedModel: {fileID: 0}
-  matureSound: {fileID: 0}
+  onHandModel: {fileID: 3100257852194279338, guid: 4876e87e223230744b969dbc64a82938, type: 3}
+  CropToYield: {fileID: 11400000, guid: a95ea0673e76d6e4ab207492891f5338, type: 2}
+  growTimeInDays: 1
+  growthStageModels:
+  - {fileID: 857558189176294040, guid: 3a7738bad1e044d4e847818f1e904c9b, type: 3}
+  - {fileID: 5497211735150880983, guid: e4d6cf5dfac217e4aa57b954b8cc1105, type: 3}
+  - {fileID: 5962430241588196273, guid: ff4ed0f60d4a5a54b9b1a0b2fad77c78, type: 3}
+  - {fileID: 2658104347403863969, guid: 530671a6dcce5b84992a7417b0d91c86, type: 3}
+  WiltedModel: {fileID: 7641197838178817489, guid: ef421fb5462bcf247a79330442efd802, type: 3}
+  specificInstrument:
+    audioClip: {fileID: 8300000, guid: b36f81665af63e4459cbbc12d80bb89f, type: 3}
+    volume: 0.7
+  cropSeason: 1

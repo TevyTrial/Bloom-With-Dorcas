@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 443304680376985794, guid: 92d9362572c3f3840a000ece8cdfb2b3, type: 3}
       propertyPath: m_Name
-      value: cabbage (2) Variant
+      value: cabbage02
       objectReference: {fileID: 0}
     - target: {fileID: 967499788730970744, guid: 92d9362572c3f3840a000ece8cdfb2b3, type: 3}
       propertyPath: m_LocalScale.x
@@ -26,15 +26,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 967499788730970744, guid: 92d9362572c3f3840a000ece8cdfb2b3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 597.4798
+      value: -0.099975586
       objectReference: {fileID: 0}
     - target: {fileID: 967499788730970744, guid: 92d9362572c3f3840a000ece8cdfb2b3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.16150409
+      value: -0.13999999
       objectReference: {fileID: 0}
     - target: {fileID: 967499788730970744, guid: 92d9362572c3f3840a000ece8cdfb2b3, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 579.8938
+      value: 0.13000488
       objectReference: {fileID: 0}
     - target: {fileID: 967499788730970744, guid: 92d9362572c3f3840a000ece8cdfb2b3, type: 3}
       propertyPath: m_LocalRotation.w

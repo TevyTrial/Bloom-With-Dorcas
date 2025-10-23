@@ -13,13 +13,16 @@ MonoBehaviour:
   m_Name: Turnip Seed
   m_EditorClassIdentifier: Assembly-CSharp::SeedData
   description: 
-  icon: {fileID: 0}
+  icon: {fileID: -650966972, guid: ad0170412b9aaba4298aba9934b8c250, type: 3}
   onHandModel: {fileID: 0}
-  CropToYield: {fileID: 0}
-  growTimeInDays: 0
-  growthStageModels: []
-  WiltedModel: {fileID: 0}
+  CropToYield: {fileID: 11400000, guid: 6bbc5108f09550d4d84ac06c473471cd, type: 2}
+  growTimeInDays: 1
+  growthStageModels:
+  - {fileID: 857558189176294040, guid: 3a7738bad1e044d4e847818f1e904c9b, type: 3}
+  - {fileID: 1000010164499024, guid: f0666abddd74e5644ac4cf977d74e5e9, type: 3}
+  - {fileID: 7177276658024248831, guid: b0ca18ecea2cfc64db5462427199d1cb, type: 3}
+  WiltedModel: {fileID: 1000010824186820, guid: 0c8ed4a35fbcd874aa3d60b143892e43, type: 3}
   specificInstrument:
-    audioClip: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: c81c6f22195beae4eaec61552523100d, type: 3}
     volume: 0.7
   cropSeason: 0

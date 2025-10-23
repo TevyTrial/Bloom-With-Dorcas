@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Sunflower
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   description: 
-  icon: {fileID: 0}
-  onHandModel: {fileID: 0}
+  icon: {fileID: 2073851208, guid: 98cd4abe7df1a024d8f917dc05bdb114, type: 3}
+  onHandModel: {fileID: 3011677954316654070, guid: 8e3abf9d311d9a74abdc97bccc82cb37, type: 3}

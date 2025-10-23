@@ -10,15 +10,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2975033828348874315, guid: 235a965e2371bbe44885b6167592dcd6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 585.5877
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2975033828348874315, guid: 235a965e2371bbe44885b6167592dcd6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.16150391
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2975033828348874315, guid: 235a965e2371bbe44885b6167592dcd6, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 577.176
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2975033828348874315, guid: 235a965e2371bbe44885b6167592dcd6, type: 3}
       propertyPath: m_LocalRotation.w
@@ -62,7 +62,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5381980487241406569, guid: 235a965e2371bbe44885b6167592dcd6, type: 3}
       propertyPath: m_Name
-      value: Mature_Eggplant Variant
+      value: Eggplant02
       objectReference: {fileID: 0}
     - target: {fileID: 7626669106929095111, guid: 235a965e2371bbe44885b6167592dcd6, type: 3}
       propertyPath: m_LocalScale.x
@@ -76,7 +76,9 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.26638
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 408293982799630169, guid: 235a965e2371bbe44885b6167592dcd6, type: 3}
+    - {fileID: 8480355280538704104, guid: 235a965e2371bbe44885b6167592dcd6, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

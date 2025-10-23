@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9147996d92eccb4b8c175b932008c52, type: 3}
+  m_Name: Strawberry Seeds
+  m_EditorClassIdentifier: Assembly-CSharp::SeedData
+  description: 
+  icon: {fileID: -347336888, guid: ad0170412b9aaba4298aba9934b8c250, type: 3}
+  onHandModel: {fileID: 0}
+  CropToYield: {fileID: 11400000, guid: b8d458a697b8eae4a91c3cedb7a134bb, type: 2}
+  growTimeInDays: 1
+  growthStageModels:
+  - {fileID: 857558189176294040, guid: 3a7738bad1e044d4e847818f1e904c9b, type: 3}
+  - {fileID: 2792029760208804096, guid: 997a1da230c3b5f48aa0d7de78a61c5c, type: 3}
+  - {fileID: 1858309986808006292, guid: 3cfbf8699466b7048a54719adec4ed4c, type: 3}
+  - {fileID: 571464738823100280, guid: cae8768cb5b80444a93bc467fe368387, type: 3}
+  WiltedModel: {fileID: 2669905090786056823, guid: 48cafe4d4be054f43a97242d00fb4e63, type: 3}
+  specificInstrument:
+    audioClip: {fileID: 8300000, guid: 05eda27d0ed78b248ad8c9d44840c52c, type: 3}
+    volume: 0.7
+  cropSeason: 0

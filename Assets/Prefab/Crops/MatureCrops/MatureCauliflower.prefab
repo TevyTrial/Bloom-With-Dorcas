@@ -10,15 +10,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 71a8593e7d382344999984776435ba52, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0
+      value: 0.09
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 71a8593e7d382344999984776435ba52, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.08
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 71a8593e7d382344999984776435ba52, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.14733887
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 71a8593e7d382344999984776435ba52, type: 3}
       propertyPath: m_LocalRotation.w
@@ -49,15 +49,68 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 71a8593e7d382344999984776435ba52, type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: fa6c45465cde56c4495f6d9109c80326, type: 2}
     - target: {fileID: 919132149155446097, guid: 71a8593e7d382344999984776435ba52, type: 3}
       propertyPath: m_Name
-      value: Farm_Crop_Cauliflower_Step_03
+      value: MatureCauliflower
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 71a8593e7d382344999984776435ba52, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 71a8593e7d382344999984776435ba52, type: 3}
+      propertyPath: m_TagString
+      value: Item
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 71a8593e7d382344999984776435ba52, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2960882165018391849}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 71a8593e7d382344999984776435ba52, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7633640553705068474}
   m_SourcePrefab: {fileID: 100100000, guid: 71a8593e7d382344999984776435ba52, type: 3}
+--- !u!1 &2515096759070014954 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 71a8593e7d382344999984776435ba52, type: 3}
+  m_PrefabInstance: {fileID: 3325348658900598971}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &2960882165018391849
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2515096759070014954}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9819014, y: 0.805339, z: 1.8563374}
+  m_Center: {x: -0.0035594702, y: 0.344989, z: -0.01887697}
+--- !u!114 &7633640553705068474
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2515096759070014954}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cef9a8de43b7c364bbd2109dbd56bcbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteractableObject
+  item: {fileID: 11400000, guid: bd5572319b34dc94292ae1d8949ad9c3, type: 2}

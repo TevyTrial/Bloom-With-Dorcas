@@ -22,15 +22,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2811121415323834017, guid: 4d9332aaa8b4788468ff187648aecd3b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 589.441
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2811121415323834017, guid: 4d9332aaa8b4788468ff187648aecd3b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.000015258789
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2811121415323834017, guid: 4d9332aaa8b4788468ff187648aecd3b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 601.75806
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2811121415323834017, guid: 4d9332aaa8b4788468ff187648aecd3b, type: 3}
       propertyPath: m_LocalRotation.w
@@ -70,9 +70,11 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 8125b9e4d08fe7b4b80b76ead880c135, type: 2}
     - target: {fileID: 7032045654328641067, guid: 4d9332aaa8b4788468ff187648aecd3b, type: 3}
       propertyPath: m_Name
-      value: Wheat01 1
+      value: Wheat01
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9116482966208398769, guid: 4d9332aaa8b4788468ff187648aecd3b, type: 3}
+    - {fileID: -6315395593647236603, guid: 4d9332aaa8b4788468ff187648aecd3b, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

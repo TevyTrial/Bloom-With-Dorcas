@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9147996d92eccb4b8c175b932008c52, type: 3}
+  m_Name: Blue Tulip Seeds
+  m_EditorClassIdentifier: Assembly-CSharp::SeedData
+  description: 
+  icon: {fileID: 284279184, guid: 6f03f4cecac9d7d4bb06b9f540d90b71, type: 3}
+  onHandModel: {fileID: 8445662232565064272, guid: 3d94f5e5e03a565428b517e7b9b37127, type: 3}
+  CropToYield: {fileID: 11400000, guid: 6fd95329b26009246b5afd5385e9e46a, type: 2}
+  growTimeInDays: 1
+  growthStageModels:
+  - {fileID: 857558189176294040, guid: 3a7738bad1e044d4e847818f1e904c9b, type: 3}
+  - {fileID: 7894121702400547446, guid: fa40cb55a132a234c9decfb8512adb2f, type: 3}
+  - {fileID: 6898424200722150946, guid: 97b66f796819cd64aa180ce1aa49ad45, type: 3}
+  - {fileID: 4043110814711016892, guid: 6ce8df2278dd30646a7ebfab8922c7c0, type: 3}
+  WiltedModel: {fileID: 1000010824186820, guid: 0c8ed4a35fbcd874aa3d60b143892e43, type: 3}
+  specificInstrument:
+    audioClip: {fileID: 8300000, guid: c81c6f22195beae4eaec61552523100d, type: 3}
+    volume: 0.7
+  cropSeason: 0

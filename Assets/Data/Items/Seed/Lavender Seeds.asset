@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9147996d92eccb4b8c175b932008c52, type: 3}
+  m_Name: Lavender Seeds
+  m_EditorClassIdentifier: Assembly-CSharp::SeedData
+  description: 
+  icon: {fileID: 1668036657, guid: ad0170412b9aaba4298aba9934b8c250, type: 3}
+  onHandModel: {fileID: 0}
+  CropToYield: {fileID: 11400000, guid: ceb0712e47d9d03428e50550d35fccdd, type: 2}
+  growTimeInDays: 1
+  growthStageModels:
+  - {fileID: 857558189176294040, guid: 3a7738bad1e044d4e847818f1e904c9b, type: 3}
+  - {fileID: 2897994932835740331, guid: e13029a8452b8af41bfba3ff71d1cdbc, type: 3}
+  - {fileID: 5237076177278212582, guid: 18e6f7c03725984499727514dd65f885, type: 3}
+  - {fileID: 8774154953865194540, guid: c380c02cb9589ea4e891b6f827a30b23, type: 3}
+  WiltedModel: {fileID: 1000010824186820, guid: 0c8ed4a35fbcd874aa3d60b143892e43, type: 3}
+  specificInstrument:
+    audioClip: {fileID: 8300000, guid: b37be280f8ce9604cb5281ab0ca79ffc, type: 3}
+    volume: 0.7
+  cropSeason: 1

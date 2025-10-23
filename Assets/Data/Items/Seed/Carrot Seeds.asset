@@ -26,3 +26,4 @@ MonoBehaviour:
   specificInstrument:
     audioClip: {fileID: 8300000, guid: cc06398de8bc374428e8daa1e8135ec1, type: 3}
     volume: 0.7
+  cropSeason: 0

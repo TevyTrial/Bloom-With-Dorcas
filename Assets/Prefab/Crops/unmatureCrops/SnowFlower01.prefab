@@ -82,15 +82,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7260434548264515605, guid: 3389f048eb3576c448458cbc76656345, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 585.04
+      value: -0.83569336
       objectReference: {fileID: 0}
     - target: {fileID: 7260434548264515605, guid: 3389f048eb3576c448458cbc76656345, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.16150403
+      value: -0.16
       objectReference: {fileID: 0}
     - target: {fileID: 7260434548264515605, guid: 3389f048eb3576c448458cbc76656345, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 589.06
+      value: 0.51
       objectReference: {fileID: 0}
     - target: {fileID: 7260434548264515605, guid: 3389f048eb3576c448458cbc76656345, type: 3}
       propertyPath: m_LocalRotation.w
@@ -158,7 +158,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7844096053166506628, guid: 3389f048eb3576c448458cbc76656345, type: 3}
       propertyPath: m_Name
-      value: MatureSnowFlower (2) Variant
+      value: SnowFlower01
       objectReference: {fileID: 0}
     - target: {fileID: 8089530842240679731, guid: 3389f048eb3576c448458cbc76656345, type: 3}
       propertyPath: m_LocalScale.x
@@ -172,7 +172,8 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.5337916
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 0}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

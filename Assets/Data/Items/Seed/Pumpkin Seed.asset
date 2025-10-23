@@ -13,9 +13,17 @@ MonoBehaviour:
   m_Name: Pumpkin Seed
   m_EditorClassIdentifier: Assembly-CSharp::SeedData
   description: 
-  icon: {fileID: 0}
+  icon: {fileID: -835784990, guid: ad0170412b9aaba4298aba9934b8c250, type: 3}
   onHandModel: {fileID: 0}
-  CropToYield: {fileID: 0}
-  growTimeInDays: 0
-  growthStageModels: []
-  WiltedModel: {fileID: 0}
+  CropToYield: {fileID: 11400000, guid: 09b56c4ab18c76a42a2cc326bb31f46c, type: 2}
+  growTimeInDays: 1
+  growthStageModels:
+  - {fileID: 857558189176294040, guid: 3a7738bad1e044d4e847818f1e904c9b, type: 3}
+  - {fileID: 1530380725738074483, guid: 1d1ae93b12196344a8642482e2f0ad92, type: 3}
+  - {fileID: 7724400737312588766, guid: ecd1e7935a6dab3459e4ba18ee01f716, type: 3}
+  - {fileID: 2540410202973086269, guid: d449bc23b3f8883438a4d1da6e838f9f, type: 3}
+  WiltedModel: {fileID: 1000010824186820, guid: 0c8ed4a35fbcd874aa3d60b143892e43, type: 3}
+  specificInstrument:
+    audioClip: {fileID: 8300000, guid: add2c6bb44853944b8a6a30fd97e0e2e, type: 3}
+    volume: 0.7
+  cropSeason: 0

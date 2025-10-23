@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1000012003911730, guid: 0adfa404918648e42a1fb073ef9010d3, type: 3}
       propertyPath: m_Name
-      value: Pumpkin_crop
+      value: Pumpkin
       objectReference: {fileID: 0}
     - target: {fileID: 1000012003911730, guid: 0adfa404918648e42a1fb073ef9010d3, type: 3}
       propertyPath: m_IsActive
