@@ -6,14 +6,9 @@ public class AudioManager : MonoBehaviour
     public static AudioManager Instance { get; private set; }
 
     [Header("Audio Sources")]
-    [SerializeField] private AudioSource musicSource;
-    [SerializeField] private AudioSource sfxSource;
-
-    [Header("Seasonal Music")]
-    [SerializeField] private AudioClip springMusic;
-    [SerializeField] private AudioClip summerMusic;
-    [SerializeField] private AudioClip fallMusic;
-    [SerializeField] private AudioClip winterMusic;
+    [SerializeField] private AudioSource musicSource;// Crops Seasonal Music
+    [SerializeField] private AudioSource sfxSource;// General SFX
+    [SerializeField] private AudioSource ambientSource;// Ambient Sounds
 
     [Header("Seasonal Instrument System")]
     [SerializeField] private SeasonalSongData springSong;
@@ -21,11 +16,29 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private SeasonalSongData fallSong;
     [SerializeField] private SeasonalSongData winterSong;
 
+    [Header("Instrument Volume Settings")]
+    [SerializeField] private float maxTotalInstrumentVolume = 1.0f;// Max combined volume of all instruments
+    [SerializeField] private int cropCountForMaxVolume = 10; // Number of mature crops to reach max volume
+    [SerializeField] private float minDistanceFor3D = 1f; // Min distance for 3D sound attenuation
+    [SerializeField] private float maxDistanceFor3D = 30f; // Max distance for 3D sound attenuation
+
     // Synchronized playback tracking
     private SeasonalSongData currentSong;
     private List<AudioSource> activeInstrumentSources = new List<AudioSource>();
     private float songStartTime;
     private bool isSongPlaying = false;
+    
+    // Track mature crops by season
+    private Dictionary<GameTimeStamp.Season, int> matureCropCounts = new Dictionary<GameTimeStamp.Season, int>()
+    {
+        { GameTimeStamp.Season.Spring, 0 },
+        { GameTimeStamp.Season.Summer, 0 },
+        { GameTimeStamp.Season.Fall, 0 },
+        { GameTimeStamp.Season.Winter, 0 }
+    };
+
+    //Current game season
+    private GameTimeStamp.Season currentGameSeason = GameTimeStamp.Season.Spring;
 
     private void Awake()
     {
@@ -34,13 +47,15 @@ public class AudioManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
             
-            // Initialize the song system with Spring as default
-            if (springSong != null)
+            // Start ambient sound
+            if (ambientSource != null && ambientSource.clip != null)
             {
-                currentSong = springSong;
-                songStartTime = Time.time;
-                isSongPlaying = true;
+                ambientSource.Play();
             }
+            
+            // Initialize with Spring season
+            currentSong = springSong;
+            currentGameSeason = GameTimeStamp.Season.Spring;
         }
         else
         {
@@ -65,52 +80,104 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    // Change background music based on season
-    public void PlaySeasonalMusic(Season season)
+    // Called when the game season changes
+    public void SetCurrentSeason(GameTimeStamp.Season season)
     {
-        if (musicSource == null) return;
+        currentGameSeason = season;
 
-        AudioClip clipToPlay = season switch
-        {
-            Season.Spring => springMusic,
-            Season.Summer => summerMusic,
-            Season.Fall => fallMusic,
-            Season.Winter => winterMusic,
-            _ => springMusic
-        };
-
-        if (clipToPlay != null && musicSource.clip != clipToPlay)
-        {
-            musicSource.clip = clipToPlay;
-            musicSource.Play();
-        }
-
-        // Also switch the instrument song data
-        SwitchSeasonalSong(season);
-    }
-
-    // Switch to a new seasonal song and restart synchronization
-    private void SwitchSeasonalSong(Season season)
-    {
         currentSong = season switch
         {
-            Season.Spring => springSong,
-            Season.Summer => summerSong,
-            Season.Fall => fallSong,
-            Season.Winter => winterSong,
+            GameTimeStamp.Season.Spring => springSong,
+            GameTimeStamp.Season.Summer => summerSong,
+            GameTimeStamp.Season.Fall => fallSong,
+            GameTimeStamp.Season.Winter => winterSong,
             _ => springSong
         };
+    }
 
-        // Restart song timeline
-        songStartTime = Time.time;
-        isSongPlaying = true;
+    // Called when a crop reaches mature state
+    public void OnCropMature(GameTimeStamp.Season cropSeason)
+    {
+        matureCropCounts[cropSeason]++;
+        
+        // Start playing seasonal music if this is the first mature crop of this season
+        if (matureCropCounts[cropSeason] == 1)
+        {
+            CheckAndPlaySeasonalMusic();
+        }
 
-        // Resync all existing instruments
-        SyncAllInstruments();
+        //Recalculate instrument volumes
+        UpdateAllInstrumentVolumes();
+    }
+
+    // Called when a mature crop is harvested or destroyed
+    public void OnCropHarvested(GameTimeStamp.Season cropSeason)
+    {
+        if (matureCropCounts[cropSeason] > 0)
+        {
+            matureCropCounts[cropSeason]--;
+            
+            // Stop seasonal music if no more mature crops of this season
+            if (matureCropCounts[cropSeason] == 0)
+            {
+                CheckAndPlaySeasonalMusic();
+            }
+            //Recalculate instrument volumes
+            UpdateAllInstrumentVolumes();
+        }
+    }
+
+    // Check if we should play seasonal music based on mature crop counts
+    private void CheckAndPlaySeasonalMusic()
+    {
+        //Check current season mature crops
+        bool hasSeasonalCrops = matureCropCounts[currentGameSeason] > 0;
+        if (hasSeasonalCrops && !isSongPlaying)
+        {
+            // Start seasonal music
+            songStartTime = Time.time;
+            isSongPlaying = true;
+            SyncAllInstruments();
+        }
+        else if (!hasSeasonalCrops && isSongPlaying)
+        {
+            // Stop seasonal music
+            isSongPlaying = false;
+            StopAllInstruments();
+        }
+    }
+
+    //Calcuate normalized volume based on number of mature crops
+    private float GetNormalizedVolume(float baseVolume) {
+        int totalCrops = activeInstrumentSources.Count;
+        if (totalCrops == 0) return baseVolume;
+
+       // Calculate volume scaling factor
+        // As crops increase, individual volume decreases to maintain max total volume
+        float volumeScaling = Mathf.Min(1f, (float)cropCountForMaxVolume / totalCrops);
+        
+        // Apply scaling but ensure we don't exceed max total volume
+        float normalizedVolume = (baseVolume * volumeScaling * maxTotalInstrumentVolume);
+
+        return Mathf.Clamp(normalizedVolume, 0f, baseVolume);
+    }
+
+    // Update volumes for all active instruments
+    private void UpdateAllInstrumentVolumes()
+    {
+        foreach (var source in activeInstrumentSources)
+        {
+            if (source != null && source.clip != null)
+            {
+                //Get the base volume from the clip
+                float baseVolume = source.volume;
+                source.volume = GetNormalizedVolume(baseVolume);
+            }
+        }
     }
 
     // Register a crop's instrument track and sync it to the current song
-    public AudioSource RegisterCropInstrument(InstrumentTrack track)
+    public AudioSource RegisterCropInstrument(InstrumentTrack track, GameTimeStamp.Season cropSeason, Vector3 cropPosition)
     {
         if (track == null || track.audioClip == null)
         {
@@ -118,40 +185,54 @@ public class AudioManager : MonoBehaviour
             return null;
         }
 
-        // Initialize song system if not started
         if (currentSong == null)
         {
-            if (springSong != null)
-            {
-                currentSong = springSong;
-                songStartTime = Time.time;
-                isSongPlaying = true;
-            }
-            else
-            {
-                Debug.LogError("No seasonal song data assigned to AudioManager!");
-                return null;
-            }
+            Debug.LogError("No seasonal song data assigned to AudioManager!");
+            return null;
         }
 
         // Create a new AudioSource for this instrument
         GameObject instrumentObj = new GameObject($"Instrument_{track.audioClip.name}");
         instrumentObj.transform.SetParent(transform);
+        instrumentObj.transform.position = cropPosition;    
+
         AudioSource source = instrumentObj.AddComponent<AudioSource>();
 
         // Configure the AudioSource
         source.clip = track.audioClip;
         source.loop = true;
         source.volume = track.volume;
-        source.spatialBlend = 0f; // 2D sound
+        source.spatialBlend = 1f; // 3D sound
         source.playOnAwake = false;
 
-        // Sync to current playback time
-        float currentPlaybackTime = (Time.time - songStartTime) % currentSong.songLengthInSeconds;
-        source.time = currentPlaybackTime;
-        source.Play();
+        // Set 3D sound settings
+        source.minDistance = minDistanceFor3D;
+        source.maxDistance = maxDistanceFor3D;
+        source.rolloffMode = AudioRolloffMode.Linear;
+        source.dopplerLevel = 0f;
 
+        // Set initial volume based on current number of mature crops
+        source.volume = GetNormalizedVolume(track.volume);
+
+        // Add to active instruments list
         activeInstrumentSources.Add(source);
+
+        // Only play if seasonal music is active
+        if (isSongPlaying)
+        {
+            //Calculate current playback time to sync
+            float currentPlaybackTime = (Time.time - songStartTime) % currentSong.songLengthInSeconds;
+            //set the audio source time and play
+            source.time = currentPlaybackTime;
+            source.Play();
+        }
+        else if (matureCropCounts[cropSeason] == 1)
+        {
+            songStartTime = Time.time;
+            isSongPlaying = true;
+            source.time = 0f;
+            source.Play();
+        }
         
         return source;
     }
@@ -169,7 +250,7 @@ public class AudioManager : MonoBehaviour
     // Sync all active instruments to the current timeline
     private void SyncAllInstruments()
     {
-        if (currentSong == null) return;
+        if (currentSong == null || !isSongPlaying) return;
 
         float currentPlaybackTime = (Time.time - songStartTime) % currentSong.songLengthInSeconds;
 
@@ -177,7 +258,13 @@ public class AudioManager : MonoBehaviour
         {
             if (source != null && source.clip != null)
             {
-                source.time = currentPlaybackTime;
+                //only adjust time if there's a significant difference to avoid audio glitches
+                float timeDifference = Mathf.Abs(source.time - currentPlaybackTime);
+                if (timeDifference > 0.1f)
+                {
+                    source.time = currentPlaybackTime;
+                }
+                
                 if (!source.isPlaying)
                 {
                     source.Play();
@@ -186,21 +273,23 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    // Get a random instrument track from the current season's song
-    public InstrumentTrack GetRandomInstrumentTrack()
+    // Stop all instruments
+    private void StopAllInstruments()
     {
-        if (currentSong == null || currentSong.instrumentTracks.Length == 0)
-            return null;
-
-        int randomIndex = Random.Range(0, currentSong.instrumentTracks.Length);
-        return currentSong.instrumentTracks[randomIndex];
+        foreach (var source in activeInstrumentSources)
+        {
+            if (source != null)
+            {
+                source.Stop();
+            }
+        }
     }
 
     // Volume controls
-    public void SetMusicVolume(float volume)
+    public void SetAmbientSoundVolume(float volume)
     {
-        if (musicSource != null)
-            musicSource.volume = Mathf.Clamp01(volume);
+        if (ambientSource != null)
+            ambientSource.volume = Mathf.Clamp01(volume);
     }
 
     public void SetSFXVolume(float volume)
@@ -211,20 +300,7 @@ public class AudioManager : MonoBehaviour
 
     public void SetInstrumentVolume(float volume)
     {
-        foreach (var source in activeInstrumentSources)
-        {
-            if (source != null)
-            {
-                source.volume = Mathf.Clamp01(volume);
-            }
-        }
+        maxTotalInstrumentVolume = Mathf.Clamp01(volume);
+        UpdateAllInstrumentVolumes();
     }
-}
-
-public enum Season
-{
-    Spring,
-    Summer,
-    Fall,
-    Winter
 }

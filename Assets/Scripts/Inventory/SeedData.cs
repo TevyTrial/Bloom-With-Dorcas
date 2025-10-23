@@ -17,4 +17,6 @@ public class SeedData : ItemData
     [Header("Instrument Assignment")]
     [Tooltip("Leave null to assign random instrument from current season. Or specify a particular instrument track.")]
     public InstrumentTrack specificInstrument;
+    [Header("Crop Season")]
+    public GameTimeStamp.Season cropSeason;
 }

@@ -27,6 +27,9 @@ public class TimeManager : MonoBehaviour
     //list of UI listeners to update when time changes
     List<ITimeTracker> listeners = new List<ITimeTracker>();
 
+    //Season tracking
+    private GameTimeStamp.Season previousSeason;
+
     private void Awake()
     {
         //If there is more than one instance, destroy the extra
@@ -71,7 +74,13 @@ public class TimeManager : MonoBehaviour
             listener.ClockUpdate(currentTime);
         }
 
-        
+        //Check for season change and notify AudioManager
+        if(currentTime.season != previousSeason) 
+        {
+            // Notify AudioManager of season change
+            AudioManager.Instance.SetCurrentSeason(currentTime.season);
+            previousSeason = currentTime.season;
+        }
         
         //Update sun position based on time of day
         UpdateSun(timeInMinutes);

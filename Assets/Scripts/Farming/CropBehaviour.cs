@@ -181,7 +181,7 @@ public class CropBehaviour : MonoBehaviour
 
                 // Add CropInstrumentController to the mature crop so it can stop music when harvested
                 CropInstrumentController controller = stageObjects[matureIndex].AddComponent<CropInstrumentController>();
-                controller.Initialize(instrumentSource);
+                controller.Initialize(instrumentSource, seedToGrow.cropSeason);
 
                 // Reset health on mature crop
                 health = maxHealth;
@@ -212,12 +212,22 @@ public class CropBehaviour : MonoBehaviour
     {
         if (AudioManager.Instance == null) return;
 
-        // Get instrument track (specific or random)
-        assignedInstrument = seedToGrow.specificInstrument ?? AudioManager.Instance.GetRandomInstrumentTrack();
+        // Use the specific instrument assigned in SeedData
+        assignedInstrument = seedToGrow.specificInstrument;
 
         if (assignedInstrument != null && assignedInstrument.audioClip != null)
         {
-            instrumentSource = AudioManager.Instance.RegisterCropInstrument(assignedInstrument);
+            //Pass mature crop position to AudioManager for 3D sound
+            Vector3 cropPosition = stageObjects[stageObjects.Length - 1].transform.position;
+
+            instrumentSource = AudioManager.Instance.RegisterCropInstrument(
+                assignedInstrument, 
+                seedToGrow.cropSeason, 
+                cropPosition
+                );
+
+            // Notify AudioManager of mature crop
+            AudioManager.Instance.OnCropMature(seedToGrow.cropSeason);
         }
     }
 
