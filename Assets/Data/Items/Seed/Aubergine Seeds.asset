@@ -19,3 +19,7 @@ MonoBehaviour:
   growTimeInDays: 0
   growthStageModels: []
   WiltedModel: {fileID: 0}
+  specificInstrument:
+    audioClip: {fileID: 0}
+    volume: 0.7
+  cropSeason: 2
