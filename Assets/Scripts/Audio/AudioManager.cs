@@ -6,9 +6,9 @@ public class AudioManager : MonoBehaviour
     public static AudioManager Instance { get; private set; }
 
     [Header("Audio Sources")]
-    [SerializeField] private AudioSource musicSource;// Crops Seasonal Music
-    [SerializeField] private AudioSource sfxSource;// General SFX
-    [SerializeField] private AudioSource ambientSource;// Ambient Sounds
+    [SerializeField] private AudioSource musicSource;
+    [SerializeField] private AudioSource sfxSource;
+    [SerializeField] private AudioSource ambientSource;
 
     [Header("Seasonal Instrument System")]
     [SerializeField] private SeasonalSongData springSong;
@@ -17,10 +17,14 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private SeasonalSongData winterSong;
 
     [Header("Instrument Volume Settings")]
-    [SerializeField] private float maxTotalInstrumentVolume = 1.0f;// Max combined volume of all instruments
-    [SerializeField] private int cropCountForMaxVolume = 10; // Number of mature crops to reach max volume
-    [SerializeField] private float minDistanceFor3D = 1f; // Min distance for 3D sound attenuation
-    [SerializeField] private float maxDistanceFor3D = 30f; // Max distance for 3D sound attenuation
+    [SerializeField] private float maxTotalInstrumentVolume = 1.0f;
+    [SerializeField] private int cropCountForMaxVolume = 10;
+    [SerializeField] private float minDistanceFor3D = 1f;
+    [SerializeField] private float maxDistanceFor3D = 30f;
+
+    [Header("Performance Settings")]
+    [SerializeField] private int audioSourcePoolSize = 50; // Pre-create pool
+    [SerializeField] private float volumeUpdateDelay = 0.1f; // Batch volume updates
 
     // Synchronized playback tracking
     private SeasonalSongData currentSong;
@@ -38,7 +42,17 @@ public class AudioManager : MonoBehaviour
         { GameTimeStamp.Season.Winter, 0 }
     };
 
-    //Current game season
+    // OPTIMIZATION: Object pooling for AudioSources
+    private Queue<AudioSource> audioSourcePool = new Queue<AudioSource>();
+    private GameObject poolContainer;
+
+    // OPTIMIZATION: Batch volume updates
+    private bool volumeUpdatePending = false;
+    private float lastVolumeUpdateTime = 0f;
+
+    // OPTIMIZATION: Cache current season count
+    private int currentSeasonCropCount = 0;
+
     private GameTimeStamp.Season currentGameSeason = GameTimeStamp.Season.Spring;
 
     private void Awake()
@@ -48,15 +62,20 @@ public class AudioManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
             
-            // Start ambient sound
+            // OPTIMIZATION: Initialize object pool
+            InitializeAudioSourcePool();
+            
+            // OPTIMIZATION: Preload all audio clips
+            PreloadAudioClips();
+            
             if (ambientSource != null && ambientSource.clip != null)
             {
                 ambientSource.Play();
             }
             
-            // Initialize with Spring season
             currentSong = springSong;
             currentGameSeason = GameTimeStamp.Season.Spring;
+            currentSeasonCropCount = matureCropCounts[currentGameSeason];
         }
         else
         {
@@ -64,105 +83,184 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    // OPTIMIZATION: Pre-create AudioSource pool
+    private void InitializeAudioSourcePool()
+    {
+        poolContainer = new GameObject("AudioSourcePool");
+        poolContainer.transform.SetParent(transform);
+        
+        for (int i = 0; i < audioSourcePoolSize; i++)
+        {
+            AudioSource source = CreatePooledAudioSource();
+            source.gameObject.SetActive(false);
+            audioSourcePool.Enqueue(source);
+        }
+        
+        Debug.Log($"AudioManager: Initialized pool with {audioSourcePoolSize} AudioSources");
+    }
+
+    private AudioSource CreatePooledAudioSource()
+    {
+        GameObject obj = new GameObject("PooledAudioSource");
+        obj.transform.SetParent(poolContainer.transform);
+        
+        AudioSource source = obj.AddComponent<AudioSource>();
+        source.loop = true;
+        source.spatialBlend = 1f;
+        source.playOnAwake = false;
+        source.minDistance = minDistanceFor3D;
+        source.maxDistance = maxDistanceFor3D;
+        source.rolloffMode = AudioRolloffMode.Linear;
+        source.dopplerLevel = 0f;
+        
+        return source;
+    }
+
+    // OPTIMIZATION: Preload all audio clips to prevent loading stutter
+    private void PreloadAudioClips()
+    {
+        PreloadSongData(springSong);
+        PreloadSongData(summerSong);
+        PreloadSongData(fallSong);
+        PreloadSongData(winterSong);
+        
+        Debug.Log("AudioManager: All audio clips preloaded");
+    }
+
+    private void PreloadSongData(SeasonalSongData songData)
+    {
+        if (songData == null) return;
+        
+        // Access all instrument tracks to force Unity to load them
+        foreach (var track in songData.instrumentTracks)
+        {
+            if (track != null && track.audioClip != null)
+            {
+                track.audioClip.LoadAudioData();
+            }
+        }
+    }
+
     private void Update()
     {
-        // Keep all instrument tracks synchronized
         if (isSongPlaying && currentSong != null)
         {
             float currentPlaybackTime = Time.time - songStartTime;
             float songLength = currentSong.songLengthInSeconds;
 
-            // Loop the song
             if (currentPlaybackTime >= songLength)
             {
                 songStartTime = Time.time;
                 SyncAllInstruments();
             }
         }
+
+        // OPTIMIZATION: Batch volume updates instead of updating immediately
+        if (volumeUpdatePending && Time.time - lastVolumeUpdateTime >= volumeUpdateDelay)
+        {
+            PerformVolumeUpdate();
+            volumeUpdatePending = false;
+        }
     }
 
-    // Called when a crop reaches mature state
     public void OnCropMature(GameTimeStamp.Season cropSeason)
     {
         matureCropCounts[cropSeason]++;
         
-        // Start playing seasonal music if this is the first mature crop of this season
+        // OPTIMIZATION: Cache current season count
+        if (cropSeason == currentGameSeason)
+        {
+            currentSeasonCropCount++;
+        }
+        
         if (matureCropCounts[cropSeason] == 1)
         {
             CheckAndPlaySeasonalMusic();
         }
 
-        //Recalculate instrument volumes
-        UpdateAllInstrumentVolumes();
+        // OPTIMIZATION: Schedule batched volume update
+        ScheduleVolumeUpdate();
     }
 
-    // Called when a mature crop is harvested or destroyed
     public void OnCropHarvested(GameTimeStamp.Season cropSeason)
     {
         if (matureCropCounts[cropSeason] > 0)
         {
             matureCropCounts[cropSeason]--;
             
-            // Stop seasonal music if no more mature crops of this season
+            // OPTIMIZATION: Cache current season count
+            if (cropSeason == currentGameSeason)
+            {
+                currentSeasonCropCount--;
+            }
+            
             if (matureCropCounts[cropSeason] == 0)
             {
                 CheckAndPlaySeasonalMusic();
             }
-            //Recalculate instrument volumes
-            UpdateAllInstrumentVolumes();
+            
+            ScheduleVolumeUpdate();
         }
     }
 
-    // Check if we should play seasonal music based on mature crop counts
+    // OPTIMIZATION: Batched volume updates
+    private void ScheduleVolumeUpdate()
+    {
+        volumeUpdatePending = true;
+        lastVolumeUpdateTime = Time.time;
+    }
+
+    private void PerformVolumeUpdate()
+    {
+        // Cache count to avoid repeated dictionary lookups
+        int cropCount = currentSeasonCropCount;
+        if (cropCount == 0) return;
+
+        float volumeScaling = Mathf.Min(1f, (float)cropCountForMaxVolume / cropCount);
+
+        // Update all volumes in one pass
+        for (int i = 0; i < activeInstrumentSources.Count; i++)
+        {
+            AudioSource source = activeInstrumentSources[i];
+            if (source != null && source.clip != null)
+            {
+                float baseVolume = originalVolumes[source];
+                float normalizedVolume = (baseVolume * volumeScaling * maxTotalInstrumentVolume);
+                source.volume = Mathf.Clamp(normalizedVolume, 0f, baseVolume);
+            }
+        }
+    }
+
     private void CheckAndPlaySeasonalMusic()
     {
-        //Check current season mature crops
-        bool hasSeasonalCrops = matureCropCounts[currentGameSeason] > 0;
+        bool hasSeasonalCrops = currentSeasonCropCount > 0;
+        
         if (hasSeasonalCrops && !isSongPlaying)
         {
-            // Start seasonal music
             songStartTime = Time.time;
             isSongPlaying = true;
             SyncAllInstruments();
         }
         else if (!hasSeasonalCrops && isSongPlaying)
         {
-            // Stop seasonal music
             isSongPlaying = false;
             StopAllInstruments();
         }
     }
-
-    //Calcuate normalized volume based on number of mature crops
-    private float GetNormalizedVolume(float baseVolume) {
-        int totalCrops = activeInstrumentSources.Count;
+    
+    // OPTIMIZATION: Use cached count
+    private float GetNormalizedVolume(float baseVolume)
+    {
+        int totalCrops = currentSeasonCropCount;
         if (totalCrops == 0) return baseVolume;
 
-       // Calculate volume scaling factor
-        // As crops increase, individual volume decreases to maintain max total volume
         float volumeScaling = Mathf.Min(1f, (float)cropCountForMaxVolume / totalCrops);
-        
-        // Apply scaling but ensure we don't exceed max total volume
         float normalizedVolume = (baseVolume * volumeScaling * maxTotalInstrumentVolume);
 
         return Mathf.Clamp(normalizedVolume, 0f, baseVolume);
     }
 
-    // Update volumes for all active instruments
-    private void UpdateAllInstrumentVolumes()
-    {
-        foreach (var source in activeInstrumentSources)
-        {
-            if (source != null && source.clip != null)
-            {
-                //Get the base volume from the clip
-                float baseVolume = source.volume;
-                source.volume = GetNormalizedVolume(baseVolume);
-            }
-        }
-    }
-
-    // Register a crop's instrument track and sync it to the current song
+    // OPTIMIZATION: Use pooled AudioSources instead of instantiating
     public AudioSource RegisterCropInstrument(InstrumentTrack track, GameTimeStamp.Season cropSeason, Vector3 cropPosition)
     {
         if (track == null || track.audioClip == null)
@@ -177,89 +275,88 @@ public class AudioManager : MonoBehaviour
             return null;
         } 
 
-        //Only play instruments for crops of the current season
         if (cropSeason != currentGameSeason)
         {
-            Debug.Log($"Crop season {cropSeason} doesn't match current season {currentGameSeason}. Not playing instrument.");
             return null;
         }
 
-        // Create a new AudioSource for this instrument
-        GameObject instrumentObj = new GameObject($"Instrument_{track.audioClip.name}");
-        instrumentObj.transform.SetParent(transform);
-        instrumentObj.transform.position = cropPosition;    
-
-        AudioSource source = instrumentObj.AddComponent<AudioSource>();
+        // OPTIMIZATION: Get from pool instead of instantiating
+        AudioSource source = GetPooledAudioSource();
+        if (source == null)
+        {
+            Debug.LogWarning("AudioSource pool exhausted, creating new source");
+            source = CreatePooledAudioSource();
+        }
 
         // Configure the AudioSource
+        source.gameObject.SetActive(true);
+        source.transform.position = cropPosition;
         source.clip = track.audioClip;
-        source.loop = true;
         source.volume = track.volume;
-        source.spatialBlend = 1f; // 3D sound
-        source.playOnAwake = false;
 
-        // Set 3D sound settings
-        source.minDistance = minDistanceFor3D;
-        source.maxDistance = maxDistanceFor3D;
-        source.rolloffMode = AudioRolloffMode.Linear;
-        source.dopplerLevel = 0f;
-
-        // Set initial volume based on current number of mature crops
         originalVolumes[source] = track.volume;
         source.volume = GetNormalizedVolume(track.volume);
 
-        // Add to active instruments list
         activeInstrumentSources.Add(source);
 
-        // Update all instrument volumes
-        UpdateAllInstrumentVolumes();
+        // OPTIMIZATION: Schedule batched update instead of immediate
+        ScheduleVolumeUpdate();
 
-        // Only play if seasonal music is active
         if (isSongPlaying)
         {
-            //Calculate current playback time to sync
             float currentPlaybackTime = (Time.time - songStartTime) % currentSong.songLengthInSeconds;
-            //set the audio source time and play
             source.time = currentPlaybackTime;
             source.Play();
         }
-        else if (matureCropCounts[currentGameSeason] >= 1)
+        else if (currentSeasonCropCount >= 1)
         {
-            // Start seasonal music if not already playing
             songStartTime = Time.time;
             isSongPlaying = true;
-            // Sync all instruments including this new one
             SyncAllInstruments();
         }
         
         return source;
     }
 
-    // Unregister a crop's instrument when harvested/destroyed
+    private AudioSource GetPooledAudioSource()
+    {
+        if (audioSourcePool.Count > 0)
+        {
+            return audioSourcePool.Dequeue();
+        }
+        return null;
+    }
+
+    // OPTIMIZATION: Return to pool instead of destroying
     public void UnregisterCropInstrument(AudioSource source)
     {
         if (source != null && activeInstrumentSources.Contains(source))
         {
             activeInstrumentSources.Remove(source);
             originalVolumes.Remove(source);
-            Destroy(source.gameObject);
+            
+            // Return to pool
+            source.Stop();
+            source.clip = null;
+            source.gameObject.SetActive(false);
+            audioSourcePool.Enqueue(source);
         }
-        // Update all instrument volumes
-        UpdateAllInstrumentVolumes();
+        
+        ScheduleVolumeUpdate();
     }
 
-    // Sync all active instruments to the current timeline
     private void SyncAllInstruments()
     {
         if (currentSong == null || !isSongPlaying) return;
 
         float currentPlaybackTime = (Time.time - songStartTime) % currentSong.songLengthInSeconds;
 
-        foreach (var source in activeInstrumentSources)
+        // OPTIMIZATION: Use for loop instead of foreach (less GC)
+        for (int i = 0; i < activeInstrumentSources.Count; i++)
         {
+            AudioSource source = activeInstrumentSources[i];
             if (source != null && source.clip != null)
             {
-                //only adjust time if there's a significant difference to avoid audio glitches
                 float timeDifference = Mathf.Abs(source.time - currentPlaybackTime);
                 if (timeDifference > 0.1f)
                 {
@@ -274,22 +371,21 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    // Stop all instruments
     private void StopAllInstruments()
     {
-        foreach (var source in activeInstrumentSources)
+        for (int i = 0; i < activeInstrumentSources.Count; i++)
         {
-            if (source != null)
+            if (activeInstrumentSources[i] != null)
             {
-                source.Stop();
+                activeInstrumentSources[i].Stop();
             }
         }
     }
 
-    // Called when the game season changes
     public void SetCurrentSeason(GameTimeStamp.Season season)
     {
         currentGameSeason = season;
+        currentSeasonCropCount = matureCropCounts[currentGameSeason];
 
         currentSong = season switch
         {
@@ -300,26 +396,27 @@ public class AudioManager : MonoBehaviour
             _ => springSong
         };
 
-        // Stop all out-of-season instruments and restart music system
         StopAllInstruments();
 
-        // Destroy all audio source game objects
+        // OPTIMIZATION: Return all to pool instead of destroying
         foreach (var source in activeInstrumentSources)
         {
             if (source != null)
             {
-                Destroy(source.gameObject);
+                source.Stop();
+                source.clip = null;
+                source.gameObject.SetActive(false);
+                audioSourcePool.Enqueue(source);
             }
         }
+        
         isSongPlaying = false;
         activeInstrumentSources.Clear();
         originalVolumes.Clear();
 
-        //Check if we should play music for the new season
         CheckAndPlaySeasonalMusic();
     }
 
-    // Volume controls
     public void SetAmbientSoundVolume(float volume)
     {
         if (ambientSource != null)
@@ -335,6 +432,6 @@ public class AudioManager : MonoBehaviour
     public void SetInstrumentVolume(float volume)
     {
         maxTotalInstrumentVolume = Mathf.Clamp01(volume);
-        UpdateAllInstrumentVolumes();
+        ScheduleVolumeUpdate();
     }
 }

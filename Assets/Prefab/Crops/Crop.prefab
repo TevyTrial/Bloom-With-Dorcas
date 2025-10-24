@@ -58,6 +58,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Seed
       objectReference: {fileID: 0}
+    - target: {fileID: 857558189176294040, guid: 3a7738bad1e044d4e847818f1e904c9b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 858798697078067566, guid: 3a7738bad1e044d4e847818f1e904c9b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.027526855
