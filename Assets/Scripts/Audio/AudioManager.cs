@@ -1,9 +1,14 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance { get; private set; }
+
+    [Header("Scene Settings")]
+    [SerializeField] private bool persistAcrossScenes = false; // NEW: Toggle in Inspector
+    [SerializeField] private string[] activeInScenes = new string[] { "Garden" }; // NEW: Scenes where this manager is active
 
     [Header("Audio Sources")]
     [SerializeField] private AudioSource musicSource;
@@ -57,10 +62,26 @@ public class AudioManager : MonoBehaviour
 
     private void Awake()
     {
+        // Check if this AudioManager should be active in current scene
+        string currentScene = SceneManager.GetActiveScene().name;
+        bool shouldBeActive = System.Array.Exists(activeInScenes, scene => scene == currentScene);
+
+        if (!shouldBeActive)
+        {
+            Debug.Log($"[AudioManager] Not active in scene '{currentScene}' - destroying");
+            Destroy(gameObject);
+            return;
+        }
+
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            
+            // Only persist if enabled
+            if (persistAcrossScenes)
+            {
+                DontDestroyOnLoad(gameObject);
+            }
             
             // OPTIMIZATION: Initialize object pool
             InitializeAudioSourcePool();
@@ -76,9 +97,16 @@ public class AudioManager : MonoBehaviour
             currentSong = springSong;
             currentGameSeason = GameTimeStamp.Season.Spring;
             currentSeasonCropCount = matureCropCounts[currentGameSeason];
+
+            Debug.Log($"[AudioManager] Initialized in scene '{currentScene}'");
         }
         else
         {
+            // If another instance exists and we're scene-specific, destroy this one
+            if (!persistAcrossScenes)
+            {
+                Debug.Log($"[AudioManager] Another instance exists, destroying scene-specific manager");
+            }
             Destroy(gameObject);
         }
     }

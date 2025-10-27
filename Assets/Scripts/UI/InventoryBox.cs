@@ -72,6 +72,12 @@ public class InventoryBox : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     //Display the item info on the item info box when the player mouses over
     public virtual void OnPointerEnter(PointerEventData eventData)
     {
+        // PROTECTION: Don't trigger any actions when dragging
+        if (eventData.dragging)
+        {
+            return;
+        }
+
         UIManager.Instance.DisplayItemInfo(itemToDisplay);
     }
 

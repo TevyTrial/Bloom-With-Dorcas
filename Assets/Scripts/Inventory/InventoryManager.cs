@@ -59,7 +59,6 @@ public class InventoryManager : MonoBehaviour
     //movement of item from inventory to hand
     public void InventoryToHand(int boxIndex, InventoryBox.InventoryType boxType)
     {
-        Debug.Log($"[InventoryManager] InventoryToHand called index={boxIndex} boxType={boxType}");
         //The slot data in hand
         ItemSlotData handEquip = equippedToolSlot;
         //The array to change
@@ -73,7 +72,6 @@ public class InventoryManager : MonoBehaviour
 
         //Check if nothing is in the inventory slot
         if(inventoryArr[boxIndex].IsEmpty()) {
-            Debug.Log("[InventoryManager] InventoryToHand: Inventory slot is empty, nothing to equip");
             return;
         }
 
@@ -99,9 +97,7 @@ public class InventoryManager : MonoBehaviour
 
         }
         //Update in scenes
-        //Always update hand rendering after a transfer so debug info is visible
         RenderEquippedItem();
-        Debug.Log($"[InventoryManager] After InventoryToHand - equippedTool='{(equippedToolSlot==null||equippedToolSlot.itemData==null?"null":equippedToolSlot.itemData.name)}' equippedItem='{(equippedItemSlot==null||equippedItemSlot.itemData==null?"null":equippedItemSlot.itemData.name)}'");
         //Update the inventory UI
         UIManager.Instance.RenderInventory();
 
@@ -160,33 +156,20 @@ public class InventoryManager : MonoBehaviour
     //Render the item in the player's hand
     public void RenderEquippedItem()
     {
-        try
-        {
-
         //Reset object in hand
-        Debug.Log($"[InventoryManager] RenderEquippedItem: handPoint childCount={handPoint.childCount}");
         if(handPoint.childCount > 0)
         {
-            Debug.Log("[InventoryManager] RenderEquippedItem: Destroying existing child in handPoint");
             Destroy(handPoint.GetChild(0).gameObject);
         }
 
         //Check if the player has an item equipped
         if(SlotEquipped(InventoryBox.InventoryType.Item))
         {
-            //Instantiate the item model at the hand point (defensive: ensure item and model exist)
+            //Instantiate the item model at the hand point
             ItemData data = GetEquippedItemSlots(InventoryBox.InventoryType.Item);
-            if (data != null)
+            if (data != null && data.onHandModel != null)
             {
-                if (data.onHandModel == null)
-                {
-                    Debug.Log($"[InventoryManager] RenderEquippedItem: No visual model (onHandModel) assigned for '{data.name}' - item is equipped but invisible");
-                }
-                else
-                {
-                    GameObject inst = Instantiate(data.onHandModel, handPoint);
-                    
-                }
+                GameObject inst = Instantiate(data.onHandModel, handPoint);
             }
             return;
         }
@@ -194,27 +177,13 @@ public class InventoryManager : MonoBehaviour
         //Check if the player has an tool equipped
         if(SlotEquipped(InventoryBox.InventoryType.Tool))
         {
-            //Instantiate the tool model at the hand point (defensive: ensure item and model exist)
+            //Instantiate the tool model at the hand point
             ItemData data = GetEquippedItemSlots(InventoryBox.InventoryType.Tool);
-            if (data != null)
+            if (data != null && data.onHandModel != null)
             {
-                if (data.onHandModel == null)
-                {
-                    Debug.Log($"[InventoryManager] RenderEquippedItem: No visual model (onHandModel) assigned for '{data.name}' - tool is equipped but invisible");
-                }
-                else
-                {
-                    GameObject inst = Instantiate(data.onHandModel, handPoint);
-                }
+                GameObject inst = Instantiate(data.onHandModel, handPoint);
             }
             return;
-        }
-
-        Debug.Log("[InventoryManager] RenderEquippedItem: Nothing equipped");
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogError("[InventoryManager] Exception in RenderEquippedItem: " + ex.ToString());
         }
     }
 
@@ -282,7 +251,6 @@ public class InventoryManager : MonoBehaviour
     public void EquipHandSlot(ItemData item)
     {
         bool isTool = IsTool(item);
-        Debug.Log($"[InventoryManager] EquipHandSlot(ItemData): equipping '{(item==null?"null":item.name)}' as {(isTool?"Tool":"Item")} ");
         if(isTool) {
             equippedToolSlot = new ItemSlotData(item);
             return;
@@ -296,7 +264,6 @@ public class InventoryManager : MonoBehaviour
         //Get the item data from the slot
         ItemData itemData = slotData.itemData;
         bool isTool = IsTool(itemData);
-        Debug.Log($"[InventoryManager] EquipHandSlot(ItemSlotData): equipping '{(itemData==null?"null":itemData.name)}' as {(isTool?"Tool":"Item")} (quantity={slotData.quantity})");
         if(isTool) {
             equippedToolSlot = new ItemSlotData(slotData);
             return;
