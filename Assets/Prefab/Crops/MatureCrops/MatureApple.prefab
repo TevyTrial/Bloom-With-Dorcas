@@ -5156,6 +5156,9 @@ PrefabInstance:
       addedObject: {fileID: 3144645313615597140}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1774438225319396953, guid: 11c53348ed97abc409847c78de1c27ec, type: 3}
+      insertIndex: 1
+      addedObject: {fileID: 8586323235003428946}
+    - targetCorrespondingSourceObject: {fileID: 1774438225319396953, guid: 11c53348ed97abc409847c78de1c27ec, type: 3}
       insertIndex: -1
       addedObject: {fileID: -7663252702601496389}
     - targetCorrespondingSourceObject: {fileID: 1774438225319396953, guid: 11c53348ed97abc409847c78de1c27ec, type: 3}
@@ -5172,6 +5175,19 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1774438225319396953, guid: 11c53348ed97abc409847c78de1c27ec, type: 3}
   m_PrefabInstance: {fileID: 5055918792132069280}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8586323235003428946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6812302949550162425}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb2efa380ce21ca47b7cbe8827fb7b66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CropInstrumentController
+  particleSystemObject: {fileID: 8023756060273586674}
 --- !u!65 &-7663252702601496389
 BoxCollider:
   m_ObjectHideFlags: 0

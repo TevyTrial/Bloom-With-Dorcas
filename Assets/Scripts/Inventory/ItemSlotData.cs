@@ -42,7 +42,7 @@ public class ItemSlotData
     //Remove specified amount from quantity
     public void Remove(int amount)
     {
-        quantity--;
+        quantity -= amount;
         ValidateQuantity();
     }
 

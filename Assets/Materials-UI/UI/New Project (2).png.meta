@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: c5cf4fa7fca1058459003155ba4ea5dc
+guid: eb802fbc45f1ac4458d680d7aed64caf
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -97,13 +97,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: aiease_1761316648745_0
+      name: New Project (2)_0
       rect:
         serializedVersion: 2
-        x: 210
-        y: 163
-        width: 596
-        height: 727
+        x: 311
+        y: 334
+        width: 591
+        height: 613
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -112,30 +112,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c60db3ee103662745b3b7d7c2bb67ce0
-      internalID: 1612549838
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: aiease_1761316648745_1
-      rect:
-        serializedVersion: 2
-        x: 108
-        y: 63
-        width: 7
-        height: 8
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a259579204d6849419d0281d4d8ec639
-      internalID: 405940283
+      spriteID: 0983bad4e12ea0f468935cd989c9da6a
+      internalID: -421347032
       vertices: []
       indices: 
       edges: []
@@ -144,7 +122,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 69584cdb3d60448419f846e1277294f3
+    spriteID: f68021f82b1ea1d4e8c9ed2c26b0459d
     internalID: 0
     vertices: []
     indices: 
@@ -156,8 +134,7 @@ TextureImporter:
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      aiease_1761316648745_0: 1612549838
-      aiease_1761316648745_1: 405940283
+      New Project (2)_0: -421347032
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

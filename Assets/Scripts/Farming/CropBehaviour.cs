@@ -179,9 +179,16 @@ public class CropBehaviour : MonoBehaviour
                 // Start playing instrument when crop matures
                 StartInstrument();
 
-                // Add CropInstrumentController to the mature crop so it can stop music when harvested
-                CropInstrumentController controller = stageObjects[matureIndex].AddComponent<CropInstrumentController>();
-                controller.Initialize(instrumentSource, seedToGrow.cropSeason);
+                // Get the CropInstrumentController component
+                CropInstrumentController controller = stageObjects[matureIndex].GetComponent<CropInstrumentController>();
+                if (controller != null)
+                {
+                    // Initialize the controller with the instrument source and crop season
+                    controller.Initialize(instrumentSource, seedToGrow.cropSeason);
+                } else
+                {
+                    Debug.LogWarning("CropInstrumentController component not found on mature crop.");
+                }
 
                 // Reset health on mature crop
                 health = maxHealth;

@@ -17,6 +17,7 @@ public class InventoryBox : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     public InventoryType boxType;
 
     protected int boxIndex;
+    public int BoxIndex => boxIndex;
 
     public void Display(ItemSlotData itemSlot)
     {
@@ -45,6 +46,16 @@ public class InventoryBox : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         }
 
         itemDisplayImage.gameObject.SetActive(false);     
+    }
+
+    public ItemSlotData GetSlotData()
+    {
+        ItemSlotData[] slots = InventoryManager.Instance.GetInventorySlots(boxType);
+        if(slots != null && boxIndex >= 0 && boxIndex < slots.Length)
+        {
+            return slots[boxIndex];
+        }
+        return null;
     }
 
     public virtual void OnPointerClick(PointerEventData eventData)
