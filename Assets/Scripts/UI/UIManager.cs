@@ -41,6 +41,10 @@ public class UIManager : MonoBehaviour, ITimeTracker
     //Tooltip panel 
     public GameObject tooltipPanel;
 
+    [Header("Screen Transitions")]
+    public GameObject fadeIn;
+    public GameObject fadeOut;
+
     private void Awake()
     {
         //If there is more than one instance, destroy the extra
@@ -62,6 +66,24 @@ public class UIManager : MonoBehaviour, ITimeTracker
 
         //Register as a listener to time updates
         TimeManager.Instance.RegisterListener(this);
+    }
+
+    public void FadeInScreen() {
+        fadeIn.SetActive(true);
+    }
+
+    public void FadeOutScreen() {
+        fadeOut.SetActive(true);
+    }
+
+    public void OnFadeInComplete() {
+        //Disable Fade in screen
+        fadeIn.SetActive(false);
+    }
+
+    public void ResetFadeDefault() {
+        fadeOut.SetActive(false);
+        fadeIn.SetActive(true);
     }
 
     //iterate and assign indexes to each inventory box
