@@ -9,6 +9,9 @@ public class PlayerInteraction : MonoBehaviour
     //The interactable object the player is currently looking at
     InteractableObject selectedInteractable = null;
 
+    //The NPC the player is currently looking at
+    DialogueScript selectedNPC = null;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -26,6 +29,10 @@ public class PlayerInteraction : MonoBehaviour
         // Also keep downward raycast for land detection
         else if (Physics.Raycast(transform.position, Vector3.down, out hit, 1)) {
             OnInteractWithObject(hit);                    
+        }
+        // Start NPC conversation with T key
+        if (selectedNPC != null && Input.GetKeyDown(KeyCode.T)) {
+            selectedNPC.StartConversation();
         }
 
     }
@@ -46,16 +53,35 @@ public class PlayerInteraction : MonoBehaviour
             
             //Show tooltip for the item
             if(selectedInteractable != null && selectedInteractable.item != null) {
-                UIManager.Instance.ShowTooltip();
+                UIManager.Instance.ShowHarvestTooltip();
             }
 
+            return;
+        }
+
+        // Check if looking at an NPC
+        if(collider.tag == "NPC") {
+            selectedNPC = collider.GetComponent<DialogueScript>();
+
+            if(selectedNPC != null) {
+                // Only show interact tooltip if not in conversation
+                if(!selectedNPC.IsInConversation()) {
+                    UIManager.Instance.ShowInteractTooltip();
+                }
+            }
             return;
         }
 
         //Deselect the old interactable
         if(selectedInteractable != null) {
             selectedInteractable = null;
-            UIManager.Instance.HideTooltip();
+            UIManager.Instance.HideHarvestTooltip();
+        }
+
+        //Deselect the old NPC
+        if(selectedNPC != null) {
+            selectedNPC = null;
+            UIManager.Instance.HideInteractTooltip();
         }
 
         //deselect the old land
@@ -98,7 +124,7 @@ public class PlayerInteraction : MonoBehaviour
             //pick up the item
             selectedInteractable.Pickup();
             //Hide tooltip after pickup
-            UIManager.Instance.HideTooltip();
+            UIManager.Instance.HideHarvestTooltip();
             selectedInteractable = null;
             return;
         }
@@ -112,4 +138,3 @@ public class PlayerInteraction : MonoBehaviour
     }
 
 }
-

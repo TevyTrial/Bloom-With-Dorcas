@@ -15,7 +15,7 @@ MonoBehaviour:
   description: Tall and resilient, thrives under long sunny days. Produces golden
     kernels.
   icon: {fileID: 774922119, guid: ab7af8c09d0724c448d524ead916bcd4, type: 3}
-  onHandModel: {fileID: 3100257852194279338, guid: 4876e87e223230744b969dbc64a82938, type: 3}
+  onHandModel: {fileID: 4709425489127217626, guid: ea182204022a60b46a3fffadebde1670, type: 3}
   CropToYield: {fileID: 11400000, guid: a95ea0673e76d6e4ab207492891f5338, type: 2}
   growTimeInDays: 1
   growthStageModels:

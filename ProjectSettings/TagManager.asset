@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Land
   - Item
+  - Fluid
+  - NPC
   layers:
   - Default
   - TransparentFX

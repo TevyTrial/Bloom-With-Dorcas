@@ -39,7 +39,8 @@ public class UIManager : MonoBehaviour, ITimeTracker
 
     [Header("Tooltip System")]
     //Tooltip panel 
-    public GameObject tooltipPanel;
+    public GameObject HarvestTooltipPanel;
+    public GameObject InteractTooltipPanel;
 
     [Header("Screen Transitions")]
     public GameObject fadeIn;
@@ -191,21 +192,39 @@ public class UIManager : MonoBehaviour, ITimeTracker
         itemDescription.text = data.description; 
     }
 
-    //Show tooltip
-    public void ShowTooltip()
+    //Show harvest tooltip
+    public void ShowHarvestTooltip()
     {
-        if(tooltipPanel != null)
+        if(HarvestTooltipPanel != null)
         {
-            tooltipPanel.SetActive(true);
+            HarvestTooltipPanel.SetActive(true);
+        }
+    }
+    //Hide harvest tooltip
+    public void HideHarvestTooltip()
+    {
+        if(HarvestTooltipPanel != null)
+        {
+            HarvestTooltipPanel.SetActive(false);
         }
     }
 
-    //Hide tooltip
-    public void HideTooltip()
+    //Show interact tooltip
+    public void ShowInteractTooltip()
     {
-        if(tooltipPanel != null)
+        Debug.Log("Show Interact Tooltip");
+        if(InteractTooltipPanel != null)
         {
-            tooltipPanel.SetActive(false);
+            InteractTooltipPanel.SetActive(true);
+        }
+    }
+    //Hide interact tooltip
+    public void HideInteractTooltip()
+    {
+        Debug.Log("Hide Interact Tooltip");
+        if(InteractTooltipPanel != null)
+        {
+            InteractTooltipPanel.SetActive(false);
         }
     }
 

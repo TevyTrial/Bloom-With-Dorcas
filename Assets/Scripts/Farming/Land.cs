@@ -95,17 +95,14 @@ public enum LandState
             //Check the type of tool
             switch(toolType) {
                 case EquipmentData.ToolType.Hoe:
-                    Debug.Log($"[Land] Using Hoe - current state: {landstate}");
                     //If the land is in soil state, till it
                     if(landstate == LandState.Soil) {
-                        Debug.Log("[Land] Tilling soil -> tilled");
                         SwitchState(LandState.Tilled);
                     } else {
-                        Debug.Log($"[Land] Cannot till - land is already {landstate}");
+                        Debug.Log($"[Land] Cannot till - land must be in soil state (current: {landstate})");
                     }
                     break;
                 case EquipmentData.ToolType.WaterCan:
-                    Debug.Log($"[Land] Using WaterCan - current state: {landstate}");
                     //If the land is in tilled state, water it
                     if(landstate == LandState.Tilled) {
                         Debug.Log("[Land] Watering tilled land -> watered");
@@ -122,10 +119,8 @@ public enum LandState
                     }
                     break;
                 case EquipmentData.ToolType.Rake:
-                    Debug.Log($"[Land] Using Rake - current state: {landstate}");
                     //Remove crop
                     if(cropPlanted != null) {
-                        Debug.Log("[Land] Removing crop with rake");
                         Destroy(cropPlanted.gameObject);
                         cropPlanted = null;
                     } else {

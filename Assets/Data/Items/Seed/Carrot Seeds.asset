@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SeedData
   description: Carrot
   icon: {fileID: -1476294837, guid: ab7af8c09d0724c448d524ead916bcd4, type: 3}
-  onHandModel: {fileID: 0}
+  onHandModel: {fileID: 4709425489127217626, guid: ea182204022a60b46a3fffadebde1670, type: 3}
   CropToYield: {fileID: 11400000, guid: f4815409f2f207c488111922386e455c, type: 2}
   growTimeInDays: 1
   growthStageModels:

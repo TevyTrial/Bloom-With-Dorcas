@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SeedData
   description: 
   icon: {fileID: 1237870550, guid: ad0170412b9aaba4298aba9934b8c250, type: 3}
-  onHandModel: {fileID: 0}
+  onHandModel: {fileID: 4709425489127217626, guid: ea182204022a60b46a3fffadebde1670, type: 3}
   CropToYield: {fileID: 11400000, guid: 06251e8c05b01fe42abeb9dfa646261d, type: 2}
   growTimeInDays: 1
   growthStageModels:
