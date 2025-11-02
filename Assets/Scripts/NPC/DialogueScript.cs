@@ -26,7 +26,7 @@ public class DialogueScript : MonoBehaviour
 
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            ConversationManager.OnConversationEnded += LockCursorAgain;
+            ConversationManager.OnConversationEnded += OnConversationEnded;
         }
         else
         {
@@ -34,11 +34,11 @@ public class DialogueScript : MonoBehaviour
         }
     }
 
-    private void LockCursorAgain() 
+    private void OnConversationEnded() 
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         isInConversation = false;
-        ConversationManager.OnConversationEnded -= LockCursorAgain;
+        ConversationManager.OnConversationEnded -= OnConversationEnded;
     }
 }

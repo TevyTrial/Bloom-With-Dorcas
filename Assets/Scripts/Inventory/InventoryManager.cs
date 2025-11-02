@@ -22,6 +22,9 @@ public class InventoryManager : MonoBehaviour
         InitializeSlots();
     }
 
+    //The full list of items 
+    public ItemIndex itemIndex;
+
     // Ensure no null slots exist so methods can call IsEmpty()/Stackable() safely
     void InitializeSlots()
     {

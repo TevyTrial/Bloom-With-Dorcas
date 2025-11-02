@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class Land : MonoBehaviour, ITimeTracker
 {
-public enum LandState
+    public int id;
+    public enum LandState
     {
         Soil,
         Tilled,
@@ -36,11 +37,11 @@ public enum LandState
         TimeManager.Instance.RegisterListener(this);
     }
 
-    public void SwitchState(LandState newstatus) {
-        //set land state and switch material
-        LandState oldState = landstate;
+    public void LoadLandData(LandState newstatus, GameTimeStamp lastWateredTime)
+    {
+        //Set land state and last watered time  
         landstate = newstatus;
-        Debug.Log($"[Land] SwitchState: {oldState} -> {newstatus}");
+        timeWatered = lastWateredTime;
 
         //decide which material to switch to
         Material materialToSwitch = soilMat;
@@ -59,6 +60,33 @@ public enum LandState
                 break;
         }
         renderer.material = materialToSwitch;
+
+    }
+
+    public void SwitchState(LandState newstatus) {
+        //set land state and switch material
+        LandState oldState = landstate;
+        landstate = newstatus;
+
+        //decide which material to switch to
+        Material materialToSwitch = soilMat;
+        switch (newstatus) {
+            case LandState.Soil:
+                materialToSwitch = soilMat;
+                break;
+            case LandState.Tilled:
+                materialToSwitch = tilledMat;
+                break;
+            case LandState.Watered:
+                materialToSwitch = wateredMat;
+                
+                //record the time when watered
+                timeWatered = TimeManager.Instance.GetGameTimeStamp();
+                break;
+        }
+        renderer.material = materialToSwitch;
+
+        LandManager.Instance.OnLandStateChanged(id, landstate, timeWatered);
     }
 
     public void Select(bool isSelected) {
@@ -79,18 +107,15 @@ public enum LandState
 
         //Now retrieve the equipped tool data and log details
         ItemData toolSlot = InventoryManager.Instance.GetEquippedItemSlots(InventoryBox.InventoryType.Tool);
-        Debug.Log($"[Land] GetEquippedItemSlots(Tool) returned: " + (toolSlot == null ? "null" : toolSlot.name));
 
         //Try casting the itemdata in the toolslot as equipment data
         EquipmentData equippedTool = toolSlot as EquipmentData;
-        Debug.Log("[Land] Equipped item runtime type: " + (toolSlot == null ? "null" : toolSlot.GetType().Name));
 
         //Check if the equipped tool the type of equipment data
         if(equippedTool != null) {
 
             //get the equipment type of the tool
             EquipmentData.ToolType toolType = equippedTool.toolType;
-            Debug.Log("[Land] Equipped toolType: " + toolType);
             
             //Check the type of tool
             switch(toolType) {
@@ -98,9 +123,7 @@ public enum LandState
                     //If the land is in soil state, till it
                     if(landstate == LandState.Soil) {
                         SwitchState(LandState.Tilled);
-                    } else {
-                        Debug.Log($"[Land] Cannot till - land must be in soil state (current: {landstate})");
-                    }
+                    } 
                     break;
                 case EquipmentData.ToolType.WaterCan:
                     //If the land is in tilled state, water it
@@ -121,11 +144,9 @@ public enum LandState
                 case EquipmentData.ToolType.Rake:
                     //Remove crop
                     if(cropPlanted != null) {
-                        Destroy(cropPlanted.gameObject);
+                        cropPlanted.RemoveCrop();
                         cropPlanted = null;
-                    } else {
-                        Debug.Log("[Land] No crop to remove");
-                    }
+                    } 
                     break;
                     
                 default:
@@ -135,7 +156,6 @@ public enum LandState
             return;
         }
         
-        Debug.Log("No valid tool equipped");
         //Try casting the itemdata in the toolslot as seed data
         SeedData seedTool = toolSlot as SeedData;
 
@@ -144,33 +164,30 @@ public enum LandState
         //2. The land is in tilled/watered state
         //3. There is no crop currently planted
         if(seedTool != null && landstate != LandState.Soil && cropPlanted == null) {
-        // Check if cropObject prefab is assigned
-            if(cropObject == null) {
-            Debug.LogError("cropObject prefab is not assigned!");
-            return;
-            }
-    
-            GameObject cropObj = Instantiate(cropObject, transform);
-    
-            // Use local position instead of world position
-            cropObj.transform.localPosition = new Vector3(0.061f, 0.8f, 0.14f);
-            cropObj.transform.localScale = new Vector3(0.3f, 1.4f, 0.3f);
-    
-            // Check if CropBehaviour component exists
-            cropPlanted = cropObj.GetComponent<CropBehaviour>();
-            if(cropPlanted == null) {
-                Debug.LogError("CropBehaviour component not found on cropObject prefab!");
-                Destroy(cropObj); // Clean up the instantiated object
-                return;
-            }
-            cropPlanted.plant(seedTool);
+            SpawnCrop();
+            //Plant it with the seed's info
+            cropPlanted.plant(id, seedTool);
 
             //Remove one seed from inventory
             InventoryManager.Instance.ConsumeItem
             (InventoryManager.Instance.GetEquippedSlot(InventoryBox.InventoryType.Tool));
-        }
+        } 
+    }
+    public CropBehaviour SpawnCrop(){
+        GameObject cropObj = Instantiate(cropObject, transform);
     
-        
+        // Use local position instead of world position
+        cropObj.transform.localPosition = new Vector3(0.061f, 0.8f, 0.14f);
+        cropObj.transform.localScale = new Vector3(0.3f, 1.4f, 0.3f);
+    
+        // Check if CropBehaviour component exists
+        cropPlanted = cropObj.GetComponent<CropBehaviour>();
+        if(cropPlanted == null) {
+            Debug.LogError("CropBehaviour component not found on cropObject prefab!");
+            Destroy(cropObj); // Clean up the instantiated object
+            return null;
+        }
+        return cropPlanted;
     }
 
     public void ClockUpdate(GameTimeStamp currentTime)

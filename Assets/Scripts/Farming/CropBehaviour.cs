@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class CropBehaviour : MonoBehaviour
 {
-    
+    //The ID of the land this crop is planted on
+    int landID;
     //Information on what the crop will yield when harvested
     SeedData seedToGrow;
 
@@ -32,8 +33,21 @@ public class CropBehaviour : MonoBehaviour
     private InstrumentTrack assignedInstrument;
     private bool hasMatureUnparented = false; // Track if we've unparented the mature crop
 
-    public void plant(SeedData seedToGrow) {
+    public void plant(int landID, SeedData seedToGrow) {
+        LoadCrop(landID, seedToGrow, 0, 0, maxHealth, false, false);
+        // Register crop in LandManager
+        LandManager.Instance.RegisterCrop(landID, seedToGrow.name, currentStageIndex, growth, health, isWilted, hasMatureUnparented);
+    }
+
+    public void LoadCrop(int landID, SeedData seedToGrow, int currentStageIndex, int growth, int health, bool isWilted, bool hasMatureUnparented)
+    {
+        this.landID = landID;
         this.seedToGrow = seedToGrow;
+        this.growth = growth;
+        this.health = health;
+        this.isWilted = isWilted;
+        this.hasMatureUnparented = hasMatureUnparented;
+        this.currentStageIndex = currentStageIndex;
         
         // Validate seed data
         if(seedToGrow.growthStageModels == null || seedToGrow.growthStageModels.Length == 0) {
@@ -41,16 +55,22 @@ public class CropBehaviour : MonoBehaviour
             return;
         }
         
-        // Reset growth state
-        growth = 0;
-        health = maxHealth;
-        currentStageIndex = 0;
-        isWilted = false;
-        hasMatureUnparented = false;
-        
         // Total stages = seed (always present) + defined models
         totalStages = seedToGrow.growthStageModels.Length + 1;
-        
+
+        // Calculate growth time
+        int hoursToGrow = GameTimeStamp.ConvertDaysToHours(seedToGrow.growTimeInDays);
+        maxGrowth = GameTimeStamp.ConvertHoursToMinutes(hoursToGrow);
+
+        // If loading a mature crop that was already unparented, skip instantiation
+        if (currentStageIndex == totalStages - 1 && hasMatureUnparented)
+        {
+            // Start playing instrument for mature crop
+            //StartInstrument();
+            Destroy(gameObject); // Destroy this CropBehaviour GameObject
+            return;
+        }
+
         // Instantiate all stage models except the last one (mature)
         stageObjects = new GameObject[seedToGrow.growthStageModels.Length];
         for(int i = 0; i < seedToGrow.growthStageModels.Length - 1; i++) {
@@ -82,13 +102,9 @@ public class CropBehaviour : MonoBehaviour
             wiltedModel = Instantiate(seedToGrow.WiltedModel, transform);
             wiltedModel.SetActive(false);
         }
-        
-        // Calculate growth time
-        int hoursToGrow = GameTimeStamp.ConvertDaysToHours(seedToGrow.growTimeInDays);
-        maxGrowth = GameTimeStamp.ConvertHoursToMinutes(hoursToGrow);
-        
+     
         // Start at seed stage
-        SwitchToStage(0);
+        SwitchToStage(currentStageIndex);
     }
 
     public void grow()
@@ -114,6 +130,8 @@ public class CropBehaviour : MonoBehaviour
         {
             SwitchToStage(targetStage);
         }
+        // Inform landmanager on the changes
+        LandManager.Instance.OnCropStateChanged(landID, seedToGrow.name, currentStageIndex, growth, health, isWilted, hasMatureUnparented);
     }
 
     public void wilted()
@@ -128,7 +146,8 @@ public class CropBehaviour : MonoBehaviour
             StopInstrument(); // Stop playing music when wilted
             SwitchToStage(-1);
         }
-        Debug.Log($"Crop {seedToGrow.name} health: {health}/{maxHealth}");
+        // Inform landmanager on the changes
+        LandManager.Instance.OnCropStateChanged(landID, seedToGrow.name, currentStageIndex, growth, health, isWilted, hasMatureUnparented);
     }
 
     //Function to handle the state change of the crop
@@ -174,20 +193,32 @@ public class CropBehaviour : MonoBehaviour
             if (stageObjects[matureIndex] != null)
             {
                 stageObjects[matureIndex].SetActive(true);
-                stageObjects[matureIndex].transform.parent = null;
+                
+                // Unparent if not already done
+                if (!hasMatureUnparented)
+                {
+                    stageObjects[matureIndex].transform.parent = null;
+                    hasMatureUnparented = true;
+                }
+
+                // Add MatureCropTracker component to handle deregistration
+                MatureCropTracker tracker = stageObjects[matureIndex].GetComponent<MatureCropTracker>();
+                if (tracker == null)
+                {
+                    tracker = stageObjects[matureIndex].AddComponent<MatureCropTracker>();
+                }
 
                 // Start playing instrument when crop matures
                 StartInstrument();
+
+                // Initialize the tracker
+                tracker.Initialize(landID, seedToGrow.name, instrumentSource);
 
                 // Get the CropInstrumentController component
                 CropInstrumentController controller = stageObjects[matureIndex].GetComponent<CropInstrumentController>();
                 if (controller != null)
                 {
-                    // Initialize the controller with the instrument source and crop season
                     controller.Initialize(instrumentSource, seedToGrow.cropSeason);
-                } else
-                {
-                    Debug.LogWarning("CropInstrumentController component not found on mature crop.");
                 }
 
                 // Reset health on mature crop
@@ -212,6 +243,14 @@ public class CropBehaviour : MonoBehaviour
         }
 
         currentStageIndex = stageIndex;
+    }
+    public void RemoveCrop() {
+        LandManager.Instance.DeregisterCrop(landID);
+        Destroy(gameObject);
+        if (!hasMatureUnparented)
+        {
+            StopInstrument();
+        }
     }
 
     // Start playing the crop's instrument track
@@ -248,13 +287,4 @@ public class CropBehaviour : MonoBehaviour
         }
     }
 
-    private void OnDestroy()
-    {
-        // Only clean up instrument if we haven't unparented (wilted crops, manual destroy)
-        // If we've unparented, the CropInstrumentController handles it
-        if (!hasMatureUnparented)
-        {
-            StopInstrument();
-        }
-    }
 }

@@ -30,7 +30,7 @@ public class CameraController : MonoBehaviour
     {
         if (playerPos == null)
         {
-            var player = FindObjectOfType<PlayerController>();
+            var player = FindAnyObjectByType<PlayerController>();
             if (player != null)
                 playerPos = player.transform;
             else

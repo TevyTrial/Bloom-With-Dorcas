@@ -24,6 +24,7 @@ public class SceneTransitionManager : MonoBehaviour
         if(Instance != null && Instance != this)
         {
             Destroy(gameObject);
+            return; // Important: stop execution after destroying
         }
         else
         {
@@ -38,6 +39,18 @@ public class SceneTransitionManager : MonoBehaviour
         SceneManager.sceneLoaded += OnLocationLoad;
     }
 
+    private void OnDestroy()
+    {
+        // Unsubscribe from the event when this object is destroyed
+        SceneManager.sceneLoaded -= OnLocationLoad;
+        
+        // Clear the static instance if this is the current instance
+        if(Instance == this)
+        {
+            Instance = null;
+        }
+    }
+
     //Switch the player to another scene
     public void SwitchLocation(Location locationToSwitch)
     {
@@ -50,13 +63,16 @@ public class SceneTransitionManager : MonoBehaviour
     IEnumerator ChangeScene(Location locationToSwitch)
     {
         //Find the player before scene transition
-        playerPoint = FindObjectOfType<PlayerController>()?.transform;
+        playerPoint = FindAnyObjectByType<PlayerController>()?.transform;
         
         if(playerPoint != null)
         {
             //Disable the player's CharacterController component
             CharacterController playerCharacter = playerPoint.GetComponent<CharacterController>();
-            playerCharacter.enabled = false;
+            if(playerCharacter != null)
+            {
+                playerCharacter.enabled = false;
+            }
         }
         
         //Wait for the scene to finish fading out before loading the next scene
@@ -83,13 +99,17 @@ public class SceneTransitionManager : MonoBehaviour
     public void OnFadeOutComplete()
     {
         screenFadedOut = true;
-        
     }
 
-    
     //Called when a scene is loaded
     public void OnLocationLoad(Scene scene, LoadSceneMode mode)
     {
+        // Safety check: make sure this object still exists
+        if(this == null || Instance != this)
+        {
+            return;
+        }
+
         //The location the player is coming from when the scene loads
         Location oldLocation = currentLocation;
 
@@ -108,7 +128,7 @@ public class SceneTransitionManager : MonoBehaviour
         yield return null;
 
         //Re-find the player in the new scene
-        playerPoint = FindObjectOfType<PlayerController>()?.transform;
+        playerPoint = FindAnyObjectByType<PlayerController>()?.transform;
         
         if(playerPoint == null)
         {
@@ -117,7 +137,7 @@ public class SceneTransitionManager : MonoBehaviour
         }
 
         //Find the start point
-        Transform startPoint = LocationManager.Instance.GetPlayerStartingPosition(oldLocation);
+        Transform startPoint = LocationManager.Instance?.GetPlayerStartingPosition(oldLocation);
 
         if(startPoint == null)
         {
@@ -127,17 +147,20 @@ public class SceneTransitionManager : MonoBehaviour
 
         //Disable the player's CharacterController component
         CharacterController playerCharacter = playerPoint.GetComponent<CharacterController>();
-        playerCharacter.enabled = false; 
+        if(playerCharacter != null)
+        {
+            playerCharacter.enabled = false; 
 
-        //Change the player's position to the start point
-        playerPoint.position = startPoint.position;
-        playerPoint.rotation = startPoint.rotation;
+            //Change the player's position to the start point
+            playerPoint.position = startPoint.position;
+            playerPoint.rotation = startPoint.rotation;
 
-        //Wait another frame before re-enabling
-        yield return null;
+            //Wait another frame before re-enabling
+            yield return null;
 
-        //Re-enable player character controller so he can move
-        playerCharacter.enabled = true;
+            //Re-enable player character controller so he can move
+            playerCharacter.enabled = true;
+        }
 
         //Save the current location that we just switched to
         currentLocation = newLocation; 
