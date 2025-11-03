@@ -27,8 +27,8 @@ Transform:
   m_GameObject: {fileID: 8938029782858867394}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7070494, y: -0, z: -0, w: 0.70716417}
-  m_LocalPosition: {x: 0.014, y: -0.155, z: 0.005}
-  m_LocalScale: {x: 0.2173913, y: 0.22004129, z: 0.25385198}
+  m_LocalPosition: {x: 0.022, y: -0.155, z: 0.005}
+  m_LocalScale: {x: 0.24880435, y: 0.22004129, z: 0.59083265}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7176335836923081289}
@@ -169,7 +169,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 2.31
+      scalar: 0.8
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -665,10 +665,10 @@ ParticleSystem:
     serializedVersion: 6
     enabled: 1
     type: 4
-    angle: 25.46
+    angle: 25
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
-    radiusThickness: 1
+    radiusThickness: 0
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
     m_Rotation: {x: 0, y: 0, z: 0}
@@ -751,7 +751,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 2.73
+      value: 2.1
       mode: 0
       spread: 0
       speed:
@@ -923,7 +923,7 @@ ParticleSystem:
     rateOverDistance:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 39.43
+      scalar: 0.83
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -4782,7 +4782,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b59b07a1afe785a4d961d40837a2cdc0, type: 2}
+  - {fileID: 2100000, guid: 62f082d186415444aab9abf24c1b7c0c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
