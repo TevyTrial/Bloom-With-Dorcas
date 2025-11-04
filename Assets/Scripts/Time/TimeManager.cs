@@ -35,12 +35,14 @@ public class TimeManager : MonoBehaviour
         //If there is more than one instance, destroy the extra
         if(Instance != null && Instance != this)
         {
-            Destroy(this);
+            Destroy(gameObject);
+            return;
         }
         else
         {
             //Set the static instance to this instance
-            Instance = this; 
+            Instance = this;
+            DontDestroyOnLoad(gameObject); // Persist across scenes
         }
     }
 

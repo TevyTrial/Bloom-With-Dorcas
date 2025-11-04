@@ -11,5 +11,8 @@ public class ItemData : ScriptableObject
     [Header("Models")]
     //gameobject to be shown in the player's hand
     public GameObject onHandModel;
+
+    [Header("Item Properties")]
+    public int price;
     
 }

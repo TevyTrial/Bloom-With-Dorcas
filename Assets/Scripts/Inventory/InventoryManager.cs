@@ -6,58 +6,59 @@ public class InventoryManager : MonoBehaviour
 {
     public static InventoryManager Instance { get; private set; }
 
-    private void Awake()
-    {
-        //If there is more than one instance, destroy the extra
-        if(Instance != null && Instance != this)
-        {
-            Destroy(this);
-        }
-        else
-        {
-            //Set the static instance to this instance
-            Instance = this; 
-        }
-        // Ensure equipped slots and inventory arrays are initialized to avoid null refs
-        InitializeSlots();
-    }
-
     //The full list of items 
     public ItemIndex itemIndex;
 
-    // Ensure no null slots exist so methods can call IsEmpty()/Stackable() safely
-    void InitializeSlots()
-    {
-        if (equippedToolSlot == null) equippedToolSlot = new ItemSlotData((ItemData)null, 0);
-        if (equippedItemSlot == null) equippedItemSlot = new ItemSlotData((ItemData)null, 0);
-
-        if (toolSlots == null) toolSlots = new ItemSlotData[10];
-        if (itemSlots == null) itemSlots = new ItemSlotData[10];
-
-        for (int i = 0; i < toolSlots.Length; i++)
-        {
-            if (toolSlots[i] == null) toolSlots[i] = new ItemSlotData((ItemData)null, 0);
-        }
-        for (int i = 0; i < itemSlots.Length; i++)
-        {
-            if (itemSlots[i] == null) itemSlots[i] = new ItemSlotData((ItemData)null, 0);
-        }
-    }
-
     [Header("Tools")]
     //Tool Slots
-    [SerializeField] private ItemSlotData[] toolSlots = new ItemSlotData[10];
+    [SerializeField] private ItemSlotData[] toolSlots;
     //Tool in the player's hand
-    [SerializeField] private ItemSlotData equippedToolSlot = null;
+    [SerializeField] private ItemSlotData equippedToolSlot;
 
     [Header("Items")]
     //Item Slots
-    [SerializeField] private ItemSlotData[] itemSlots = new ItemSlotData[10];
+    [SerializeField] private ItemSlotData[] itemSlots;
     //Item in the player's hand
-    [SerializeField] private ItemSlotData equippedItemSlot = null;
+    [SerializeField] private ItemSlotData equippedItemSlot;
 
     //The transform for the player to hold the item
     public Transform handPoint;
+
+    private void Awake()
+{
+    //If there is more than one instance, destroy the extra
+    if(Instance != null && Instance != this)
+    {
+        Destroy(this);
+    }
+    else
+    {
+        //Set the static instance to this instance
+        Instance = this; 
+    }
+    // Ensure equipped slots and inventory arrays are initialized to avoid null refs
+    InitializeSlots();
+}
+
+// Ensure no null slots exist so methods can call IsEmpty()/Stackable() safely
+void InitializeSlots()
+{
+    // Initialize arrays if null
+    if (toolSlots == null) toolSlots = new ItemSlotData[10];
+    if (itemSlots == null) itemSlots = new ItemSlotData[10];
+    
+    if (equippedToolSlot == null) equippedToolSlot = new ItemSlotData((ItemData)null, 0);
+    if (equippedItemSlot == null) equippedItemSlot = new ItemSlotData((ItemData)null, 0);
+
+    for (int i = 0; i < toolSlots.Length; i++)
+    {
+        if (toolSlots[i] == null) toolSlots[i] = new ItemSlotData((ItemData)null, 0);
+    }
+    for (int i = 0; i < itemSlots.Length; i++)
+    {
+        if (itemSlots[i] == null) itemSlots[i] = new ItemSlotData((ItemData)null, 0);
+    }
+}
 
     //movement of item from inventory to hand
     public void InventoryToHand(int boxIndex, InventoryBox.InventoryType boxType)

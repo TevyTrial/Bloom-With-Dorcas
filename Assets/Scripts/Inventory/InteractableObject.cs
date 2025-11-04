@@ -5,7 +5,7 @@ public class InteractableObject : MonoBehaviour
     //The item information the GameObject is supposed to represent
     public ItemData item;
 
-    public void Pickup() {
+    public virtual void Pickup() {
         
         //Set the player's inventory to the item
         InventoryManager.Instance.EquipHandSlot(item);

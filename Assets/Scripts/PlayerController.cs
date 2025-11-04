@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
     public float runSpeed = 8f;
     public float walkSpeed = 5f;
 
+    private float gravity = 9.81f;
+
     [Header("Camera")]
     public Transform cameraTransform; 
 
@@ -93,9 +95,6 @@ public class PlayerController : MonoBehaviour
         
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
-        /*
-        Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
-        Vector3 velocity = speed * Time.deltaTime * direction; // units per second*/
 
         // Get camera's forward and right directions (flatten to horizontal plane)
         Vector3 cameraForward = cameraTransform.forward;
@@ -110,6 +109,17 @@ public class PlayerController : MonoBehaviour
         // Calculate movement direction relative to camera
         Vector3 direction = (cameraForward * vertical + cameraRight * horizontal).normalized;
         Vector3 velocity = speed * Time.deltaTime * direction; // units per second
+
+        //gravity
+        if (controller.isGrounded)
+        {
+            velocity.y = 0f; // Reset vertical velocity when grounded
+        }
+        else
+        {
+            // Apply gravity when not grounded
+            velocity.y -= gravity * Time.deltaTime;
+        }
 
         //shift
         if (Input.GetButton("Sprint"))

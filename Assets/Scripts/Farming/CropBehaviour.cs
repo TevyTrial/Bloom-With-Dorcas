@@ -35,8 +35,8 @@ public class CropBehaviour : MonoBehaviour
 
     public void plant(int landID, SeedData seedToGrow) {
         LoadCrop(landID, seedToGrow, 0, 0, maxHealth, false, false);
-        // Register crop in LandManager
-        LandManager.Instance.RegisterCrop(landID, seedToGrow.name, currentStageIndex, growth, health, isWilted, hasMatureUnparented);
+        // Saving disabled - uncomment when implementing save system
+        // LandManager.Instance.RegisterCrop(landID, seedToGrow.name, currentStageIndex, growth, health, isWilted, hasMatureUnparented);
     }
 
     public void LoadCrop(int landID, SeedData seedToGrow, int currentStageIndex, int growth, int health, bool isWilted, bool hasMatureUnparented)
@@ -130,8 +130,8 @@ public class CropBehaviour : MonoBehaviour
         {
             SwitchToStage(targetStage);
         }
-        // Inform landmanager on the changes
-        LandManager.Instance.OnCropStateChanged(landID, seedToGrow.name, currentStageIndex, growth, health, isWilted, hasMatureUnparented);
+        // Saving disabled - uncomment when implementing save system
+        // LandManager.Instance.OnCropStateChanged(landID, seedToGrow.name, currentStageIndex, growth, health, isWilted, hasMatureUnparented);
     }
 
     public void wilted()
@@ -146,8 +146,8 @@ public class CropBehaviour : MonoBehaviour
             StopInstrument(); // Stop playing music when wilted
             SwitchToStage(-1);
         }
-        // Inform landmanager on the changes
-        LandManager.Instance.OnCropStateChanged(landID, seedToGrow.name, currentStageIndex, growth, health, isWilted, hasMatureUnparented);
+        // Saving disabled - uncomment when implementing save system
+        // LandManager.Instance.OnCropStateChanged(landID, seedToGrow.name, currentStageIndex, growth, health, isWilted, hasMatureUnparented);
     }
 
     //Function to handle the state change of the crop
@@ -244,8 +244,10 @@ public class CropBehaviour : MonoBehaviour
 
         currentStageIndex = stageIndex;
     }
+    
     public void RemoveCrop() {
-        LandManager.Instance.DeregisterCrop(landID);
+        // Saving disabled - uncomment when implementing save system
+        // LandManager.Instance.DeregisterCrop(landID);
         Destroy(gameObject);
         if (!hasMatureUnparented)
         {

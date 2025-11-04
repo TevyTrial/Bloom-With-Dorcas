@@ -86,7 +86,8 @@ public class Land : MonoBehaviour, ITimeTracker
         }
         renderer.material = materialToSwitch;
 
-        LandManager.Instance.OnLandStateChanged(id, landstate, timeWatered);
+        // Saving disabled - uncomment when implementing save system
+        // LandManager.Instance.OnLandStateChanged(id, landstate, timeWatered);
     }
 
     public void Select(bool isSelected) {
@@ -204,7 +205,7 @@ public class Land : MonoBehaviour, ITimeTracker
                 cropPlanted.grow();
             }
 
-            if (hoursPassed >= 24)
+            if (hoursPassed > 24)
             {
                 //if 24 or more hours have passed, revert to tilled state
                 SwitchState(LandState.Tilled);
@@ -217,5 +218,9 @@ public class Land : MonoBehaviour, ITimeTracker
                     cropPlanted.wilted();
                 
             }
+    }
+    private void OnDestroy() {
+        // Unsubscribe from the list on destroy
+        TimeManager.Instance.UnregisterListener(this);
     }
 }

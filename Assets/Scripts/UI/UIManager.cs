@@ -16,6 +16,9 @@ public class UIManager : MonoBehaviour, ITimeTracker
     public TextMeshProUGUI timeText;
     public TextMeshProUGUI dateText;
 
+    [Header("Currency Display")]
+    public TextMeshProUGUI currencyText;
+
     [Header("Inventory System")]
     //The inventory panel
     public GameObject inventoryPanel; 
@@ -41,10 +44,14 @@ public class UIManager : MonoBehaviour, ITimeTracker
     //Tooltip panel 
     public GameObject HarvestTooltipPanel;
     public GameObject InteractTooltipPanel;
-
+/*
     [Header("Screen Transitions")]
     public GameObject fadeIn;
     public GameObject fadeOut;
+*/
+    [Header("Shop System")]
+    public GameObject SellPanel;
+    public GameObject BuyPanel;
 
     private void Awake()
     {
@@ -64,11 +71,12 @@ public class UIManager : MonoBehaviour, ITimeTracker
     {
         RenderInventory();
         AssignBoxIndexes();
+        RenderPlayerStats();
 
         //Register as a listener to time updates
         TimeManager.Instance.RegisterListener(this);
     }
-
+/*
     public void FadeInScreen() {
         fadeIn.SetActive(true);
     }
@@ -86,6 +94,7 @@ public class UIManager : MonoBehaviour, ITimeTracker
         fadeOut.SetActive(false);
         fadeIn.SetActive(true);
     }
+    */
 
     //iterate and assign indexes to each inventory box
     void AssignBoxIndexes()
@@ -228,6 +237,39 @@ public class UIManager : MonoBehaviour, ITimeTracker
         }
     }
 
+    // Show sell panel
+    public void ShowSellPanel()
+    {
+        if(SellPanel != null)
+        {
+            SellPanel.SetActive(true);
+        }
+    }
+    // Hide sell panel
+    public void HideSellPanel()
+    {
+        if(SellPanel != null)
+        {
+            SellPanel.SetActive(false);
+        }
+    }
+    // Show buy panel
+    public void ShowBuyPanel()
+    {
+        if(BuyPanel != null)
+        {
+            BuyPanel.SetActive(true);
+        }
+    }
+    // Hide buy panel
+    public void HideBuyPanel()  
+    {
+        if(BuyPanel != null)
+        {
+            BuyPanel.SetActive(false);
+        }
+    }
+
 
     //Update the time display in the UI
     public void ClockUpdate(GameTimeStamp currentTime)
@@ -254,6 +296,13 @@ public class UIManager : MonoBehaviour, ITimeTracker
         string season = currentTime.season.ToString().Substring(0,3); //Get first 3 letters of the season
         string dayOfWeek = currentTime.GetDayOfWeek().ToString().Substring(0,3); //Get first 3 letters of the day of the week
         dateText.text = season + " " + day + " (" + dayOfWeek + ")" ;
+    }
+
+    //Render player stats such as currency
+    public void RenderPlayerStats()
+    {
+        //Update the currency text
+        currencyText.text = PlayerStats.CURRENCY;
     }
     
 }
