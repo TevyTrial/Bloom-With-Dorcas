@@ -44,11 +44,15 @@ public class UIManager : MonoBehaviour, ITimeTracker
     //Tooltip panel 
     public GameObject HarvestTooltipPanel;
     public GameObject InteractTooltipPanel;
+    public GameObject SellingTooltipPanel;
 /*
     [Header("Screen Transitions")]
     public GameObject fadeIn;
     public GameObject fadeOut;
 */
+    [Header("Yes/No Prompt")]
+    public YesNoPrompt yesNoPrompt;
+
     [Header("Shop System")]
     public GameObject SellPanel;
     public GameObject BuyPanel;
@@ -95,7 +99,14 @@ public class UIManager : MonoBehaviour, ITimeTracker
         fadeIn.SetActive(true);
     }
     */
+    public void TriggerYesNoPrompt (string message,System.Action onYesCallback) {
+        //Set active the gameobject of the yes no prompt
+        yesNoPrompt.gameObject.SetActive(true);
 
+        yesNoPrompt.CreatePrompt(message, onYesCallback);
+    }
+    
+#region inventory
     //iterate and assign indexes to each inventory box
     void AssignBoxIndexes()
     {
@@ -200,7 +211,9 @@ public class UIManager : MonoBehaviour, ITimeTracker
         itemTitle.text = data.name;
         itemDescription.text = data.description; 
     }
+#endregion 
 
+#region Tooltip
     //Show harvest tooltip
     public void ShowHarvestTooltip()
     {
@@ -236,6 +249,26 @@ public class UIManager : MonoBehaviour, ITimeTracker
             InteractTooltipPanel.SetActive(false);
         }
     }
+
+    //Show Selling tooltip
+    public void ShowSellingTooltip()
+    {
+        if(SellingTooltipPanel != null)
+        {
+            SellingTooltipPanel.SetActive(true);
+        }
+    }
+
+    //Hide Selling tooltip
+    public void HideSellingTooltip()
+    {
+        if(SellingTooltipPanel != null)
+        {
+            SellingTooltipPanel.SetActive(false);
+        }
+    }
+    
+#endregion
 
     // Show sell panel
     public void ShowSellPanel()
@@ -301,8 +334,12 @@ public class UIManager : MonoBehaviour, ITimeTracker
     //Render player stats such as currency
     public void RenderPlayerStats()
     {
+        if(PlayerStats.Money == 0) {
+            currencyText.text = PlayerStats.CURRENCY + "0";
+            return;
+        }
         //Update the currency text
-        currencyText.text = PlayerStats.CURRENCY;
+        currencyText.text = PlayerStats.CURRENCY + PlayerStats.Money;
     }
     
 }

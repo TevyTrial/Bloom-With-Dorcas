@@ -87,6 +87,12 @@ public class PlayerController : MonoBehaviour
             lastInteractionTime = Time.time;
         }
 
+        //Keep items
+        if(Input.GetButtonDown("Fire3")) {
+            PlayerInteraction.ItemKeep();
+            lastInteractionTime = Time.time;
+        }
+
     }
 
     void Move()
@@ -140,9 +146,13 @@ public class PlayerController : MonoBehaviour
 
             // Move expects displacement for this frame (units), so multiply by deltaTime here
             controller.Move(velocity);
+            
+            animator.SetFloat("Speed", direction.magnitude * speed * Time.deltaTime);
         }
-
-           animator.SetFloat("Speed", velocity.magnitude);
+        else
+        {
+            animator.SetFloat("Speed", 0f);
+        }
 
         
     }

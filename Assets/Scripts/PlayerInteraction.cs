@@ -129,12 +129,14 @@ public class PlayerInteraction : MonoBehaviour
             return;
         }
 
+    }
+
+    public void ItemKeep() {
         //Hand -> Inventory
         if(InventoryManager.Instance.SlotEquipped(InventoryBox.InventoryType.Tool)) {
             InventoryManager.Instance.HandToInventory(InventoryBox.InventoryType.Item);
             return;
         }
-
     }
 
 }

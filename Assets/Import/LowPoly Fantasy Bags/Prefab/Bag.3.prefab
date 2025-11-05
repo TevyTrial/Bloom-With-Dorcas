@@ -11,11 +11,11 @@ GameObject:
   - component: {fileID: 4848497193117227489}
   - component: {fileID: 4472730001656259543}
   - component: {fileID: 7867468962114559790}
-  - component: {fileID: 6556887652441562104}
   - component: {fileID: 5479108614572901360}
+  - component: {fileID: 4864048333227402047}
   m_Layer: 0
   m_Name: Bag.3
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -91,19 +91,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &6556887652441562104
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8435817536778267634}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84ff843121ba3e046b518e7a3a5c0a2b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ShippingBin
-  item: {fileID: 0}
 --- !u!65 &5479108614572901360
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -123,5 +110,18 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 6.930428, y: 2.9727063, z: 5.0709233}
-  m_Center: {x: -0.0049868817, y: -0.5757217, z: -0.27335963}
+  m_Size: {x: 9.155688, y: 4.60636, z: 6.0997305}
+  m_Center: {x: 0.08256078, y: 0.24110508, z: 0.24102926}
+--- !u!114 &4864048333227402047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8435817536778267634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad36c5d89a63c444d80af683004b669b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NewMonoBehaviourScript
+  item: {fileID: 0}

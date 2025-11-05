@@ -13,7 +13,7 @@ public class ShopScript : InteractableObject
         UIManager.Instance.HideSellPanel();
         
         // TODO: Open shop UI with items for sale
-        // ShopUIManager.Instance.OpenBuyMode(itemsForSale, buyPriceMultiplier);
+        // ShopUIManager.Instance.OpenBuyMode(itemsForSale, buycostMultiplier);
         
     }
 
@@ -25,7 +25,7 @@ public class ShopScript : InteractableObject
         UIManager.Instance.HideBuyPanel();
         
         // TODO: Open shop UI showing player's inventory
-        // ShopUIManager.Instance.OpenSellMode(sellPriceMultiplier);
+        // ShopUIManager.Instance.OpenSellMode(sellcostMultiplier);
 
     }
 
@@ -41,7 +41,7 @@ public class ShopScript : InteractableObject
     // Process purchase transaction
     public static void BuyItem(ItemData item, int quantity) 
     {
-        int totalCost = item.price * quantity;
+        int totalCost = item.cost * quantity;
         
         if(PlayerStats.Money >= totalCost) 
         {

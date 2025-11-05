@@ -13,6 +13,6 @@ public class ItemData : ScriptableObject
     public GameObject onHandModel;
 
     [Header("Item Properties")]
-    public int price;
+    public int cost;
     
 }
