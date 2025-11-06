@@ -54,8 +54,7 @@ public class UIManager : MonoBehaviour, ITimeTracker
     public YesNoPrompt yesNoPrompt;
 
     [Header("Shop System")]
-    public GameObject SellPanel;
-    public GameObject BuyPanel;
+    public GameObject ShopPanel;
 
     private void Awake()
     {
@@ -270,38 +269,7 @@ public class UIManager : MonoBehaviour, ITimeTracker
     
 #endregion
 
-    // Show sell panel
-    public void ShowSellPanel()
-    {
-        if(SellPanel != null)
-        {
-            SellPanel.SetActive(true);
-        }
-    }
-    // Hide sell panel
-    public void HideSellPanel()
-    {
-        if(SellPanel != null)
-        {
-            SellPanel.SetActive(false);
-        }
-    }
-    // Show buy panel
-    public void ShowBuyPanel()
-    {
-        if(BuyPanel != null)
-        {
-            BuyPanel.SetActive(true);
-        }
-    }
-    // Hide buy panel
-    public void HideBuyPanel()  
-    {
-        if(BuyPanel != null)
-        {
-            BuyPanel.SetActive(false);
-        }
-    }
+
 
 
     //Update the time display in the UI

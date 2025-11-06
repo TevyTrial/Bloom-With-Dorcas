@@ -35,7 +35,7 @@ public class ShippingBin : InteractableObject
                 UIManager.Instance.ShowSellingTooltip();
             }
             if(animator != null) {
-                animator.SetBool("isOpen", true);
+                animator.SetBool("IsOpen", true);
             }
         }
     }
@@ -48,7 +48,7 @@ public class ShippingBin : InteractableObject
             UIManager.Instance.HideSellingTooltip();
         }
         if(animator != null) {
-            animator.SetBool("isOpen", false);
+            animator.SetBool("IsOpen", false);
         }
     }
 

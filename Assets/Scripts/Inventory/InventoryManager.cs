@@ -156,6 +156,30 @@ void InitializeSlots()
         return false;
     }
     
+    // movement of item from shop to inventory
+    public bool ShopToInventory(ItemSlotData itemSlotToMove) {
+        //The inventory array to change
+        ItemSlotData[] inventoryArr = IsTool(itemSlotToMove.itemData) ? toolSlots : itemSlots;
+
+        //Check if stackable
+        if(!StackableToInventory(itemSlotToMove, inventoryArr)) {
+            //Find an empty slot if not stackable
+            for(int i = 0; i < inventoryArr.Length; i++) {
+                if(inventoryArr[i].IsEmpty()) {
+                    inventoryArr[i] = new ItemSlotData(itemSlotToMove);
+                    break;
+                }
+            }
+            // No empty slot found
+            return false;
+        }
+
+        //Update the inventory UI
+        UIManager.Instance.RenderInventory();
+        RenderEquippedItem();
+        return true;
+    }
+
 
     //Render the item in the player's hand
     public void RenderEquippedItem()
