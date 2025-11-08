@@ -45,16 +45,13 @@ public class UIManager : MonoBehaviour, ITimeTracker
     public GameObject HarvestTooltipPanel;
     public GameObject InteractTooltipPanel;
     public GameObject SellingTooltipPanel;
-/*
-    [Header("Screen Transitions")]
-    public GameObject fadeIn;
-    public GameObject fadeOut;
-*/
+
     [Header("Yes/No Prompt")]
     public YesNoPrompt yesNoPrompt;
 
     [Header("Shop System")]
-    public GameObject ShopPanel;
+    public GameObject shopPanel;
+    public ShopListingManager shopListingManager;
 
     private void Awake()
     {
@@ -79,25 +76,7 @@ public class UIManager : MonoBehaviour, ITimeTracker
         //Register as a listener to time updates
         TimeManager.Instance.RegisterListener(this);
     }
-/*
-    public void FadeInScreen() {
-        fadeIn.SetActive(true);
-    }
 
-    public void FadeOutScreen() {
-        fadeOut.SetActive(true);
-    }
-
-    public void OnFadeInComplete() {
-        //Disable Fade in screen
-        fadeIn.SetActive(false);
-    }
-
-    public void ResetFadeDefault() {
-        fadeOut.SetActive(false);
-        fadeIn.SetActive(true);
-    }
-    */
     public void TriggerYesNoPrompt (string message,System.Action onYesCallback) {
         //Set active the gameobject of the yes no prompt
         yesNoPrompt.gameObject.SetActive(true);
@@ -233,7 +212,6 @@ public class UIManager : MonoBehaviour, ITimeTracker
     //Show interact tooltip
     public void ShowInteractTooltip()
     {
-        Debug.Log("Show Interact Tooltip");
         if(InteractTooltipPanel != null)
         {
             InteractTooltipPanel.SetActive(true);
@@ -242,7 +220,6 @@ public class UIManager : MonoBehaviour, ITimeTracker
     //Hide interact tooltip
     public void HideInteractTooltip()
     {
-        Debug.Log("Hide Interact Tooltip");
         if(InteractTooltipPanel != null)
         {
             InteractTooltipPanel.SetActive(false);
@@ -271,7 +248,7 @@ public class UIManager : MonoBehaviour, ITimeTracker
 
 
 
-
+#region Time 
     //Update the time display in the UI
     public void ClockUpdate(GameTimeStamp currentTime)
     {
@@ -309,5 +286,21 @@ public class UIManager : MonoBehaviour, ITimeTracker
         //Update the currency text
         currencyText.text = PlayerStats.CURRENCY + PlayerStats.Money;
     }
-    
+#endregion
+
+#region Shop System
+    // Open the shop UI
+    public void OpenShop(List<ItemData> shopItems)
+    {
+        // Render the shop items using the ShopListingManager
+        shopPanel.SetActive(true);
+        shopListingManager.RenderShop(shopItems);
+    }
+
+    public void CloseShop()
+    {
+        shopPanel.SetActive(false);
+    }
+#endregion
+
 }
