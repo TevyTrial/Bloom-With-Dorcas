@@ -15,7 +15,7 @@ MonoBehaviour:
   description: Carrot
   icon: {fileID: -1476294837, guid: ab7af8c09d0724c448d524ead916bcd4, type: 3}
   onHandModel: {fileID: 4709425489127217626, guid: ea182204022a60b46a3fffadebde1670, type: 3}
-  cost: 10
+  cost: 30
   CropToYield: {fileID: 11400000, guid: f4815409f2f207c488111922386e455c, type: 2}
   growTimeInDays: 2
   growthStageModels:
@@ -26,5 +26,5 @@ MonoBehaviour:
   WiltedModel: {fileID: 8861379113781653186, guid: 35ba0983ab2a3be43833199ad1cce6b1, type: 3}
   specificInstrument:
     audioClip: {fileID: 8300000, guid: cc06398de8bc374428e8daa1e8135ec1, type: 3}
-    volume: 0.7
+    volume: 0.5
   cropSeason: 0

@@ -21,6 +21,10 @@ public class PlayerInteraction : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(UIManager.Instance.shopPanel.activeSelf) {
+            //Don't allow interaction while shop is open
+            return;
+        }
         RaycastHit hit;
         // Raycast forward from player position to detect objects in front
         if (Physics.Raycast(transform.position, transform.forward, out hit, 2f)) {
@@ -113,7 +117,6 @@ public class PlayerInteraction : MonoBehaviour
             selectedLand.Interact();
             return;
         }
-        Debug.Log("[PlayerInteraction] Not on land");
     }
 
     //interacting with items

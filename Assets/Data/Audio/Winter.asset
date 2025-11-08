@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e12c894001ca6d4eb6adce1b2b3bbe9, type: 3}
+  m_Name: Winter
+  m_EditorClassIdentifier: Assembly-CSharp::SeasonalSongData
+  songName: WinterSong
+  songLengthInSeconds: 183
+  instrumentTracks:
+  - audioClip: {fileID: 8300000, guid: 8eba33285031585419019908a57dff0f, type: 3}
+    volume: 0
+  - audioClip: {fileID: 8300000, guid: 6cf5d95a12a51044182f65b9a5107b61, type: 3}
+    volume: 0
+  - audioClip: {fileID: 8300000, guid: 4becafa56ecb6cb48a994413de2973ae, type: 3}
+    volume: 0
+  - audioClip: {fileID: 8300000, guid: 210c778918086bd419ab54501b575cf2, type: 3}
+    volume: 0

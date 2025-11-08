@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
 public class ShopScript : InteractableObject
@@ -25,7 +26,10 @@ public class ShopScript : InteractableObject
     {
         if (Instance != null)
         {
-            Instance.Pickup();
+            Debug.Log("OpenShopFromDialogue called");       
+            
+            // Small delay to ensure conversation closes properly
+            Instance.StartCoroutine(Instance.OpenShopAfterDelay());
         }
         else
         {
@@ -33,9 +37,20 @@ public class ShopScript : InteractableObject
         }
     }
 
+    private IEnumerator OpenShopAfterDelay()
+    {
+        // Wait for one frame to ensure conversation UI is closed
+        yield return null;
+        
+        Debug.Log("Opening shop after delay");
+        Pickup();
+    }
+
     // Process purchase transaction
     public static void Purchase(ItemData item, int quantity) {
         int totalCost = item.cost * quantity;
+        
+        Debug.Log($"Attempting to purchase {quantity}x {item.name} for {totalCost}. Player has {PlayerStats.Money}");
         
         if(PlayerStats.Money >= totalCost) 
         {
@@ -46,12 +61,31 @@ public class ShopScript : InteractableObject
             ItemSlotData purchasedItem = new ItemSlotData(item, quantity);
             
             // Add item to player inventory
-            InventoryManager.Instance.ShopToInventory(purchasedItem);
+            bool success = InventoryManager.Instance.ShopToInventory(purchasedItem);
+            
+            if(success) {
+                Debug.Log($"Purchased {quantity}x {item.name} for {totalCost}");
+            } else {
+                Debug.LogWarning("Failed to add item to inventory - inventory might be full");
+                // Refund the money
+                PlayerStats.Earn(totalCost);
+            }
+        }
+        else
+        {
+            Debug.LogWarning($"Not enough money! Need {totalCost}, have {PlayerStats.Money}");
         }
     }
 
     public override void Pickup() {
-        Debug.Log("Purchasing - Opening shop with " + shopItems.Count + " items");
+        Debug.Log($"Pickup called. Shop has {(shopItems != null ? shopItems.Count : 0)} items");
+        
+        if (shopItems == null || shopItems.Count == 0)
+        {
+            Debug.LogError("Shop items list is empty or null!");
+            return;
+        }
+        
         if (UIManager.Instance != null)
         {
             UIManager.Instance.OpenShop(shopItems);

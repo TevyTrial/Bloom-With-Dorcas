@@ -7,10 +7,10 @@ using TMPro;
 public class ShopListingManager : MonoBehaviour
 {
     // The Shop Listing prefab to instantiate
-    public GameObject shopListingPrefab;
+    [SerializeField] private GameObject shopListingPrefab;
 
     // The parent transform where shop listings will be added
-    public Transform shopListingParent;
+    [SerializeField] private Transform shopListingParent;
 
     // Variables for item purchase
     ItemData itemToBuy;
@@ -23,33 +23,33 @@ public class ShopListingManager : MonoBehaviour
     public TextMeshProUGUI costCalculationText;
     public Button purchaseButton;
 
-    public void RenderShop(List<ItemData> shopItems) {
-        
-        // Reset the listing if there are existing items
-        if(shopListingParent.childCount > 0) {
-            foreach(Transform child in shopListingParent) {
-                Destroy(child.gameObject);
+    public void RenderShop(List<ItemData> shopItems)
+    {
+        //Reset the listings if there was a previous one
+        if(shopListingParent.childCount > 0)
+        {
+            foreach(Transform child in shopListingParent)
+            {
+                Destroy(child.gameObject); 
             }
         }
 
-        // Create a new listing for each item in the shop
-        foreach(ItemData shopitem in shopItems) {
-            // Instantiate a new shop listing
-            GameObject listingObj = Instantiate(shopListingPrefab, shopListingParent);
-            
-            // Assign it the shop item and display it
-            ShopListing listing = listingObj.GetComponent<ShopListing>();
+        //Create a new listing for every item
+        foreach(ItemData shopItem in shopItems)
+        {
+            //Instantiate a shop listing prefab for the item
+            GameObject listingGameObject = Instantiate(shopListingPrefab, shopListingParent);
 
-            listing.Display(shopitem);
+            //Assign it the shop item and display the listing
+            listingGameObject.GetComponent<ShopListing>().Display(shopItem);
         }
-        
     }
 
-    public void OpenConfirmPanel(ItemData item, int quantity) {
+    public void OpenConfirmPanel(ItemData item) {
+        Debug.Log($"Opening confirm panel for {item.name}");
         this.itemToBuy = item;
-        this.quantity = quantity;
+        this.quantity = 1;
         RenderConfirmationPanel();
-
     }
 
     public void RenderConfirmationPanel() {
@@ -59,7 +59,9 @@ public class ShopListingManager : MonoBehaviour
         int totalCost = itemToBuy.cost * quantity;
         int playerMoneyLeft = PlayerStats.Money - totalCost;
 
-        // No enough money
+        Debug.Log($"Total cost: {totalCost}, Player money: {PlayerStats.Money}, Money left: {playerMoneyLeft}");
+
+        // Not enough money
         if(playerMoneyLeft < 0) {
             costCalculationText.text = "Not enough money!";
             purchaseButton.interactable = false;
@@ -68,7 +70,6 @@ public class ShopListingManager : MonoBehaviour
             purchaseButton.interactable = true;
             costCalculationText.text = $"{PlayerStats.Money} > {playerMoneyLeft}";
         }
-
     }   
 
     public void AddQuantity() {
@@ -78,17 +79,19 @@ public class ShopListingManager : MonoBehaviour
 
     public void SubtractQuantity() {
         if(quantity > 1) {
-            quantity--;
-            RenderConfirmationPanel();
+            quantity--; 
         }
+        RenderConfirmationPanel();
     }
 
     public void ConfirmPurchase() {
+        Debug.Log($"Confirming purchase of {quantity}x {itemToBuy.name}");
         ShopScript.Purchase(itemToBuy, quantity);
         confirmPanel.SetActive(false);
     }
 
     public void CancelPurchase() {
+        Debug.Log("Purchase cancelled");
         confirmPanel.SetActive(false);
     }
 }

@@ -15,3 +15,4 @@ MonoBehaviour:
   description: 
   icon: {fileID: -423614138, guid: fb52ae8dfa72d5d4a884fb138df4816f, type: 3}
   onHandModel: {fileID: 6892070225828598521, guid: f9bb09643b8129746991d7aa4ecafaba, type: 3}
+  cost: 280

@@ -15,4 +15,4 @@ MonoBehaviour:
   description: Carrot
   icon: {fileID: 1031206479, guid: 98cd4abe7df1a024d8f917dc05bdb114, type: 3}
   onHandModel: {fileID: 3654242880184669010, guid: cfb45b707b81a514f87d55ccc2267f65, type: 3}
-  cost: 30
+  cost: 110

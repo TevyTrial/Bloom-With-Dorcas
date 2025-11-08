@@ -292,15 +292,18 @@ public class UIManager : MonoBehaviour, ITimeTracker
     // Open the shop UI
     public void OpenShop(List<ItemData> shopItems)
     {
+        HideSellingTooltip();
+        Debug.Log($"UIManager.OpenShop called with {shopItems.Count} items");
         // Render the shop items using the ShopListingManager
         shopPanel.SetActive(true);
-        shopListingManager.RenderShop(shopItems);
+        shopListingManager.RenderShop(shopItems); 
     }
 
     public void CloseShop()
     {
         shopPanel.SetActive(false);
     }
+
 #endregion
 
 }

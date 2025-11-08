@@ -14,58 +14,63 @@ public class ShopListing : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     ItemData itemData;
 
+    private void Start()
+    {
+        // Ensure raycast target is enabled
+        if(backgroundImage != null)
+        {
+            backgroundImage.raycastTarget = true;
+        }
+        Debug.Log($"ShopListing Start called for {gameObject.name}, enabled: {enabled}");
+    }
+#region Active and Display
     public void Display(ItemData itemData)
     {
         this.itemData = itemData;
+        this.enabled = true;
         
-        // Make sure the listing itself is active FIRST
         gameObject.SetActive(true);
-        
-        // Activate and enable the background
-        if(backgroundImage != null)
-        {
+
+        if(backgroundImage != null) {
             backgroundImage.gameObject.SetActive(true);
             backgroundImage.enabled = true;
+            backgroundImage.raycastTarget = true; // Ensure raycast target is enabled
         }
         
-        // Activate and enable the name text component
-        if(nameText != null)
-        {
+        if(nameText != null) {
             nameText.gameObject.SetActive(true);
             nameText.enabled = true;
             nameText.text = itemData.name;
         }
-        
-        // Activate and enable the cost text component
-        if(costText != null)
-        {
+
+        if(costText != null) {
             costText.gameObject.SetActive(true);
             costText.enabled = true;
             costText.text = PlayerStats.CURRENCY + itemData.cost;
         }
-        
-        // Activate and enable the item icon component
-        if(itemIcon != null)
-        {
+
+        if(itemIcon != null) {
             itemIcon.gameObject.SetActive(true);
             itemIcon.enabled = true;
             itemIcon.sprite = itemData.icon;
         }
+        Debug.Log($"Shop listing displayed: {itemData.name}, ShopListing enabled: {enabled}");
     }
+#endregion
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        UIManager.Instance.shopListingManager.OpenConfirmPanel(itemData);
+    }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
-        // Show tooltip or highlight
         UIManager.Instance.DisplayItemInfo(itemData);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        // Hide tooltip or remove highlight
-        throw new System.NotImplementedException();
-    }
 
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        throw new System.NotImplementedException();
+        UIManager.Instance.DisplayItemInfo(null);
     }
 }

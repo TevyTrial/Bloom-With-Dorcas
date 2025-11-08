@@ -15,4 +15,4 @@ MonoBehaviour:
   description: A Juicy tomato
   icon: {fileID: 1169662353, guid: 98cd4abe7df1a024d8f917dc05bdb114, type: 3}
   onHandModel: {fileID: 8332756904029499269, guid: 672881cb3318a70499dc40949e483722, type: 3}
-  matureCropModel: {fileID: 2879319444710317051, guid: 08acf9f7e4dd07f43b178aead6a778ed, type: 3}
+  cost: 170
