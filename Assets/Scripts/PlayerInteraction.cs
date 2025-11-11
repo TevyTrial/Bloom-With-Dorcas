@@ -54,10 +54,20 @@ public class PlayerInteraction : MonoBehaviour
         if(collider.tag == "Item") {
             //Set the interactable to the currently looked at object
             selectedInteractable = collider.GetComponent<InteractableObject>();
+
+            if (selectedInteractable == null) {
+                selectedInteractable = collider.GetComponentInParent<InteractableObject>();
+            }
+            
+            if(selectedInteractable == null) {
+                selectedInteractable = collider.GetComponentInChildren<InteractableObject>();
+            }
             
             //Show tooltip for the item
             if(selectedInteractable != null && selectedInteractable.item != null) {
                 UIManager.Instance.ShowHarvestTooltip();
+            } else {
+                UIManager.Instance.HideHarvestTooltip();
             }
 
             return;

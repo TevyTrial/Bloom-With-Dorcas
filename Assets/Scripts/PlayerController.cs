@@ -58,13 +58,6 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.U))
-        {
-            for (int i = 0; i < 43200; i++)
-            {
-                TimeManager.Instance.Tick();
-            }
-        }
              
         
 

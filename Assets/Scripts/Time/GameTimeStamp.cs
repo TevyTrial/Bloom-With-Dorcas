@@ -63,7 +63,7 @@ public class GameTimeStamp
             day++;
         }
 
-        if(day > 30){
+        if(day > 7){
             //reset day
             day = 1;
 
@@ -102,15 +102,22 @@ public class GameTimeStamp
 
     //convert seasons to days
     public static int ConvertSeasonsToDays(int season){
-        //1 season = 30 days
+        //1 season = 7 days
         int seasonsInDays = (int)season;
-        return seasonsInDays * 30;
+        return seasonsInDays * 7;
     }
 
     //years to days
-    public static int ConvertYearsToDays(int years){
-        //1 year = 360 days
-        return years * 4 * 30;
+    public static int ConvertYearsToDays(int years)
+    {
+        //1 year = 28 days
+        return years * 4 * 7;
+    }
+    
+    //The entire timestamp comparison in hours
+    public static int TimestampInMinutes(GameTimeStamp t){
+        return ConvertHoursToMinutes
+        (ConvertDaysToHours(ConvertYearsToDays(t.year) + ConvertSeasonsToDays((int)t.season) + t.day) + t.hour) + t.minute;
     }
 
     public static int CompareTimeStamps(GameTimeStamp t1, GameTimeStamp t2){

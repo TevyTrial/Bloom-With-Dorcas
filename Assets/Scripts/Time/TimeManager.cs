@@ -30,6 +30,8 @@ public class TimeManager : MonoBehaviour
     //Season tracking
     private GameTimeStamp.Season previousSeason;
 
+    bool isSleeping = false;
+
     private void Awake()
     {
         //If there is more than one instance, destroy the extra
@@ -101,11 +103,11 @@ public class TimeManager : MonoBehaviour
         // 0 min = -90 degrees, 720 min = 90 degrees, 1440 min = 270 degrees
         sunTransform.eulerAngles = new Vector3(sunAngle, 0, 0); // slight angle for more realistic lighting
     }
-    
+
     //Update the skybox material based on time of day
     private void UpdateSkybox(int timeInMinutes)
     {
-        if(skyboxMaterials == null || skyboxMaterials.Length == 0 || timeThresholds.Length < 2)
+        if (skyboxMaterials == null || skyboxMaterials.Length == 0 || timeThresholds.Length < 2)
             return;
 
         //Find the current skybox index based on time thresholds
@@ -113,7 +115,7 @@ public class TimeManager : MonoBehaviour
 
         for (int i = 0; i < timeThresholds.Length - 1; i++)
         {
-            if(timeInMinutes >= timeThresholds[i] && timeInMinutes < timeThresholds[i + 1])
+            if (timeInMinutes >= timeThresholds[i] && timeInMinutes < timeThresholds[i + 1])
             {
                 currentIndex = i;
                 break;
@@ -127,7 +129,7 @@ public class TimeManager : MonoBehaviour
         {
             float timeRange = timeThresholds[currentIndex + 1] - timeThresholds[currentIndex];
             float timeProgress = (timeInMinutes - timeThresholds[currentIndex]) / timeRange;
-            
+
             // Apply blend speed
             timeProgress = Mathf.Lerp(0f, 1f, timeProgress * skyboxBlendSpeed);
 
@@ -139,6 +141,58 @@ public class TimeManager : MonoBehaviour
         {
             RenderSettings.skybox = skyboxMaterials[currentIndex];
         }
+    }
+
+    public void Sleep()
+    {
+        isSleeping = true;
+        //Call the sleep video
+        UIManager.Instance.PlaySleepVideo();
+        StartCoroutine(TranstionToMorning());
+
+    }
+
+     IEnumerator TranstionToMorning()
+    {
+        Debug.Log("Sleeping... Transitioning to next morning.");
+        
+        //Wait for 5 seconds to simulate sleep duration
+        yield return new WaitForSeconds(5f);
+        
+        //Transition to 6:30 AM next day
+        GameTimeStamp targetTime = new GameTimeStamp(currentTime);
+        targetTime.day += 1; //Next day
+        targetTime.hour = 6;
+        targetTime.minute = 30;
+        
+        SkipTime(targetTime);
+        
+        //Reset sleeping flag and stop video
+        isSleeping = false;
+        UIManager.Instance.StopSleepVideo();
+        
+        Debug.Log("Wake up at " + targetTime.hour + ":" + targetTime.minute);
+    }
+
+    
+    public void SkipTime(GameTimeStamp targetTime)
+    {
+        //Convert to minutes
+        int targetMinutes = GameTimeStamp.TimestampInMinutes(targetTime);
+        Debug.Log("Time to skip to:" + targetMinutes + " minutes");
+        int currentMinutes = GameTimeStamp.TimestampInMinutes(currentTime);
+        Debug.Log("Current time in minutes:" + currentMinutes + " minutes");
+
+        int differenceInMinutes = targetMinutes - currentMinutes;
+        Debug.Log("Difference in minutes to skip:" + differenceInMinutes + " minutes");
+
+        //Check if the target time is earlier than current time
+        if (differenceInMinutes <= 0) return;
+        for (int i = 0; i < differenceInMinutes; i++)
+        {
+            Tick();
+        }
+        
     }
 
     public GameTimeStamp GetGameTimeStamp()

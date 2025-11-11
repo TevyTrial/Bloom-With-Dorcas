@@ -21,7 +21,7 @@ public class UIManager : MonoBehaviour, ITimeTracker
 
     [Header("Inventory System")]
     //The inventory panel
-    public GameObject inventoryPanel; 
+    public GameObject inventoryPanel;
 
     //The tool slot UIs
     public InventoryBox[] toolSlots;
@@ -45,6 +45,7 @@ public class UIManager : MonoBehaviour, ITimeTracker
     public GameObject HarvestTooltipPanel;
     public GameObject InteractTooltipPanel;
     public GameObject SellingTooltipPanel;
+    public GameObject SleepingTooltipPanel;
 
     [Header("Yes/No Prompt")]
     public YesNoPrompt yesNoPrompt;
@@ -52,6 +53,9 @@ public class UIManager : MonoBehaviour, ITimeTracker
     [Header("Shop System")]
     public GameObject shopPanel;
     public ShopListingManager shopListingManager;
+
+    [Header("Sleep Video")]
+    public GameObject sleepVideoPanel;
 
     private void Awake()
     {
@@ -76,26 +80,28 @@ public class UIManager : MonoBehaviour, ITimeTracker
         //Register as a listener to time updates
         TimeManager.Instance.RegisterListener(this);
     }
-
-    public void TriggerYesNoPrompt (string message,System.Action onYesCallback) {
+    #region YesNoPrompt
+    public void TriggerYesNoPrompt(string message, System.Action onYesCallback)
+    {
         //Set active the gameobject of the yes no prompt
         yesNoPrompt.gameObject.SetActive(true);
 
         yesNoPrompt.CreatePrompt(message, onYesCallback);
     }
-    
-#region inventory
+    #endregion
+
+    #region inventory
     //iterate and assign indexes to each inventory box
     void AssignBoxIndexes()
     {
         //Assign indexes to tool slots
-        for(int i = 0; i < toolSlots.Length; i++)
+        for (int i = 0; i < toolSlots.Length; i++)
         {
             toolSlots[i].AssignIndex(i);
             itemSlots[i].AssignIndex(i);
         }
 
-    }   
+    }
 
     //Render the inventory screen to reflect the Player's Inventory. 
     public void RenderInventory()
@@ -120,7 +126,8 @@ public class UIManager : MonoBehaviour, ITimeTracker
         toolEquipQuantityText.text = "";
 
         //check if there is item to display
-        if(equippedTool != null) {
+        if (equippedTool != null)
+        {
             //Switch the icon over
             toolEquipSlot.sprite = equippedTool.icon;
 
@@ -129,15 +136,16 @@ public class UIManager : MonoBehaviour, ITimeTracker
             //Get quantity
             int quantity = InventoryManager.Instance.GetEquippedSlot(InventoryBox.InventoryType.Tool).quantity;
 
-            if(quantity > 1) {
+            if (quantity > 1)
+            {
                 toolEquipQuantityText.text = quantity.ToString();
             }
 
-            return; 
+            return;
         }
 
         toolEquipSlot.gameObject.SetActive(false);
-        
+
     }
 
     //Iterate through a slot in a section and display them in the UI
@@ -165,7 +173,7 @@ public class UIManager : MonoBehaviour, ITimeTracker
         {
             ToggleInventoryPanel();
         }
-    
+
         // Check for escape key to close inventory panel
         if (Input.GetKeyDown(KeyCode.Escape) && inventoryPanel.activeSelf)
         {
@@ -178,7 +186,7 @@ public class UIManager : MonoBehaviour, ITimeTracker
     public void DisplayItemInfo(ItemData data)
     {
         //If data is null, reset
-        if(data == null)
+        if (data == null)
         {
             itemTitle.text = "";
             itemDescription.text = "";
@@ -187,15 +195,15 @@ public class UIManager : MonoBehaviour, ITimeTracker
         }
 
         itemTitle.text = data.name;
-        itemDescription.text = data.description; 
+        itemDescription.text = data.description;
     }
-#endregion 
+    #endregion
 
-#region Tooltip
+    #region Tooltip
     //Show harvest tooltip
     public void ShowHarvestTooltip()
     {
-        if(HarvestTooltipPanel != null)
+        if (HarvestTooltipPanel != null)
         {
             HarvestTooltipPanel.SetActive(true);
         }
@@ -203,7 +211,7 @@ public class UIManager : MonoBehaviour, ITimeTracker
     //Hide harvest tooltip
     public void HideHarvestTooltip()
     {
-        if(HarvestTooltipPanel != null)
+        if (HarvestTooltipPanel != null)
         {
             HarvestTooltipPanel.SetActive(false);
         }
@@ -212,7 +220,7 @@ public class UIManager : MonoBehaviour, ITimeTracker
     //Show interact tooltip
     public void ShowInteractTooltip()
     {
-        if(InteractTooltipPanel != null)
+        if (InteractTooltipPanel != null)
         {
             InteractTooltipPanel.SetActive(true);
         }
@@ -220,7 +228,7 @@ public class UIManager : MonoBehaviour, ITimeTracker
     //Hide interact tooltip
     public void HideInteractTooltip()
     {
-        if(InteractTooltipPanel != null)
+        if (InteractTooltipPanel != null)
         {
             InteractTooltipPanel.SetActive(false);
         }
@@ -229,7 +237,7 @@ public class UIManager : MonoBehaviour, ITimeTracker
     //Show Selling tooltip
     public void ShowSellingTooltip()
     {
-        if(SellingTooltipPanel != null)
+        if (SellingTooltipPanel != null)
         {
             SellingTooltipPanel.SetActive(true);
         }
@@ -238,57 +246,75 @@ public class UIManager : MonoBehaviour, ITimeTracker
     //Hide Selling tooltip
     public void HideSellingTooltip()
     {
-        if(SellingTooltipPanel != null)
+        if (SellingTooltipPanel != null)
         {
             SellingTooltipPanel.SetActive(false);
         }
     }
-    
-#endregion
+
+    public void ShowSleepingTooltip()
+    {
+        if (SleepingTooltipPanel != null)
+        {
+            SleepingTooltipPanel.SetActive(true);
+        }
+    }
+
+    public void HideSleepingTooltip()
+    {
+        if (SleepingTooltipPanel != null)
+        {
+            SleepingTooltipPanel.SetActive(false);
+        }
+    }
+
+    #endregion
 
 
 
-#region Time 
+    #region Time 
     //Update the time display in the UI
     public void ClockUpdate(GameTimeStamp currentTime)
     {
         // Update the UI elements to reflect the current in-game time
         // Example: Update a UI text element with currentTime.hour and currentTime.minute
-        
+
         //Get the hour and minute 
         int hour = currentTime.hour;
         int minute = currentTime.minute;
 
         //Format the time string (e.g., "HH:MM AM/PM")
         string period = "AM ";
-        if(hour > 12){
+        if (hour > 12)
+        {
             period = "PM ";
             hour -= 12; //Convert to 12-hour format
         }
 
         //Update the time text
         timeText.text = period + hour + ":" + minute.ToString("00");
-        
+
         //Update the date text
         int day = currentTime.day;
-        string season = currentTime.season.ToString().Substring(0,3); //Get first 3 letters of the season
-        string dayOfWeek = currentTime.GetDayOfWeek().ToString().Substring(0,3); //Get first 3 letters of the day of the week
-        dateText.text = season + " " + day + " (" + dayOfWeek + ")" ;
+        string season = currentTime.season.ToString().Substring(0, 3); //Get first 3 letters of the season
+        string dayOfWeek = currentTime.GetDayOfWeek().ToString().Substring(0, 3); //Get first 3 letters of the day of the week
+        dateText.text = season + " " + day + " (" + dayOfWeek + ")";
     }
 
     //Render player stats such as currency
     public void RenderPlayerStats()
     {
-        if(PlayerStats.Money == 0) {
+        if (PlayerStats.Money == 0)
+        {
             currencyText.text = PlayerStats.CURRENCY + "0";
             return;
         }
         //Update the currency text
         currencyText.text = PlayerStats.CURRENCY + PlayerStats.Money;
     }
-#endregion
+    #endregion
 
-#region Shop System
+    #region Shop System
     // Open the shop UI
     public void OpenShop(List<ItemData> shopItems)
     {
@@ -296,7 +322,7 @@ public class UIManager : MonoBehaviour, ITimeTracker
         Debug.Log($"UIManager.OpenShop called with {shopItems.Count} items");
         // Render the shop items using the ShopListingManager
         shopPanel.SetActive(true);
-        shopListingManager.RenderShop(shopItems); 
+        shopListingManager.RenderShop(shopItems);
     }
 
     public void CloseShop()
@@ -304,6 +330,18 @@ public class UIManager : MonoBehaviour, ITimeTracker
         shopPanel.SetActive(false);
     }
 
-#endregion
+    #endregion
+
+#region Sleep Video
+    public void PlaySleepVideo()
+    {
+        sleepVideoPanel.SetActive(true);
+    }
+
+    public void StopSleepVideo()
+    {
+        sleepVideoPanel.SetActive(false);
+    }
+    #endregion
 
 }
