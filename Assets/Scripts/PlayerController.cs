@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
     private float lastInteractionTime = 0f;
     private float interactionCooldown = 0.1f; // 100ms cooldown
 
+
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -64,6 +65,7 @@ public class PlayerController : MonoBehaviour
                 TimeManager.Instance.Tick();
             }
         }
+             
         
 
     }
