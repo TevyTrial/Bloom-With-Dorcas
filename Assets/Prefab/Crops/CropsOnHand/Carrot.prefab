@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1354996048308653523, guid: da30c56b3f093764d9d473da3bb794ef, type: 3}
       propertyPath: m_Name
-      value: Carrot_crops
+      value: Carrot
       objectReference: {fileID: 0}
     - target: {fileID: 1354996048308653523, guid: da30c56b3f093764d9d473da3bb794ef, type: 3}
       propertyPath: m_TagString
@@ -30,15 +30,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1839220266791507817, guid: da30c56b3f093764d9d473da3bb794ef, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.01172
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1839220266791507817, guid: da30c56b3f093764d9d473da3bb794ef, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.01242
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1839220266791507817, guid: da30c56b3f093764d9d473da3bb794ef, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.0001
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1839220266791507817, guid: da30c56b3f093764d9d473da3bb794ef, type: 3}
       propertyPath: m_LocalRotation.w

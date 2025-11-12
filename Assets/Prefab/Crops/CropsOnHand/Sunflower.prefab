@@ -22,15 +22,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1270769412349187261, guid: e7997aa72a2f37e48a05b60f2afb554a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.01153
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1270769412349187261, guid: e7997aa72a2f37e48a05b60f2afb554a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.01574
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1270769412349187261, guid: e7997aa72a2f37e48a05b60f2afb554a, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.0001
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1270769412349187261, guid: e7997aa72a2f37e48a05b60f2afb554a, type: 3}
       propertyPath: m_LocalRotation.w
@@ -66,7 +66,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1939220343108472327, guid: e7997aa72a2f37e48a05b60f2afb554a, type: 3}
       propertyPath: m_Name
-      value: Sunflower_crops
+      value: Sunflower
       objectReference: {fileID: 0}
     - target: {fileID: 1939220343108472327, guid: e7997aa72a2f37e48a05b60f2afb554a, type: 3}
       propertyPath: m_IsActive

@@ -37,32 +37,6 @@ public class Land : MonoBehaviour, ITimeTracker
         TimeManager.Instance.RegisterListener(this);
     }
 
-    public void LoadLandData(LandState newstatus, GameTimeStamp lastWateredTime)
-    {
-        //Set land state and last watered time  
-        landstate = newstatus;
-        timeWatered = lastWateredTime;
-
-        //decide which material to switch to
-        Material materialToSwitch = soilMat;
-        switch (newstatus) {
-            case LandState.Soil:
-                materialToSwitch = soilMat;
-                break;
-            case LandState.Tilled:
-                materialToSwitch = tilledMat;
-                break;
-            case LandState.Watered:
-                materialToSwitch = wateredMat;
-                
-                //record the time when watered
-                timeWatered = TimeManager.Instance.GetGameTimeStamp();
-                break;
-        }
-        renderer.material = materialToSwitch;
-
-    }
-
     public void SwitchState(LandState newstatus) {
         //set land state and switch material
         LandState oldState = landstate;

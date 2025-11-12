@@ -16,6 +16,10 @@ public class PlayerController : MonoBehaviour
     [Header("Camera")]
     public Transform cameraTransform; 
 
+    [Header("Footstep Sounds")]
+    private float footstepTimer = 0f;
+    private float footstepInterval = 0.5f; // Time between footsteps
+
     //Interact components
     PlayerInteraction PlayerInteraction;
     
@@ -37,7 +41,6 @@ public class PlayerController : MonoBehaviour
         {
             cameraTransform = Camera.main.transform;
         }
-      
     }
 
     void Update()
@@ -57,14 +60,9 @@ public class PlayerController : MonoBehaviour
                 TimeManager.Instance.Tick();
             }
         }
-
-             
-        
-
     }
 
     public void Interact() {
-
         // Check cooldown to prevent rapid interactions
         if(Time.time - lastInteractionTime < interactionCooldown) {
             return;
@@ -87,13 +85,14 @@ public class PlayerController : MonoBehaviour
             PlayerInteraction.ItemKeep();
             lastInteractionTime = Time.time;
         }
-
     }
 
     void Move()
     {
+        // Don't move if controller is disabled
         if(!controller.enabled) return;
         
+        // Get input
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
@@ -109,20 +108,19 @@ public class PlayerController : MonoBehaviour
 
         // Calculate movement direction relative to camera
         Vector3 direction = (cameraForward * vertical + cameraRight * horizontal).normalized;
-        Vector3 velocity = speed * Time.deltaTime * direction; // units per second
+        Vector3 velocity = speed * Time.deltaTime * direction;
 
-        //gravity
+        // Apply gravity
         if (controller.isGrounded)
         {
             velocity.y = 0f; // Reset vertical velocity when grounded
         }
         else
         {
-            // Apply gravity when not grounded
             velocity.y -= gravity * Time.deltaTime;
         }
 
-        //shift
+        // Handle sprint
         if (Input.GetButton("Sprint"))
         {
             speed = runSpeed;
@@ -134,29 +132,31 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("Running", false);
         }
 
-        //movement and rotation
+        // Handle movement and rotation
         if (direction.magnitude >= 0.1f)
         {            
+            // Rotate player to face movement direction
             transform.rotation = Quaternion.LookRotation(direction);
 
-            // Move expects displacement for this frame (units), so multiply by deltaTime here
+            // Move the character
             controller.Move(velocity);
             
+            // Update animator
             animator.SetFloat("Speed", direction.magnitude * speed * Time.deltaTime);
+
+            // Play footstep sounds
+            if (controller.isGrounded)
+            {
+
+                AudioManager.Instance.PlayWalkingSFX();
+
+            }
         }
         else
         {
+            // Player is not moving
             animator.SetFloat("Speed", 0f);
+            AudioManager.Instance.StopWalkingSFX();
         }
-
-        
     }
-    /*
-    public void TriggerWateringAnimation()
-    {
-        animator.SetBool("Watering", true);
-    }
-    */
-
-
 }

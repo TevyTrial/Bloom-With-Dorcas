@@ -1,19 +1,29 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance { get; private set; }
 
     [Header("Scene Settings")]
-    [SerializeField] private bool persistAcrossScenes = false; // NEW: Toggle in Inspector
+    [SerializeField] private bool persistAcrossScenes = false; 
     [SerializeField] private string[] activeInScenes = new string[] { "Garden" }; // NEW: Scenes where this manager is active
+
+    [Header("Audio Mixer")]
+    [SerializeField] private AudioMixer audioMixer;
 
     [Header("Audio Sources")]
     [SerializeField] private AudioSource musicSource;
     [SerializeField] private AudioSource sfxSource;
     [SerializeField] private AudioSource ambientSource;
+    private AudioSource footstepSource;
+
+    [Header("SFX Clips")]
+    [SerializeField] private AudioClip walkingSFX;
+    [SerializeField] private AudioClip wateringSFX;
+    [SerializeField] private AudioClip plowingSFX;
 
     [Header("Seasonal Instrument System")]
     [SerializeField] private SeasonalSongData springSong;
@@ -82,6 +92,14 @@ public class AudioManager : MonoBehaviour
             {
                 DontDestroyOnLoad(gameObject);
             }
+
+             // Create dedicated footstep AudioSource
+            GameObject footstepObj = new GameObject("FootstepSource");
+            footstepObj.transform.SetParent(transform);
+            footstepSource = footstepObj.AddComponent<AudioSource>();
+            footstepSource.playOnAwake = false;
+            footstepSource.spatialBlend = 0f; // 2D audio
+            footstepSource.loop = false;
             
             // OPTIMIZATION: Initialize object pool
             InitializeAudioSourcePool();
@@ -444,22 +462,139 @@ public class AudioManager : MonoBehaviour
 
         CheckAndPlaySeasonalMusic();
     }
+    #region SFX Volume Controls
+       public void PlaySFX(AudioClip clip, float volume)
+        {
+            if (clip == null)
+            {
+                Debug.LogWarning("[AudioManager] PlaySFX called with null clip");
+                return;
+            }
 
-    public void SetAmbientSoundVolume(float volume)
+            // If sfxSource wasn't assigned in inspector, create a simple 2D source as fallback
+            if (sfxSource == null)
+            {
+                GameObject go = new GameObject("SFXSource_Temp");
+                go.transform.SetParent(transform);
+                sfxSource = go.AddComponent<AudioSource>();
+                sfxSource.playOnAwake = false;
+                sfxSource.spatialBlend = 0f; // 2D SFX
+            }
+
+            if (!sfxSource.gameObject.activeInHierarchy)
+                sfxSource.gameObject.SetActive(true);
+
+            if (AudioListener.pause)
+                Debug.LogWarning("[AudioManager] AudioListener.pause is true; SFX may not be audible");
+
+            Debug.Log($"[AudioManager] PlaySFX: {clip.name} volume={volume}");
+            sfxSource.PlayOneShot(clip, Mathf.Clamp01(volume));
+        }
+
+        //Specific SFX methods
+        public void PlayWalkingSFX()
+        {
+            // Use dedicated footstep source instead of shared sfxSource
+            if (footstepSource != null && walkingSFX != null)
+            {
+                if (!footstepSource.isPlaying)
+                {
+                    footstepSource.PlayOneShot(walkingSFX, 1.0f);
+                }
+            }
+        }
+        public void PlayWateringSFX()
+        {
+            PlaySFX(wateringSFX, 1f);
+        }
+        public void PlayPlowingSFX()
+        {
+            PlaySFX(plowingSFX, 0.6f);
+        }
+
+        public void StopWalkingSFX()
+        {
+            if (footstepSource != null && footstepSource.isPlaying)
+            {
+                footstepSource.Stop();
+            }
+        }
+
+    #endregion
+
+    #region Volume Controls
+    public void SetMasterVolume(float volume)
     {
-        if (ambientSource != null)
-            ambientSource.volume = Mathf.Clamp01(volume);
+        if (audioMixer != null)
+        {
+            // Convert 0-1 linear to decibels: -80dB (silent) to 0dB (full)
+            float dB = volume > 0.0001f ? 20f * Mathf.Log10(volume) : -80f;
+            audioMixer.SetFloat("MasterVolume", dB);
+        }
+    }
+
+    public void SetMusicVolume(float volume)
+    {
+        if (audioMixer != null)
+        {
+            float dB = volume > 0.0001f ? 20f * Mathf.Log10(volume) : -80f;
+            audioMixer.SetFloat("MusicVolume", dB);
+        }
     }
 
     public void SetSFXVolume(float volume)
     {
-        if (sfxSource != null)
-            sfxSource.volume = Mathf.Clamp01(volume);
+        if (audioMixer != null)
+        {
+            float dB = volume > 0.0001f ? 20f * Mathf.Log10(volume) : -80f;
+            audioMixer.SetFloat("SFXVolume", dB);
+        }
     }
 
-    public void SetInstrumentVolume(float volume)
+    public void SetAmbientVolume(float volume)
     {
-        maxTotalInstrumentVolume = Mathf.Clamp01(volume);
-        ScheduleVolumeUpdate();
+        if (audioMixer != null)
+        {
+            float dB = volume > 0.0001f ? 20f * Mathf.Log10(volume) : -80f;
+            audioMixer.SetFloat("AmbientVolume", dB);
+        }
     }
+    
+    public float GetMasterVolume()
+    {
+        if (audioMixer != null && audioMixer.GetFloat("MasterVolume", out float dB))
+        {
+            return Mathf.Pow(10f, dB / 20f);
+        }
+        return 1f;
+    }
+
+    public float GetMusicVolume()
+    {
+        if (audioMixer != null && audioMixer.GetFloat("MusicVolume", out float dB))
+        {
+            return Mathf.Pow(10f, dB / 20f);
+        }
+        return 1f;
+    }
+
+    public float GetSFXVolume()
+    {
+        if (audioMixer != null && audioMixer.GetFloat("SFXVolume", out float dB))
+        {
+            return Mathf.Pow(10f, dB / 20f);
+        }
+        return 1f;
+    }
+
+    public float GetAmbientVolume()
+    {
+        if (audioMixer != null && audioMixer.GetFloat("AmbientVolume", out float dB))
+        {
+            return Mathf.Pow(10f, dB / 20f);
+        }
+        return 1f;
+    }
+
+    #endregion
 }

@@ -1,8 +1,15 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerInteraction : MonoBehaviour
 {
     PlayerController playerController;
+
+    Animator animator;
+    EquipmentData equipmentTool;
+
+    bool isBusy = false;
 
     Land selectedLand = null;
 
@@ -16,6 +23,8 @@ public class PlayerInteraction : MonoBehaviour
     void Start()
     {
         playerController = transform.parent.GetComponent<PlayerController>();
+
+        animator = GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -116,18 +125,101 @@ public class PlayerInteraction : MonoBehaviour
     selectedLand = land;
     land.Select(true);
     }
-    
+
     public void Interact() {
         
-        //Check if player has a tool equipped
-        bool toolEquipped = InventoryManager.Instance.SlotEquipped(InventoryBox.InventoryType.Tool);
-
+        // Don't allow interaction while performing an action
+        if(isBusy) {
+            return;
+        }
+        
         //selecting any lands
         if(selectedLand != null){
-            selectedLand.Interact();
+            //Check if player has a tool or seed equipped in the tool slot
+            bool toolEquipped = InventoryManager.Instance.SlotEquipped(InventoryBox.InventoryType.Tool);
+            
+            if(!toolEquipped) {
+                Debug.Log("No tool or seed equipped");
+                return;
+            }
+            
+            //Get the equipped item data (could be a tool or a seed)
+            ItemData toolSlot = InventoryManager.Instance.GetEquippedItemSlots(InventoryBox.InventoryType.Tool);
+            
+            //Try casting as equipment data (tools)
+            EquipmentData equipmentTool = toolSlot as EquipmentData;
+            if(equipmentTool != null) {
+                //Get the tool type and trigger animation
+                EquipmentData.ToolType toolType = equipmentTool.toolType;
+
+                switch (toolType) {
+                    case EquipmentData.ToolType.Hoe:
+                        isBusy = true;
+                        playerController.enabled = false;
+                        StartCoroutine(PlayAnimationAndInteract("Plowing", 1.5f));
+                        AudioManager.Instance.PlayPlowingSFX();
+                        break;
+                    case EquipmentData.ToolType.WaterCan:
+                        isBusy = true;
+                        playerController.enabled = false;
+                        StartCoroutine(PlayAnimationAndInteract("Watering", 1.0f));
+                        AudioManager.Instance.PlayWateringSFX();
+                        break;
+                    default:
+                        isBusy = false;
+                        playerController.enabled = true;
+                        Debug.Log("Equipped tool is not handled");
+                        break;
+                }
+                
+                return;
+            }
+
+            // planting should happen immediately (no tool animation)
+            SeedData seed = toolSlot as SeedData;
+            if (seed != null) {
+                // Directly interact with the land to plant the seed
+                selectedLand.Interact();
+                return;
+            }
             return;
         }
     }
+
+    private System.Collections.IEnumerator PlayAnimationAndInteract(string triggerName, float duration) {
+        
+        // Get CharacterController to disable movement
+        CharacterController controller = playerController.GetComponent<CharacterController>();
+        
+        // Trigger animation
+        animator.SetTrigger(triggerName);
+
+        // Disable character movement
+        if(controller != null) {
+            controller.enabled = false;
+        }
+        
+        // Wait for animation to finish
+        yield return new WaitForSeconds(duration);
+        
+        // Execute the land interaction
+        if(selectedLand != null) {
+            selectedLand.Interact();
+        }
+        
+        // Re-enable character movement
+        if(controller != null) {
+            controller.enabled = true;
+        }
+
+        if(playerController != null) {
+            playerController.enabled = true;
+        }
+        
+        isBusy = false;
+    }
+
+
 
     //interacting with items
     public void ItemInteract() {

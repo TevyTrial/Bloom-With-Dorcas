@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 522450192520747998, guid: 1392fd565ad036744b2d2216f6eb0121, type: 3}
       propertyPath: m_Name
-      value: Mashroom_crops
+      value: Mashroom
       objectReference: {fileID: 0}
     - target: {fileID: 522450192520747998, guid: 1392fd565ad036744b2d2216f6eb0121, type: 3}
       propertyPath: m_IsActive
@@ -34,15 +34,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 868012761684689252, guid: 1392fd565ad036744b2d2216f6eb0121, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.01172
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 868012761684689252, guid: 1392fd565ad036744b2d2216f6eb0121, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.012519
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 868012761684689252, guid: 1392fd565ad036744b2d2216f6eb0121, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.0001
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 868012761684689252, guid: 1392fd565ad036744b2d2216f6eb0121, type: 3}
       propertyPath: m_LocalRotation.w
