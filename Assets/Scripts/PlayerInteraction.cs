@@ -162,7 +162,7 @@ public class PlayerInteraction : MonoBehaviour
                     case EquipmentData.ToolType.WaterCan:
                         isBusy = true;
                         playerController.enabled = false;
-                        StartCoroutine(PlayAnimationAndInteract("Watering", 1.0f));
+                        StartCoroutine(PlayAnimationAndInteract("Watering", 1.5f));
                         AudioManager.Instance.PlayWateringSFX();
                         break;
                     default:

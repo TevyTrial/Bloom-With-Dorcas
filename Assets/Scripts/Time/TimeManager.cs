@@ -51,7 +51,7 @@ public class TimeManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        currentTime = new GameTimeStamp(1, GameTimeStamp.Season.Spring, 1, 6, 30);
+        currentTime = new GameTimeStamp(1, GameTimeStamp.Season.Spring, 1, 7, 30);
         StartCoroutine(StartClock());
     }
 
@@ -93,7 +93,7 @@ public class TimeManager : MonoBehaviour
         UpdateSkybox(timeInMinutes);
 
     }
-
+#region Update Sun & Skybox
     //Update sun based on time of day
     private void UpdateSun(int timeInMinutes)
     {
@@ -142,7 +142,9 @@ public class TimeManager : MonoBehaviour
             RenderSettings.skybox = skyboxMaterials[currentIndex];
         }
     }
+#endregion
 
+#region Sleep
     public void Sleep()
     {
         isSleeping = true;
@@ -157,12 +159,12 @@ public class TimeManager : MonoBehaviour
         Debug.Log("Sleeping... Transitioning to next morning.");
         
         //Wait for 5 seconds to simulate sleep duration
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(8.5f);
         
-        //Transition to 6:30 AM next day
+        //Transition to 7:30 AM next day
         GameTimeStamp targetTime = new GameTimeStamp(currentTime);
         targetTime.day += 1; //Next day
-        targetTime.hour = 6;
+        targetTime.hour = 7;
         targetTime.minute = 30;
         
         SkipTime(targetTime);
@@ -173,8 +175,9 @@ public class TimeManager : MonoBehaviour
         
         Debug.Log("Wake up at " + targetTime.hour + ":" + targetTime.minute);
     }
+#endregion
 
-    
+#region SkipTime    
     public void SkipTime(GameTimeStamp targetTime)
     {
         //Convert to minutes
@@ -213,5 +216,7 @@ public class TimeManager : MonoBehaviour
     {
         listeners.Remove(listener);
     }
+#endregion
+
 }
 

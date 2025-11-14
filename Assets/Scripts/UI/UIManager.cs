@@ -18,6 +18,9 @@ public class UIManager : MonoBehaviour, ITimeTracker
 
     [Header("Currency Display")]
     public TextMeshProUGUI currencyText;
+    [Header("Stamina Display")]
+    public Image staminaBarFill;
+    public TextMeshProUGUI staminaText;
 
     [Header("Inventory System")]
     //The inventory panel
@@ -79,6 +82,12 @@ public class UIManager : MonoBehaviour, ITimeTracker
 
         //Register as a listener to time updates
         TimeManager.Instance.RegisterListener(this);
+
+        inventoryPanel.SetActive(false);
+
+        // Initialize player stats (do this once at game start)
+        PlayerStats.Initialize(startingMoney: 50, startingStamina: 50, maxStamina: 50);
+
     }
     #region YesNoPrompt
     public void TriggerYesNoPrompt(string message, System.Action onYesCallback)
@@ -342,6 +351,19 @@ public class UIManager : MonoBehaviour, ITimeTracker
     {
         sleepVideoPanel.SetActive(false);
     }
-    #endregion
+#endregion
+
+#region Stamina
+    public void UpdateStaminaBar(int current, int max)
+    {
+        if (staminaBarFill == null || max <= 0) return;
+        staminaBarFill.fillAmount = Mathf.Clamp01((float)current / max);
+        
+        if (staminaText != null)
+        {
+            staminaText.text = $"{current}/{max}";
+        }
+    }
+#endregion
 
 }

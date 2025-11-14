@@ -99,22 +99,17 @@ public class Land : MonoBehaviour, ITimeTracker
                     if(landstate == LandState.Soil) {
                         SwitchState(LandState.Tilled);
                     } 
+                    PlayerStats.UseStamina(2);
                     break;
                 case EquipmentData.ToolType.WaterCan:
                     //If the land is in tilled state, water it
                     if(landstate == LandState.Tilled) {
                         Debug.Log("[Land] Watering tilled land -> watered");
                         SwitchState(LandState.Watered);
-                        /*
-                        //Trigger watering animation
-                        PlayerController player = FindObjectOfType<PlayerController>();
-                        if(player != null) {
-                            player.TriggerWateringAnimation();
-                        }
-                        */
                     } else {
                         Debug.Log($"[Land] Cannot water - land must be tilled first (current: {landstate})");
                     }
+                    PlayerStats.UseStamina(2);
                     break;
                 case EquipmentData.ToolType.Rake:
                     //Remove crop
@@ -122,6 +117,7 @@ public class Land : MonoBehaviour, ITimeTracker
                         cropPlanted.RemoveCrop();
                         cropPlanted = null;
                     } 
+                    PlayerStats.UseStamina(2);
                     break;
                     
                 default:
