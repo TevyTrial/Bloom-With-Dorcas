@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Food
   foodName: croissant
   icon: {fileID: 0}
-  staminaRestore: 0
+  staminaRestore: 8
   foodModel: {fileID: 1730609000794682, guid: 352e2f344291f394ab735ce088dc8a4a, type: 3}

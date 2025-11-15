@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Food
   foodName: cupcake
   icon: {fileID: 0}
-  staminaRestore: 0
+  staminaRestore: 14
   foodModel: {fileID: 1921254186118406, guid: 48dfbc7954a60d244b62bdb6153abb1d, type: 3}

@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Food
   foodName: Macaron
   icon: {fileID: 0}
-  staminaRestore: 0
+  staminaRestore: 18
   foodModel: {fileID: 1531539653899946, guid: 703c9ca7783cdd1429ff2ba724c72d00, type: 3}

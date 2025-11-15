@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Food
   foodName: Doughnut
   icon: {fileID: 0}
-  staminaRestore: 0
+  staminaRestore: 10
   foodModel: {fileID: 1080854471979460, guid: 562835a60d3866640a755390ba300f9e, type: 3}

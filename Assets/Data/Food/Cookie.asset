@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Food
   foodName: Cookie
   icon: {fileID: 0}
-  staminaRestore: 20
+  staminaRestore: 6
   foodModel: {fileID: 1686174373880542, guid: 972053b14adae29429282c6522aaf0e1, type: 3}

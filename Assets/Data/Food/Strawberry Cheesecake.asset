@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Food
   foodName: Strawberry Cheesecake
   icon: {fileID: 0}
-  staminaRestore: 20
+  staminaRestore: 12
   foodModel: {fileID: 1828155420384140, guid: f1e7fa8c4819f084dbf2b45fcc8a0a70, type: 3}
