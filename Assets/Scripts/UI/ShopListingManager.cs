@@ -22,6 +22,17 @@ public class ShopListingManager : MonoBehaviour
     public TextMeshProUGUI confirmQuantityText;
     public TextMeshProUGUI costCalculationText;
     public Button purchaseButton;
+    public Image confirmSeedIcon;
+
+    [Header("Season Icons")]
+    [SerializeField] private SeasonIconEntry[] seasonIcons;
+
+    [System.Serializable]
+    private struct SeasonIconEntry
+    {
+        public GameTimeStamp.Season season;
+        public Sprite icon;
+    }    
 
     public void RenderShop(List<ItemData> shopItems)
     {
@@ -40,10 +51,34 @@ public class ShopListingManager : MonoBehaviour
             //Instantiate a shop listing prefab for the item
             GameObject listingGameObject = Instantiate(shopListingPrefab, shopListingParent);
 
-            //Assign it the shop item and display the listing
-            listingGameObject.GetComponent<ShopListing>().Display(shopItem);
+            //Get the ShopListing component
+            ShopListing listing = listingGameObject.GetComponent<ShopListing>();
+            
+            // Display item info
+            listing.Display(shopItem);
+            
+            // Set season icon if applicable
+            Sprite seasonSprite = GetSeasonSprite(shopItem);
+            listing.SetSeasonIcon(seasonSprite);
         }
     }
+
+    public Sprite GetSeasonSprite(ItemData itemData) 
+    {
+        if(itemData is SeedData seedData) 
+        {
+            foreach(var entry in seasonIcons) 
+            {
+                if(entry.season == seedData.cropSeason) 
+                {
+                    return entry.icon;
+                }
+            }
+        }
+        return null; // No season icon
+    }
+
+    
 
     public void OpenConfirmPanel(ItemData item) {
         Debug.Log($"Opening confirm panel for {item.name}");
@@ -58,6 +93,7 @@ public class ShopListingManager : MonoBehaviour
         confirmQuantityText.text = "x" + quantity;
         int totalCost = itemToBuy.cost * quantity;
         int playerMoneyLeft = PlayerStats.Money - totalCost;
+        confirmSeedIcon.sprite = itemToBuy.icon;
 
         Debug.Log($"Total cost: {totalCost}, Player money: {PlayerStats.Money}, Money left: {playerMoneyLeft}");
 

@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d50a9ec1e6d0ce40bdb82d4c315452d, type: 3}
+  m_Name: Macaron
+  m_EditorClassIdentifier: Assembly-CSharp::Food
+  foodName: Macaron
+  icon: {fileID: 0}
+  staminaRestore: 0
+  foodModel: {fileID: 1531539653899946, guid: 703c9ca7783cdd1429ff2ba724c72d00, type: 3}

@@ -12,6 +12,8 @@ public class ShopListing : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public TextMeshProUGUI costText;
     public Image itemIcon;
 
+    [SerializeField] private Image seasonIconImage;
+
     ItemData itemData;
 
     private void Start()
@@ -23,6 +25,7 @@ public class ShopListing : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         }
         Debug.Log($"ShopListing Start called for {gameObject.name}, enabled: {enabled}");
     }
+
 #region Active and Display
     public void Display(ItemData itemData)
     {
@@ -56,6 +59,25 @@ public class ShopListing : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         }
         Debug.Log($"Shop listing displayed: {itemData.name}, ShopListing enabled: {enabled}");
     }
+    
+    public void SetSeasonIcon(Sprite seasonSprite)
+    {
+        if (seasonIconImage != null)
+        {
+            if (seasonSprite != null)
+            {
+                seasonIconImage.sprite = seasonSprite;
+                seasonIconImage.gameObject.SetActive(true);
+            }
+            else
+            {
+                // Hide season icon if no sprite (for non-seed items)
+                seasonIconImage.gameObject.SetActive(false);
+            }
+        }
+    }
+
+
 #endregion
 
     public void OnPointerClick(PointerEventData eventData)

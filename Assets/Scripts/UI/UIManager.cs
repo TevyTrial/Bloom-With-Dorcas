@@ -49,6 +49,7 @@ public class UIManager : MonoBehaviour, ITimeTracker
     public GameObject InteractTooltipPanel;
     public GameObject SellingTooltipPanel;
     public GameObject SleepingTooltipPanel;
+    public GameObject DrawingTooltipPanel;
 
     [Header("Yes/No Prompt")]
     public YesNoPrompt yesNoPrompt;
@@ -274,6 +275,21 @@ public class UIManager : MonoBehaviour, ITimeTracker
         if (SleepingTooltipPanel != null)
         {
             SleepingTooltipPanel.SetActive(false);
+        }
+    }
+
+    public void ShowDrawingTooltip()
+    {
+        if (DrawingTooltipPanel != null)
+        {
+            DrawingTooltipPanel.SetActive(true);
+        }
+    }
+    public void HideDrawingTooltip()
+    {
+        if (DrawingTooltipPanel != null)
+        {
+            DrawingTooltipPanel.SetActive(false);
         }
     }
 

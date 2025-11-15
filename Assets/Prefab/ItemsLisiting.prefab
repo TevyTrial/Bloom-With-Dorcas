@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8124709455459035789}
   - component: {fileID: 6750778190127107015}
   m_Layer: 5
-  m_Name: Weather
+  m_Name: Season
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -141,6 +141,7 @@ MonoBehaviour:
   nameText: {fileID: 8304695438538096487}
   costText: {fileID: 7755162781054131207}
   itemIcon: {fileID: 8199764225962422265}
+  seasonIconImage: {fileID: 6750778190127107015}
 --- !u!1 &2001072144255984379
 GameObject:
   m_ObjectHideFlags: 0
