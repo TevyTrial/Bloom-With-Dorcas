@@ -61,6 +61,9 @@ public class UIManager : MonoBehaviour, ITimeTracker
     [Header("Sleep Video")]
     public GameObject sleepVideoPanel;
 
+    [Header("Tip System")]
+    public GameObject tipPanel;
+
     private void Awake()
     {
         //If there is more than one instance, destroy the extra
@@ -378,6 +381,31 @@ public class UIManager : MonoBehaviour, ITimeTracker
         if (staminaText != null)
         {
             staminaText.text = $"{current}/{max}";
+        }
+    }
+#endregion
+
+#region Tip System
+    public void ShowTip(string tipMessage)
+    {
+        if (tipPanel != null)
+        {
+            
+            tipPanel.SetActive(true);
+
+            TextMeshProUGUI tipText = tipPanel.GetComponentInChildren<TextMeshProUGUI>();
+            if (tipText != null)
+            {
+                tipText.text = tipMessage;
+            }
+        }
+    }
+
+    public void HideTip()
+    {
+        if (tipPanel != null)
+        {
+            tipPanel.SetActive(false);
         }
     }
 #endregion

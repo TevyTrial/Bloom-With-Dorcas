@@ -10,7 +10,6 @@ public class RandomDraw : MonoBehaviour
     [SerializeField] private List<Food> foodOptions = new();
     [SerializeField] private Transform drawAnchor;
     [SerializeField] private float drawDelay = 1.5f;
-    [SerializeField] private float foodDisplayDuration = 2f; // How long to show the food
     [SerializeField] private Animator drawAnimator; 
     [SerializeField] private string drawTriggerName = "Draw";
 
@@ -30,9 +29,8 @@ public class RandomDraw : MonoBehaviour
     void OnTriggerStay(Collider other)
     {
         // Check if player presses F while in the trigger
-        if (other.CompareTag("Player") && Input.GetKeyDown(KeyCode.F) && canInteract)
-        {
-            canInteract = false; // Prevent multiple interactions
+        if (other.CompareTag("Player") && Input.GetKeyDown(KeyCode.F))
+        {           
             UIManager.Instance.HideDrawingTooltip();
             UIManager.Instance.TriggerYesNoPrompt("Do you want to get food from the pond Cost $10?", DrawFoodAction);
         }
@@ -82,14 +80,19 @@ public class RandomDraw : MonoBehaviour
         PlayerStats.RecoverStamina(selectedFood.staminaRestore);
         Debug.Log($"[RandomDraw] Player drew {selectedFood.foodName} and recovered {selectedFood.staminaRestore} stamina.");
 
+        UIManager.Instance.ShowTip($"You get {selectedFood.foodName} from the pond and recovered {selectedFood.staminaRestore} stamina!");
+
+
         // Wait for food display duration before destroying
-        yield return new WaitForSeconds(foodDisplayDuration);
+        yield return new WaitForSeconds(5f);
 
         if (currentFoodInstance != null)
         {
             Destroy(currentFoodInstance);
             currentFoodInstance = null;
         }
+
+        UIManager.Instance.HideTip();
 
         yield return ResetInteraction();
     }

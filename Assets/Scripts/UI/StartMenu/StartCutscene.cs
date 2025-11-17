@@ -3,15 +3,23 @@ using System.Collections;
 
 public class StartCutscene : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [SerializeField] private AnimationClip cutsceneClip;
+    [SerializeField] private GameObject cameraObject;
+
     void Start()
     {
+        if (cameraObject == null)
+            cameraObject = gameObject;
         
+        if (cutsceneClip != null)
+        {
+            StartCoroutine(DisableCameraAfterAnimation());
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    private IEnumerator DisableCameraAfterAnimation()
     {
-        
+        yield return new WaitForSeconds(cutsceneClip.length);
+        cameraObject.SetActive(false);
     }
 }
