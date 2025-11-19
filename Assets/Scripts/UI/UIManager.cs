@@ -7,6 +7,7 @@ using TMPro;
 public class UIManager : MonoBehaviour, ITimeTracker
 {
     public static UIManager Instance { get; private set; }
+
     [Header("Setus Bar")]
     //Tool equip box
     public Image toolEquipSlot;
@@ -64,6 +65,9 @@ public class UIManager : MonoBehaviour, ITimeTracker
     [Header("Tip System")]
     public GameObject tipPanel;
 
+    [Header("Player Controller")]
+    [SerializeField] private PlayerController playerController;
+
     private void Awake()
     {
         //If there is more than one instance, destroy the extra
@@ -91,6 +95,11 @@ public class UIManager : MonoBehaviour, ITimeTracker
 
         // Initialize player stats (do this once at game start)
         PlayerStats.Initialize(startingMoney: 50, startingStamina: 50, maxStamina: 50);
+
+        if(playerController == null)
+        {
+            playerController = FindObjectOfType<PlayerController>();
+        }
 
     }
     #region YesNoPrompt
@@ -173,10 +182,18 @@ public class UIManager : MonoBehaviour, ITimeTracker
 
     public void ToggleInventoryPanel()
     {
-        //If the panel is hidden, show it and vice versa
-        inventoryPanel.SetActive(!inventoryPanel.activeSelf);
+        bool isOpen = !inventoryPanel.activeSelf;
+        inventoryPanel.SetActive(isOpen);
 
-        RenderInventory();
+        Debug.Log("Toggling Inventory Panel: " + (isOpen ? "Opened" : "Closed"));
+        
+        if (isOpen)
+        {
+            RenderInventory();
+        }
+        // Enable or disable player controller based on inventory panel state
+        SetPlayerControllerEnabled(!isOpen);
+        Debug.Log("Player Controller Enabled: " + (!isOpen));
     }
 
     void Update()
@@ -192,6 +209,7 @@ public class UIManager : MonoBehaviour, ITimeTracker
         {
             inventoryPanel.SetActive(false);
             RenderInventory();
+            SetPlayerControllerEnabled(true);
         }
     }
 
@@ -351,11 +369,13 @@ public class UIManager : MonoBehaviour, ITimeTracker
         // Render the shop items using the ShopListingManager
         shopPanel.SetActive(true);
         shopListingManager.RenderShop(shopItems);
+        SetPlayerControllerEnabled(false);
     }
 
     public void CloseShop()
     {
         shopPanel.SetActive(false);
+        SetPlayerControllerEnabled(true);
     }
 
     #endregion
@@ -406,6 +426,17 @@ public class UIManager : MonoBehaviour, ITimeTracker
         if (tipPanel != null)
         {
             tipPanel.SetActive(false);
+        }
+    }
+#endregion
+
+#region Player Controller Enable/Disable
+    private void SetPlayerControllerEnabled(bool enabled)
+    {
+        if (playerController != null)
+        {
+            playerController.enabled = enabled;
+            Debug.Log("PlayerController enabled set to: " + enabled);
         }
     }
 #endregion

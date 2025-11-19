@@ -45,6 +45,9 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        // Don't process input if controller is disabled
+        if(!enabled) return;
+
         //runs the movement
         Move();
 
@@ -63,6 +66,7 @@ public class PlayerController : MonoBehaviour
     }
 
     public void Interact() {
+
         // Check cooldown to prevent rapid interactions
         if(Time.time - lastInteractionTime < interactionCooldown) {
             return;
@@ -89,9 +93,6 @@ public class PlayerController : MonoBehaviour
 
     void Move()
     {
-        // Don't move if controller is disabled
-        if(!controller.enabled) return;
-        
         // Get input
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
