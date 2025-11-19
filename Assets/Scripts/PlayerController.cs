@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour
 {
@@ -67,6 +68,14 @@ public class PlayerController : MonoBehaviour
 
     public void Interact() {
 
+        //Don't process input if controller is disabled
+        if(!enabled) return;
+
+        // Don't interact with game objects if pointer is over UI
+        if(EventSystem.current.IsPointerOverGameObject()) {
+            return;
+        }
+
         // Check cooldown to prevent rapid interactions
         if(Time.time - lastInteractionTime < interactionCooldown) {
             return;
@@ -93,6 +102,9 @@ public class PlayerController : MonoBehaviour
 
     void Move()
     {
+        //Don't process input if controller is disabled
+        if(!enabled) return;
+
         // Get input
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
