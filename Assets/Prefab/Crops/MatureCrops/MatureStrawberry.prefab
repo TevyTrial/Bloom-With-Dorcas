@@ -81,7 +81,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -98,7 +98,7 @@ GameObject:
   - component: {fileID: 2869013041056663135}
   - component: {fileID: 4847484869135067325}
   - component: {fileID: 1103519107769029827}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Particle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4987,6 +4987,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: strawberry
       objectReference: {fileID: 0}
+    - target: {fileID: 7613497420240508485, guid: 6ff0ac61da0dfaa418f1028a93c5a137, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5060,6 +5064,10 @@ PrefabInstance:
     - target: {fileID: 7613497420240508485, guid: 6ff0ac61da0dfaa418f1028a93c5a137, type: 3}
       propertyPath: m_Name
       value: strawberry (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7613497420240508485, guid: 6ff0ac61da0dfaa418f1028a93c5a137, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5135,6 +5143,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: strawberry (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 7613497420240508485, guid: 6ff0ac61da0dfaa418f1028a93c5a137, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5209,6 +5221,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: strawberry (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 7613497420240508485, guid: 6ff0ac61da0dfaa418f1028a93c5a137, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5282,6 +5298,10 @@ PrefabInstance:
     - target: {fileID: 2792029760208804096, guid: 997a1da230c3b5f48aa0d7de78a61c5c, type: 3}
       propertyPath: m_Name
       value: Tomato_Plant
+      objectReference: {fileID: 0}
+    - target: {fileID: 2792029760208804096, guid: 997a1da230c3b5f48aa0d7de78a61c5c, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

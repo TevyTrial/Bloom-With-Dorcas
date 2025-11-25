@@ -1377,6 +1377,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9784c84af321fc543b4f207b2d86e368, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Land
+  id: 0
   landstate: 0
   soilMat: {fileID: 2100000, guid: a394e00ef7db7a3489b7d27343cff6b2, type: 2}
   tilledMat: {fileID: 2100000, guid: 995243a46f04f6e4399de2fca2d95a88, type: 2}

@@ -87,12 +87,6 @@ public class PlayerController : MonoBehaviour
             lastInteractionTime = Time.time;
         }
 
-        //press F key for item interaction 
-        if(Input.GetKeyDown(KeyCode.F)) {
-            PlayerInteraction.ItemInteract();
-            lastInteractionTime = Time.time;
-        }
-
         //Keep items
         if(Input.GetButtonDown("Fire3")) {
             PlayerInteraction.ItemKeep();

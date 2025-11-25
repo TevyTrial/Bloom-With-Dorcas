@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6745779999878015042}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tulip_blue_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 2958731143442058098}
   - component: {fileID: 7808892644491181839}
   - component: {fileID: 8207370671009481009}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tulip_blue_04_Material_0 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 4771692827422604851}
   - component: {fileID: 9163822798197695720}
   - component: {fileID: 7935358915039070514}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tulip_blue_06_Material_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -219,7 +219,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1475465958964913527}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tulip_blue_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -251,7 +251,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 49455864960223669}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tulip_blue_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -283,7 +283,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4605751909569976856}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tulip_blue_04
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -318,7 +318,7 @@ GameObject:
   - component: {fileID: 5376492389018912144}
   - component: {fileID: 9158370224809750656}
   - component: {fileID: 6946982907988623741}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tulip_blue_02_Material_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -465,7 +465,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -495,7 +495,7 @@ GameObject:
   - component: {fileID: 8067608307645308671}
   - component: {fileID: 7352190667510860924}
   - component: {fileID: 2441077154774058968}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tulip_blue_04_Material_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -584,7 +584,7 @@ GameObject:
   - component: {fileID: 1426598543624479280}
   - component: {fileID: 5966811302080708643}
   - component: {fileID: 8587750928878612239}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tulip_blue_05_Material_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -673,7 +673,7 @@ GameObject:
   - component: {fileID: 9175260837045079886}
   - component: {fileID: 9151191877979754863}
   - component: {fileID: 8175857823919226944}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tulip_blue_01_Material_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -762,7 +762,7 @@ GameObject:
   - component: {fileID: 7723946730357443564}
   - component: {fileID: 3890863188479480717}
   - component: {fileID: 7417304939916855569}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tulip_blue_03_Material_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -849,7 +849,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6916109426306777802}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tulip_blue_05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -883,7 +883,7 @@ GameObject:
   - component: {fileID: 4536734235417568265}
   - component: {fileID: 344465910932516022}
   - component: {fileID: 5874321784417166367}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Particle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5717,7 +5717,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 343689519085420299}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tulip_blue_06
   m_TagString: Untagged
   m_Icon: {fileID: 0}

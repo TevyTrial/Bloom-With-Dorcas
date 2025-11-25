@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 379999073532143974}
   - component: {fileID: 895706471538520124}
   - component: {fileID: 9140092131313774777}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Particle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4966,12 +4966,12 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.9819014, y: 0.805339, z: 1.8563374}
-  m_Center: {x: -0.0035594702, y: 0.344989, z: -0.01887697}
+  m_Size: {x: 2.0732863, y: 1.0880228, z: 1.8563375}
+  m_Center: {x: 0.042132992, y: 0.48633084, z: -0.018876962}
 --- !u!114 &7633640553705068474
 MonoBehaviour:
   m_ObjectHideFlags: 0

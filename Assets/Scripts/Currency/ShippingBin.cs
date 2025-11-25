@@ -26,8 +26,8 @@ public class ShippingBin : InteractableObject
 
     void Update()
     {
-        // Check if player is in trigger and presses F
-        if (isPlayerInTrigger && Input.GetKeyDown(KeyCode.F))
+        // Check if player is in trigger and presses Q
+        if (isPlayerInTrigger && Input.GetKeyDown(KeyCode.Q))
         {
             ItemData handSlotItem = InventoryManager.Instance.GetEquippedItemSlots(InventoryBox.InventoryType.Item);
             

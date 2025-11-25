@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3144645313615597140}
   - component: {fileID: 8121614176515340906}
   - component: {fileID: 6182802870661843122}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Particle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4848,6 +4848,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Apple (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 7220678190614878043, guid: e6a6c8ef3139ebb4998e4b19d2e8c8a7, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 8034087630389038561, guid: e6a6c8ef3139ebb4998e4b19d2e8c8a7, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.86989474
@@ -4922,6 +4926,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Apple
       objectReference: {fileID: 0}
+    - target: {fileID: 7220678190614878043, guid: e6a6c8ef3139ebb4998e4b19d2e8c8a7, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 8034087630389038561, guid: e6a6c8ef3139ebb4998e4b19d2e8c8a7, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.9103855
@@ -4995,6 +5003,10 @@ PrefabInstance:
     - target: {fileID: 7220678190614878043, guid: e6a6c8ef3139ebb4998e4b19d2e8c8a7, type: 3}
       propertyPath: m_Name
       value: Apple (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7220678190614878043, guid: e6a6c8ef3139ebb4998e4b19d2e8c8a7, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8034087630389038561, guid: e6a6c8ef3139ebb4998e4b19d2e8c8a7, type: 3}
       propertyPath: m_LocalScale.x
@@ -5203,12 +5215,12 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.9872034, y: 2.4077716, z: 1.9895688}
-  m_Center: {x: -0.00000014901161, y: 1.2035112, z: -0.00000059604645}
+  m_Size: {x: 2.3374515, y: 2.4077713, z: 2.1591668}
+  m_Center: {x: -0.064927414, y: 1.2035112, z: 0.04108413}
 --- !u!114 &6243774934087166301
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5233,6 +5245,10 @@ PrefabInstance:
     - target: {fileID: 7220678190614878043, guid: e6a6c8ef3139ebb4998e4b19d2e8c8a7, type: 3}
       propertyPath: m_Name
       value: Apple (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7220678190614878043, guid: e6a6c8ef3139ebb4998e4b19d2e8c8a7, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8034087630389038561, guid: e6a6c8ef3139ebb4998e4b19d2e8c8a7, type: 3}
       propertyPath: m_LocalScale.x
@@ -5308,6 +5324,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Apple (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 7220678190614878043, guid: e6a6c8ef3139ebb4998e4b19d2e8c8a7, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 8034087630389038561, guid: e6a6c8ef3139ebb4998e4b19d2e8c8a7, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.842392
@@ -5381,6 +5401,10 @@ PrefabInstance:
     - target: {fileID: 7220678190614878043, guid: e6a6c8ef3139ebb4998e4b19d2e8c8a7, type: 3}
       propertyPath: m_Name
       value: Apple (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7220678190614878043, guid: e6a6c8ef3139ebb4998e4b19d2e8c8a7, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8034087630389038561, guid: e6a6c8ef3139ebb4998e4b19d2e8c8a7, type: 3}
       propertyPath: m_LocalScale.x

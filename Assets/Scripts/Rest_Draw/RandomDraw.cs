@@ -28,8 +28,8 @@ public class RandomDraw : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
-        // Check if player presses F while in the trigger
-        if (other.CompareTag("Player") && Input.GetKeyDown(KeyCode.F))
+        // Check if player presses Q while in the trigger
+        if (other.CompareTag("Player") && Input.GetKeyDown(KeyCode.Q))
         {           
             UIManager.Instance.HideDrawingTooltip();
             UIManager.Instance.TriggerYesNoPrompt("Do you want to get food from the pond Cost $10?", DrawFoodAction);

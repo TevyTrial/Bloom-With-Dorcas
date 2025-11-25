@@ -19,8 +19,8 @@ public class bed : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
-        // Check if player presses F while in the trigger
-        if (other.CompareTag("Player") && Input.GetKeyDown(KeyCode.F) && canInteract)
+        // Check if player presses Q while in the trigger
+        if (other.CompareTag("Player") && Input.GetKeyDown(KeyCode.Q) && canInteract)
         {
             canInteract = false; // Prevent multiple interactions
             UIManager.Instance.HideSleepingTooltip();

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1859070572162158740}
   - component: {fileID: 4077202204810070627}
   - component: {fileID: 6621120777893402268}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Particle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4870,15 +4870,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 967499788730970744, guid: 92d9362572c3f3840a000ece8cdfb2b3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 611.93
       objectReference: {fileID: 0}
     - target: {fileID: 967499788730970744, guid: 92d9362572c3f3840a000ece8cdfb2b3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.38
+      value: 29.4838
       objectReference: {fileID: 0}
     - target: {fileID: 967499788730970744, guid: 92d9362572c3f3840a000ece8cdfb2b3, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.071455
+      value: 577.8
       objectReference: {fileID: 0}
     - target: {fileID: 967499788730970744, guid: 92d9362572c3f3840a000ece8cdfb2b3, type: 3}
       propertyPath: m_LocalRotation.w
@@ -4982,12 +4982,12 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.2548857, y: 1.0688223, z: 1.9997685}
-  m_Center: {x: -0.035087824, y: 0.5852919, z: 0.021970272}
+  m_Size: {x: 2.307042, y: 1.0688224, z: 2.162784}
+  m_Center: {x: 0.030517578, y: 0.5852919, z: -0.044187903}
 --- !u!4 &995952523043893596 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 967499788730970744, guid: 92d9362572c3f3840a000ece8cdfb2b3, type: 3}
@@ -5001,9 +5001,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 995952523043893596}
     m_Modifications:
+    - target: {fileID: 1762188526680291966, guid: aec8969d0290c6d4cbc587ef85a01ce4, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8289148887857362819, guid: aec8969d0290c6d4cbc587ef85a01ce4, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 8554979865545778643, guid: aec8969d0290c6d4cbc587ef85a01ce4, type: 3}
       propertyPath: m_Name
       value: Cabbage_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 8554979865545778643, guid: aec8969d0290c6d4cbc587ef85a01ce4, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8554979865546078707, guid: aec8969d0290c6d4cbc587ef85a01ce4, type: 3}
       propertyPath: m_LocalScale.x
