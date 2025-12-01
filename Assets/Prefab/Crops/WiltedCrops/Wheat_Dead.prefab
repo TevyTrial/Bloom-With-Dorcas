@@ -14,19 +14,19 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 97b4a27ad768378458f3cbfad1c71628, type: 2}
     - target: {fileID: 2730191449903874550, guid: 6f7501efe426cbb41b53c2d42c317de8, type: 3}
       propertyPath: m_Name
-      value: Wheat01 (1) Variant
+      value: Wheat_Dead
       objectReference: {fileID: 0}
     - target: {fileID: 7167006996046811516, guid: 6f7501efe426cbb41b53c2d42c317de8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 589.441
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7167006996046811516, guid: 6f7501efe426cbb41b53c2d42c317de8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.000015258789
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7167006996046811516, guid: 6f7501efe426cbb41b53c2d42c317de8, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 604.47
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7167006996046811516, guid: 6f7501efe426cbb41b53c2d42c317de8, type: 3}
       propertyPath: m_LocalRotation.w

@@ -138,6 +138,7 @@ public class Land : MonoBehaviour, ITimeTracker
             SpawnCrop();
             //Plant it with the seed's info
             cropPlanted.plant(id, seedTool);
+            AudioManager.Instance.PlaySeedingSFX();
 
             //Remove one seed from inventory
             InventoryManager.Instance.ConsumeItem
@@ -150,6 +151,7 @@ public class Land : MonoBehaviour, ITimeTracker
         // Use local position instead of world position
         cropObj.transform.localPosition = new Vector3(0.061f, 0.8f, 0.14f);
         cropObj.transform.localScale = new Vector3(0.3f, 1.4f, 0.3f);
+        
     
         // Check if CropBehaviour component exists
         cropPlanted = cropObj.GetComponent<CropBehaviour>();

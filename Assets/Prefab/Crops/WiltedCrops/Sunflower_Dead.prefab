@@ -10,15 +10,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 569ea523ed93c6441a933bb52f06ec01, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 588.9478
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 569ea523ed93c6441a933bb52f06ec01, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.16150427
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 569ea523ed93c6441a933bb52f06ec01, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 581.2087
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 569ea523ed93c6441a933bb52f06ec01, type: 3}
       propertyPath: m_LocalRotation.w
@@ -54,7 +54,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: fa6c45465cde56c4495f6d9109c80326, type: 2}
     - target: {fileID: 919132149155446097, guid: 569ea523ed93c6441a933bb52f06ec01, type: 3}
       propertyPath: m_Name
-      value: Farm_Crop_Sunflower_Dead
+      value: Sunflower_Dead
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

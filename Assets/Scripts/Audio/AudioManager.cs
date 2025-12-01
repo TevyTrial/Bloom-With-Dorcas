@@ -24,6 +24,7 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip walkingSFX;
     [SerializeField] private AudioClip wateringSFX;
     [SerializeField] private AudioClip plowingSFX;
+    [SerializeField] private AudioClip seedSFX;
 
     [Header("Seasonal Instrument System")]
     [SerializeField] private SeasonalSongData springSong;
@@ -518,6 +519,11 @@ public class AudioManager : MonoBehaviour
             {
                 footstepSource.Stop();
             }
+        }
+
+        public void PlaySeedingSFX()
+        {
+            PlaySFX(seedSFX, 0.8f);
         }
 
     #endregion

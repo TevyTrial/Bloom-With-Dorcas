@@ -10,15 +10,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: fe2c0b7ae1567ee4eabdf5811439e6fd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 581.4519
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fe2c0b7ae1567ee4eabdf5811439e6fd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.00000047683716
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fe2c0b7ae1567ee4eabdf5811439e6fd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 582.44183
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fe2c0b7ae1567ee4eabdf5811439e6fd, type: 3}
       propertyPath: m_LocalRotation.w
@@ -54,7 +54,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: fa6c45465cde56c4495f6d9109c80326, type: 2}
     - target: {fileID: 919132149155446097, guid: fe2c0b7ae1567ee4eabdf5811439e6fd, type: 3}
       propertyPath: m_Name
-      value: Farm_Crop_Mashroom_02_Dead
+      value: Mashroom_Dead
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

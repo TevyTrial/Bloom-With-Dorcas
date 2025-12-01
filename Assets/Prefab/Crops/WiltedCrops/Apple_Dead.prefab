@@ -26,11 +26,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7350965881004259587, guid: 51431958db7e9254186b1f425d90c9ff, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7350965881004259587, guid: 51431958db7e9254186b1f425d90c9ff, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 588.57
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7350965881004259587, guid: 51431958db7e9254186b1f425d90c9ff, type: 3}
       propertyPath: m_LocalRotation.w
@@ -62,7 +62,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7874596901511111609, guid: 51431958db7e9254186b1f425d90c9ff, type: 3}
       propertyPath: m_Name
-      value: Thorns_12 Variant
+      value: Apple_Dead
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
