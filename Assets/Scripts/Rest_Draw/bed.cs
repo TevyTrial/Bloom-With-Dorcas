@@ -19,6 +19,12 @@ public class bed : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
+        // Check if the player entered the trigger
+        if (other.CompareTag("Player"))
+        {
+            UIManager.Instance.ShowSleepingTooltip();
+        }
+
         // Check if player presses Q while in the trigger
         if (other.CompareTag("Player") && Input.GetKeyDown(KeyCode.Q) && canInteract)
         {

@@ -197,7 +197,9 @@ public class TimeManager : MonoBehaviour
         }
         
     }
+#endregion
 
+#region Getters
     public GameTimeStamp GetGameTimeStamp()
     {
         return new GameTimeStamp(currentTime);

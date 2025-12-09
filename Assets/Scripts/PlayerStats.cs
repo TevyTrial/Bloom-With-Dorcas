@@ -30,12 +30,18 @@ public class PlayerStats
             return;
         }
         Money -= cost;
-        UIManager.Instance.RenderPlayerStats();
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.RenderPlayerStats();
+        }
     }
 
     public static void Earn(int income) {
         Money += income;
-        UIManager.Instance.RenderPlayerStats();
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.RenderPlayerStats();
+        }
     }
 
     public static void UseStamina(int staminaLost) {

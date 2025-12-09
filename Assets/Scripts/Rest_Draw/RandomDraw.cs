@@ -28,6 +28,12 @@ public class RandomDraw : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
+        // Check if the player entered the trigger
+        if (other.CompareTag("Player"))
+        {
+            UIManager.Instance.ShowDrawingTooltip();
+        }
+        
         // Check if player presses Q while in the trigger
         if (other.CompareTag("Player") && Input.GetKeyDown(KeyCode.Q))
         {           

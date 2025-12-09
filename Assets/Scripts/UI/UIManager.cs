@@ -68,6 +68,9 @@ public class UIManager : MonoBehaviour, ITimeTracker
     [Header("Player Controller")]
     [SerializeField] private PlayerController playerController;
 
+    [Header("Camera Controller")]
+    [SerializeField] private CameraController cameraController;
+
     private void Awake()
     {
         //If there is more than one instance, destroy the extra
@@ -84,21 +87,29 @@ public class UIManager : MonoBehaviour, ITimeTracker
 
     private void Start()
     {
+        // Initialize player stats FIRST 
+        PlayerStats.Initialize(startingMoney: 50, startingStamina: 50, maxStamina: 50);
+        
         RenderInventory();
         AssignBoxIndexes();
         RenderPlayerStats();
 
         //Register as a listener to time updates
-        TimeManager.Instance.RegisterListener(this);
+        if (TimeManager.Instance != null)
+        {
+            TimeManager.Instance.RegisterListener(this);
+        }
 
         inventoryPanel.SetActive(false);
-
-        // Initialize player stats (do this once at game start)
-        PlayerStats.Initialize(startingMoney: 50, startingStamina: 50, maxStamina: 50);
 
         if(playerController == null)
         {
             playerController = FindObjectOfType<PlayerController>();
+        }
+
+        if(cameraController == null)
+        {
+            cameraController = FindObjectOfType<CameraController>();
         }
 
     }
@@ -128,8 +139,15 @@ public class UIManager : MonoBehaviour, ITimeTracker
     //Render the inventory screen to reflect the Player's Inventory. 
     public void RenderInventory()
     {
+        if (InventoryManager.Instance == null)
+        {
+            Debug.LogError("InventoryManager.Instance is null!");
+            return;
+        }
+        
         ItemSlotData[] inventoryToolSlots = InventoryManager.Instance.GetInventorySlots(InventoryBox.InventoryType.Tool);
         ItemSlotData[] inventoryItemSlots = InventoryManager.Instance.GetInventorySlots(InventoryBox.InventoryType.Item);
+        
         //Render the Tool section
         RenderInventoryPanel(inventoryToolSlots, toolSlots);
 
@@ -173,10 +191,30 @@ public class UIManager : MonoBehaviour, ITimeTracker
     //Iterate through a slot in a section and display them in the UI
     void RenderInventoryPanel(ItemSlotData[] slots, InventoryBox[] uiSlots)
     {
-        for (int i = 0; i < uiSlots.Length; i++)
+        if (slots == null || uiSlots == null)
+        {
+            Debug.LogError($"RenderInventoryPanel: slots or uiSlots is null! slots={slots != null}, uiSlots={uiSlots != null}");
+            return;
+        }
+        
+        if (slots.Length != uiSlots.Length)
+        {
+            Debug.LogWarning($"RenderInventoryPanel: Array length mismatch! slots.Length={slots.Length}, uiSlots.Length={uiSlots.Length}");
+        }
+        
+        // Use the smaller of the two lengths to prevent index out of bounds
+        int length = Mathf.Min(slots.Length, uiSlots.Length);
+        
+        for (int i = 0; i < length; i++)
         {
             //Display them accordingly
             uiSlots[i].Display(slots[i]);
+        }
+        
+        // If there are more UI slots than data slots, clear the extra UI slots
+        for (int i = length; i < uiSlots.Length; i++)
+        {
+            uiSlots[i].Display(null);
         }
     }
 
@@ -338,18 +376,26 @@ public class UIManager : MonoBehaviour, ITimeTracker
         }
 
         //Update the time text
-        timeText.text = period + hour + ":" + minute.ToString("00");
+        if (timeText != null)
+        {
+            timeText.text = period + hour + ":" + minute.ToString("00");
+        }
 
         //Update the date text
-        int day = currentTime.day;
-        string season = currentTime.season.ToString().Substring(0, 3); //Get first 3 letters of the season
-        string dayOfWeek = currentTime.GetDayOfWeek().ToString().Substring(0, 3); //Get first 3 letters of the day of the week
-        dateText.text = season + " " + day + " (" + dayOfWeek + ")";
+        if (dateText != null)
+        {
+            int day = currentTime.day;
+            string season = currentTime.season.ToString().Substring(0, 3); //Get first 3 letters of the season
+            string dayOfWeek = currentTime.GetDayOfWeek().ToString().Substring(0, 3); //Get first 3 letters of the day of the week
+            dateText.text = season + " " + day + " (" + dayOfWeek + ")";
+        }
     }
 
     //Render player stats such as currency
     public void RenderPlayerStats()
     {
+        if (currencyText == null) return;
+        
         if (PlayerStats.Money == 0)
         {
             currencyText.text = PlayerStats.CURRENCY + "0";
@@ -370,12 +416,14 @@ public class UIManager : MonoBehaviour, ITimeTracker
         shopPanel.SetActive(true);
         shopListingManager.RenderShop(shopItems);
         SetPlayerControllerEnabled(false);
+        SetCameraControllerEnabled(false);
     }
 
     public void CloseShop()
     {
         shopPanel.SetActive(false);
         SetPlayerControllerEnabled(true);
+        SetCameraControllerEnabled(true);
     }
 
     #endregion
@@ -430,13 +478,22 @@ public class UIManager : MonoBehaviour, ITimeTracker
     }
 #endregion
 
-#region Player Controller Enable/Disable
+#region Player & Camera Controller Enable/Disable
     private void SetPlayerControllerEnabled(bool enabled)
     {
         if (playerController != null)
         {
             playerController.enabled = enabled;
             Debug.Log("PlayerController enabled set to: " + enabled);
+        }
+    }
+
+    private void SetCameraControllerEnabled(bool enabled)
+    {
+        if (cameraController != null)
+        {
+            cameraController.enabled = enabled;
+            Debug.Log("CameraController enabled set to: " + enabled);
         }
     }
 #endregion

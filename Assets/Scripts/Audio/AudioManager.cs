@@ -9,16 +9,21 @@ public class AudioManager : MonoBehaviour
 
     [Header("Scene Settings")]
     [SerializeField] private bool persistAcrossScenes = false; 
-    [SerializeField] private string[] activeInScenes = new string[] { "Garden" }; // NEW: Scenes where this manager is active
+    [SerializeField] private string[] activeInScenes = new string[] { "Garden" };
 
     [Header("Audio Mixer")]
     [SerializeField] private AudioMixer audioMixer;
+    
+    [Header("Audio Mixer Groups")]
+    [SerializeField] private AudioMixerGroup musicGroup;
+    [SerializeField] private AudioMixerGroup sfxGroup;
+    [SerializeField] private AudioMixerGroup ambientGroup;
 
     [Header("Audio Sources")]
     [SerializeField] private AudioSource musicSource;
     [SerializeField] private AudioSource sfxSource;
     [SerializeField] private AudioSource ambientSource;
-    private AudioSource footstepSource;
+    [SerializeField] private AudioSource footstepSource;
 
     [Header("SFX Clips")]
     [SerializeField] private AudioClip walkingSFX;
@@ -39,17 +44,15 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private float maxDistanceFor3D = 30f;
 
     [Header("Performance Settings")]
-    [SerializeField] private int audioSourcePoolSize = 50; // Pre-create pool
-    [SerializeField] private float volumeUpdateDelay = 0.1f; // Batch volume updates
+    [SerializeField] private int audioSourcePoolSize = 50;
+    [SerializeField] private float volumeUpdateDelay = 0.1f;
 
-    // Synchronized playback tracking
     private SeasonalSongData currentSong;
     private List<AudioSource> activeInstrumentSources = new List<AudioSource>();
     private Dictionary<AudioSource, float> originalVolumes = new Dictionary<AudioSource, float>();
     private float songStartTime;
     private bool isSongPlaying = false;
     
-    // Track mature crops by season
     private Dictionary<GameTimeStamp.Season, int> matureCropCounts = new Dictionary<GameTimeStamp.Season, int>()
     {
         { GameTimeStamp.Season.Spring, 0 },
@@ -58,22 +61,15 @@ public class AudioManager : MonoBehaviour
         { GameTimeStamp.Season.Winter, 0 }
     };
 
-    // OPTIMIZATION: Object pooling for AudioSources
     private Queue<AudioSource> audioSourcePool = new Queue<AudioSource>();
     private GameObject poolContainer;
-
-    // OPTIMIZATION: Batch volume updates
     private bool volumeUpdatePending = false;
     private float lastVolumeUpdateTime = 0f;
-
-    // OPTIMIZATION: Cache current season count
     private int currentSeasonCropCount = 0;
-
     private GameTimeStamp.Season currentGameSeason = GameTimeStamp.Season.Spring;
 
     private void Awake()
     {
-        // Check if this AudioManager should be active in current scene
         string currentScene = SceneManager.GetActiveScene().name;
         bool shouldBeActive = System.Array.Exists(activeInScenes, scene => scene == currentScene);
 
@@ -88,24 +84,24 @@ public class AudioManager : MonoBehaviour
         {
             Instance = this;
             
-            // Only persist if enabled
             if (persistAcrossScenes)
             {
                 DontDestroyOnLoad(gameObject);
             }
 
-             // Create dedicated footstep AudioSource
-            GameObject footstepObj = new GameObject("FootstepSource");
-            footstepObj.transform.SetParent(transform);
-            footstepSource = footstepObj.AddComponent<AudioSource>();
-            footstepSource.playOnAwake = false;
-            footstepSource.spatialBlend = 0f; // 2D audio
-            footstepSource.loop = false;
+            // Create footstep AudioSource if not assigned
+            if (footstepSource == null)
+            {
+                GameObject footstepObj = new GameObject("FootstepSource");
+                footstepObj.transform.SetParent(transform);
+                footstepSource = footstepObj.AddComponent<AudioSource>();
+                footstepSource.playOnAwake = false;
+                footstepSource.spatialBlend = 0f;
+                footstepSource.loop = false;
+                footstepSource.outputAudioMixerGroup = sfxGroup;
+            }
             
-            // OPTIMIZATION: Initialize object pool
             InitializeAudioSourcePool();
-            
-            // OPTIMIZATION: Preload all audio clips
             PreloadAudioClips();
             
             if (ambientSource != null && ambientSource.clip != null)
@@ -121,7 +117,6 @@ public class AudioManager : MonoBehaviour
         }
         else
         {
-            // If another instance exists and we're scene-specific, destroy this one
             if (!persistAcrossScenes)
             {
                 Debug.Log($"[AudioManager] Another instance exists, destroying scene-specific manager");
@@ -130,7 +125,6 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    // OPTIMIZATION: Pre-create AudioSource pool
     private void InitializeAudioSourcePool()
     {
         poolContainer = new GameObject("AudioSourcePool");
@@ -159,11 +153,11 @@ public class AudioManager : MonoBehaviour
         source.maxDistance = maxDistanceFor3D;
         source.rolloffMode = AudioRolloffMode.Linear;
         source.dopplerLevel = 0f;
+        source.outputAudioMixerGroup = musicGroup; // Assign pooled sources to Music mixer group
         
         return source;
     }
 
-    // OPTIMIZATION: Preload all audio clips to prevent loading stutter
     private void PreloadAudioClips()
     {
         PreloadSongData(springSong);
@@ -178,7 +172,6 @@ public class AudioManager : MonoBehaviour
     {
         if (songData == null) return;
         
-        // Access all instrument tracks to force Unity to load them
         foreach (var track in songData.instrumentTracks)
         {
             if (track != null && track.audioClip != null)
@@ -202,7 +195,6 @@ public class AudioManager : MonoBehaviour
             }
         }
 
-        // OPTIMIZATION: Batch volume updates instead of updating immediately
         if (volumeUpdatePending && Time.time - lastVolumeUpdateTime >= volumeUpdateDelay)
         {
             PerformVolumeUpdate();
@@ -214,7 +206,6 @@ public class AudioManager : MonoBehaviour
     {
         matureCropCounts[cropSeason]++;
         
-        // OPTIMIZATION: Cache current season count
         if (cropSeason == currentGameSeason)
         {
             currentSeasonCropCount++;
@@ -225,7 +216,6 @@ public class AudioManager : MonoBehaviour
             CheckAndPlaySeasonalMusic();
         }
 
-        // OPTIMIZATION: Schedule batched volume update
         ScheduleVolumeUpdate();
     }
 
@@ -235,7 +225,6 @@ public class AudioManager : MonoBehaviour
         {
             matureCropCounts[cropSeason]--;
             
-            // OPTIMIZATION: Cache current season count
             if (cropSeason == currentGameSeason)
             {
                 currentSeasonCropCount--;
@@ -250,7 +239,6 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    // OPTIMIZATION: Batched volume updates
     private void ScheduleVolumeUpdate()
     {
         volumeUpdatePending = true;
@@ -259,13 +247,11 @@ public class AudioManager : MonoBehaviour
 
     private void PerformVolumeUpdate()
     {
-        // Cache count to avoid repeated dictionary lookups
         int cropCount = currentSeasonCropCount;
         if (cropCount == 0) return;
 
         float volumeScaling = Mathf.Min(1f, (float)cropCountForMaxVolume / cropCount);
 
-        // Update all volumes in one pass
         for (int i = 0; i < activeInstrumentSources.Count; i++)
         {
             AudioSource source = activeInstrumentSources[i];
@@ -295,7 +281,6 @@ public class AudioManager : MonoBehaviour
         }
     }
     
-    // OPTIMIZATION: Use cached count
     private float GetNormalizedVolume(float baseVolume)
     {
         int totalCrops = currentSeasonCropCount;
@@ -307,7 +292,6 @@ public class AudioManager : MonoBehaviour
         return Mathf.Clamp(normalizedVolume, 0f, baseVolume);
     }
 
-    // OPTIMIZATION: Use pooled AudioSources instead of instantiating
     public AudioSource RegisterCropInstrument(InstrumentTrack track, GameTimeStamp.Season cropSeason, Vector3 cropPosition)
     {
         if (track == null || track.audioClip == null)
@@ -327,7 +311,6 @@ public class AudioManager : MonoBehaviour
             return null;
         }
 
-        // OPTIMIZATION: Get from pool instead of instantiating
         AudioSource source = GetPooledAudioSource();
         if (source == null)
         {
@@ -335,7 +318,6 @@ public class AudioManager : MonoBehaviour
             source = CreatePooledAudioSource();
         }
 
-        // Configure the AudioSource
         source.gameObject.SetActive(true);
         source.transform.position = cropPosition;
         source.clip = track.audioClip;
@@ -345,8 +327,6 @@ public class AudioManager : MonoBehaviour
         source.volume = GetNormalizedVolume(track.volume);
 
         activeInstrumentSources.Add(source);
-
-        // OPTIMIZATION: Schedule batched update instead of immediate
         ScheduleVolumeUpdate();
 
         if (isSongPlaying)
@@ -374,7 +354,6 @@ public class AudioManager : MonoBehaviour
         return null;
     }
 
-    // OPTIMIZATION: Return to pool instead of destroying
     public void UnregisterCropInstrument(AudioSource source)
     {
         if (source != null && activeInstrumentSources.Contains(source))
@@ -382,7 +361,6 @@ public class AudioManager : MonoBehaviour
             activeInstrumentSources.Remove(source);
             originalVolumes.Remove(source);
             
-            // Return to pool
             source.Stop();
             source.clip = null;
             source.gameObject.SetActive(false);
@@ -398,7 +376,6 @@ public class AudioManager : MonoBehaviour
 
         float currentPlaybackTime = (Time.time - songStartTime) % currentSong.songLengthInSeconds;
 
-        // OPTIMIZATION: Use for loop instead of foreach (less GC)
         for (int i = 0; i < activeInstrumentSources.Count; i++)
         {
             AudioSource source = activeInstrumentSources[i];
@@ -445,7 +422,6 @@ public class AudioManager : MonoBehaviour
 
         StopAllInstruments();
 
-        // OPTIMIZATION: Return all to pool instead of destroying
         foreach (var source in activeInstrumentSources)
         {
             if (source != null)
@@ -463,69 +439,65 @@ public class AudioManager : MonoBehaviour
 
         CheckAndPlaySeasonalMusic();
     }
+
     #region SFX Volume Controls
-       public void PlaySFX(AudioClip clip, float volume)
+    public void PlaySFX(AudioClip clip, float volume)
+    {
+        if (clip == null)
         {
-            if (clip == null)
-            {
-                Debug.LogWarning("[AudioManager] PlaySFX called with null clip");
-                return;
-            }
-
-            // If sfxSource wasn't assigned in inspector, create a simple 2D source as fallback
-            if (sfxSource == null)
-            {
-                GameObject go = new GameObject("SFXSource_Temp");
-                go.transform.SetParent(transform);
-                sfxSource = go.AddComponent<AudioSource>();
-                sfxSource.playOnAwake = false;
-                sfxSource.spatialBlend = 0f; // 2D SFX
-            }
-
-            if (!sfxSource.gameObject.activeInHierarchy)
-                sfxSource.gameObject.SetActive(true);
-
-            if (AudioListener.pause)
-                Debug.LogWarning("[AudioManager] AudioListener.pause is true; SFX may not be audible");
-
-            Debug.Log($"[AudioManager] PlaySFX: {clip.name} volume={volume}");
-            sfxSource.PlayOneShot(clip, Mathf.Clamp01(volume));
+            Debug.LogWarning("[AudioManager] PlaySFX called with null clip");
+            return;
         }
 
-        //Specific SFX methods
-        public void PlayWalkingSFX()
+        if (sfxSource == null)
         {
-            // Use dedicated footstep source instead of shared sfxSource
-            if (footstepSource != null && walkingSFX != null)
+            GameObject go = new GameObject("SFXSource_Temp");
+            go.transform.SetParent(transform);
+            sfxSource = go.AddComponent<AudioSource>();
+            sfxSource.playOnAwake = false;
+            sfxSource.spatialBlend = 0f;
+            sfxSource.outputAudioMixerGroup = sfxGroup; // Assign to SFX mixer group
+        }
+
+        if (!sfxSource.gameObject.activeInHierarchy)
+            sfxSource.gameObject.SetActive(true);
+
+        sfxSource.PlayOneShot(clip, Mathf.Clamp01(volume));
+    }
+
+    public void PlayWalkingSFX()
+    {
+        if (footstepSource != null && walkingSFX != null)
+        {
+            if (!footstepSource.isPlaying)
             {
-                if (!footstepSource.isPlaying)
-                {
-                    footstepSource.PlayOneShot(walkingSFX, 1.0f);
-                }
+                footstepSource.PlayOneShot(walkingSFX, 1.0f);
             }
         }
-        public void PlayWateringSFX()
-        {
-            PlaySFX(wateringSFX, 1f);
-        }
-        public void PlayPlowingSFX()
-        {
-            PlaySFX(plowingSFX, 0.6f);
-        }
+    }
 
-        public void StopWalkingSFX()
-        {
-            if (footstepSource != null && footstepSource.isPlaying)
-            {
-                footstepSource.Stop();
-            }
-        }
+    public void PlayWateringSFX()
+    {
+        PlaySFX(wateringSFX, 1f);
+    }
 
-        public void PlaySeedingSFX()
-        {
-            PlaySFX(seedSFX, 0.8f);
-        }
+    public void PlayPlowingSFX()
+    {
+        PlaySFX(plowingSFX, 0.6f);
+    }
 
+    public void StopWalkingSFX()
+    {
+        if (footstepSource != null && footstepSource.isPlaying)
+        {
+            footstepSource.Stop();
+        }
+    }
+
+    public void PlaySeedingSFX()
+    {
+        PlaySFX(seedSFX, 0.8f);
+    }
     #endregion
 
     #region Volume Controls
@@ -533,7 +505,6 @@ public class AudioManager : MonoBehaviour
     {
         if (audioMixer != null)
         {
-            // Convert 0-1 linear to decibels: -80dB (silent) to 0dB (full)
             float dB = volume > 0.0001f ? 20f * Mathf.Log10(volume) : -80f;
             audioMixer.SetFloat("MasterVolume", dB);
         }
@@ -601,6 +572,5 @@ public class AudioManager : MonoBehaviour
         }
         return 1f;
     }
-
     #endregion
 }

@@ -21,6 +21,16 @@ public class InventoryBox : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     public void Display(ItemSlotData itemSlot)
     {
+        //Check if itemSlot is null first
+        if(itemSlot == null)
+        {
+            itemToDisplay = null;
+            quantity = 0;
+            quantityText.text = "";
+            itemDisplayImage.gameObject.SetActive(false);
+            return;
+        }
+        
         //Set the variable name
         itemToDisplay = itemSlot.itemData;
         quantity = itemSlot.quantity;
