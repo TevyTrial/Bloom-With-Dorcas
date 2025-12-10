@@ -28,29 +28,32 @@ public class RandomDraw : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
-        // Check if the player entered the trigger
-        if (other.CompareTag("Player"))
-        {
-            UIManager.Instance.ShowDrawingTooltip();
-        }
-        
         // Check if player presses Q while in the trigger
         if (other.CompareTag("Player") && Input.GetKeyDown(KeyCode.Q))
         {           
             UIManager.Instance.HideDrawingTooltip();
-            UIManager.Instance.TriggerYesNoPrompt("Do you want to get food from the pond Cost $10?", DrawFoodAction);
-        }
+            UIManager.Instance.TriggerYesNoPrompt("Do you want to get food from the pond Cost $20?", DrawFoodAction);
+        } 
     }
 
     private void DrawFoodAction()
     {
-        PlayerStats.Spend(10); // Spend 10 money to draw food
+
+        if(PlayerStats.Money < 20)
+        {
+            UIManager.Instance.ShowTip("Not enough money to draw food!");
+            StartCoroutine(ResetInteraction());
+            return;
+        }
+
         if (foodOptions == null || foodOptions.Count == 0)
         {
             Debug.LogWarning("[RandomDraw] No food options configured.");
             StartCoroutine(ResetInteraction());
             return;
         }
+        
+        PlayerStats.Spend(20);
 
         if (drawRoutine != null)
         {

@@ -49,31 +49,35 @@ public class ShopScript : InteractableObject
     // Process purchase transaction
     public static void Purchase(ItemData item, int quantity) {
         int totalCost = item.cost * quantity;
-        
+    
         Debug.Log($"Attempting to purchase {quantity}x {item.name} for {totalCost}. Player has {PlayerStats.Money}");
-        
-        if(PlayerStats.Money >= totalCost) 
-        {
-            // Deduct money from player
-            PlayerStats.Spend(totalCost);
-
-            //Create item slot data
-            ItemSlotData purchasedItem = new ItemSlotData(item, quantity);
-            
-            // Add item to player inventory
-            bool success = InventoryManager.Instance.ShopToInventory(purchasedItem);
-            
-            if(success) {
-                Debug.Log($"Purchased {quantity}x {item.name} for {totalCost}");
-            } else {
-                Debug.LogWarning("Failed to add item to inventory - inventory might be full");
-                // Refund the money
-                PlayerStats.Earn(totalCost);
-            }
-        }
-        else
+    
+        // Check if player has enough money
+        if(PlayerStats.Money < totalCost) 
         {
             Debug.LogWarning($"Not enough money! Need {totalCost}, have {PlayerStats.Money}");
+            UIManager.Instance.ShowTip("Not enough money!");
+            return;
+        }
+    
+
+        //Create item slot data
+        ItemSlotData purchasedItem = new ItemSlotData(item, quantity);
+    
+        // Add item to player inventory
+        bool success = InventoryManager.Instance.ShopToInventory(purchasedItem);
+    
+        if(success) {
+            // Deduct money from player
+            if(PlayerStats.Spend(totalCost)) {
+                Debug.Log($"Deducted {totalCost} from player for purchase");
+                return;
+            }
+            Debug.Log($"Successfully purchased {quantity}x {item.name} for {totalCost}");
+        } else {
+            Debug.LogWarning("Failed to add item to inventory - inventory might be full");
+            // Refund the money since item couldn't be added
+            UIManager.Instance.ShowTip("Inventory is full!");
         }
     }
 

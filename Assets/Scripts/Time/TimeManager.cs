@@ -51,6 +51,7 @@ public class TimeManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        // GameTimeStamp: year, season, day, hour, minute
         currentTime = new GameTimeStamp(1, GameTimeStamp.Season.Spring, 1, 7, 30);
         StartCoroutine(StartClock());
     }
@@ -154,7 +155,7 @@ public class TimeManager : MonoBehaviour
 
     }
 
-     IEnumerator TranstionToMorning()
+    IEnumerator TranstionToMorning()
     {
         Debug.Log("Sleeping... Transitioning to next morning.");
         
@@ -174,6 +175,62 @@ public class TimeManager : MonoBehaviour
         UIManager.Instance.StopSleepVideo();
         
         Debug.Log("Wake up at " + targetTime.hour + ":" + targetTime.minute);
+    }
+
+    public void ForceRest(int daysToSkip) {
+        StartCoroutine(ForceRestCoroutine(daysToSkip));
+    }
+
+    IEnumerator ForceRestCoroutine(int daysToSkip) {
+        isSleeping = true;
+        UIManager.Instance.ShowTip("You collapsed from exhaustion! Resting for " + daysToSkip + " days...");
+        yield return new WaitForSeconds(2f);
+        UIManager.Instance.HideTip();
+        UIManager.Instance.PlaySleepVideo();
+        
+        // Continue to the rest transition
+        yield return StartCoroutine(ForceRestTransition(daysToSkip));
+    }
+
+    IEnumerator ForceRestTransition(int daysToSkip)
+    {
+        // Wait for the sleep video duration
+        yield return new WaitForSeconds(8.5f);
+        
+        // Calculate target time (skip specified days and set time to 7:30 AM)
+        GameTimeStamp targetTime = new GameTimeStamp(currentTime);
+
+        for (int i = 0; i < daysToSkip; i++) {
+            targetTime.day += 1; // Skip days
+            if(targetTime.day > 7) {
+                targetTime.day = 1;
+                // Increment season
+                if (targetTime.season == GameTimeStamp.Season.Winter){
+                    targetTime.season = GameTimeStamp.Season.Spring;
+                    targetTime.year++;
+                } else {
+                    targetTime.season++;
+                }
+            }
+        }
+        
+        // Set to 7:30 AM
+        targetTime.hour = 7;
+        targetTime.minute = 30;
+        
+        SkipTime(targetTime);
+        
+        // Restore stamina after time has passed
+        PlayerStats.RestoreStaminaFully();
+        
+        // Stop video and show recovery message
+        isSleeping = false;
+        UIManager.Instance.StopSleepVideo();
+        UIManager.Instance.ShowTip("Two Days After... You have recovered from exhaustion.");
+        yield return new WaitForSeconds(2f);
+        UIManager.Instance.HideTip();
+        
+        Debug.Log("Recovered from exhaustion at " + targetTime.hour + ":" + targetTime.minute);
     }
 #endregion
 

@@ -446,6 +446,15 @@ public class UIManager : MonoBehaviour, ITimeTracker
         if (staminaBarFill == null || max <= 0) return;
         staminaBarFill.fillAmount = Mathf.Clamp01((float)current / max);
         
+        //Change the color of the stamina bar based on percentage
+        if(current<=10) {
+            ColorUtility.TryParseHtmlString("#f9817bff", out Color redColor);
+            staminaBarFill.color = redColor;
+        } else {
+            ColorUtility.TryParseHtmlString("#B5FF8D", out Color greenColor);
+            staminaBarFill.color = greenColor;
+        }
+        
         if (staminaText != null)
         {
             staminaText.text = $"{current}/{max}";
@@ -454,6 +463,8 @@ public class UIManager : MonoBehaviour, ITimeTracker
 #endregion
 
 #region Tip System
+    private Coroutine hidetipCoroutine;
+
     public void ShowTip(string tipMessage)
     {
         if (tipPanel != null)
@@ -476,6 +487,24 @@ public class UIManager : MonoBehaviour, ITimeTracker
             tipPanel.SetActive(false);
         }
     }
+
+    public void HideTipAfterDelay(float delay)
+    {
+        if (hidetipCoroutine != null)
+        {
+            StopCoroutine(hidetipCoroutine);
+        }
+        hidetipCoroutine = StartCoroutine(HideTipCoroutine(delay));
+    }
+
+    private IEnumerator HideTipCoroutine(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        HideTip();
+        hidetipCoroutine = null;
+    }
+    
+
 #endregion
 
 #region Player & Camera Controller Enable/Disable

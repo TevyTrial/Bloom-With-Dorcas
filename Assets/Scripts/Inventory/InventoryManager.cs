@@ -162,22 +162,25 @@ void InitializeSlots()
         ItemSlotData[] inventoryArr = IsTool(itemSlotToMove.itemData) ? toolSlots : itemSlots;
 
         //Check if stackable
-        if(!StackableToInventory(itemSlotToMove, inventoryArr)) {
-            //Find an empty slot if not stackable
-            for(int i = 0; i < inventoryArr.Length; i++) {
-                if(inventoryArr[i].IsEmpty()) {
-                    inventoryArr[i] = new ItemSlotData(itemSlotToMove);
-                    break;
-                }
-            }
-            // No empty slot found
-            return false;
+        if(StackableToInventory(itemSlotToMove, inventoryArr)) {
+            //Update the inventory UI
+            UIManager.Instance.RenderInventory();
+            RenderEquippedItem();
+            return true;
         }
 
-        //Update the inventory UI
-        UIManager.Instance.RenderInventory();
-        RenderEquippedItem();
-        return true;
+        //Find an empty slot
+        for(int i = 0; i < inventoryArr.Length; i++) {
+            if(inventoryArr[i].IsEmpty()) {
+                inventoryArr[i] = new ItemSlotData(itemSlotToMove);
+                //Update the inventory UI
+                UIManager.Instance.RenderInventory();
+                RenderEquippedItem();
+                return true;
+            }
+        }
+        //No space in inventory
+        return false;
     }
 
 

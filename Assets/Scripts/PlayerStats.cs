@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerStats
@@ -23,17 +25,19 @@ public class PlayerStats
         }
     }
 
-    public static void Spend(int cost) {
+    public static bool Spend(int cost) {
         //Check if enough money
         if(cost > Money) {
             Debug.Log("Not enough money!");
-            return;
+            return false;
         }
         Money -= cost;
         if (UIManager.Instance != null)
         {
             UIManager.Instance.RenderPlayerStats();
         }
+        AudioManager.Instance.PlaySpendSFX();
+        return true;
     }
 
     public static void Earn(int income) {
@@ -42,6 +46,7 @@ public class PlayerStats
         {
             UIManager.Instance.RenderPlayerStats();
         }
+        AudioManager.Instance.PlayReciveSFX();
     }
 
     public static void UseStamina(int staminaLost) {
@@ -57,6 +62,22 @@ public class PlayerStats
         }
         
         Debug.Log($"[PlayerStats] Used {staminaLost} stamina. Current: {Stamina}/{MaxStamina}");
+
+        if (Stamina == 0)
+        {
+            Debug.Log("[PlayerStats] Stamina depleted!");
+            //Force the player to rest or take action due to exhaustion
+            if(TimeManager.Instance != null) {
+                TimeManager.Instance.ForceRest(2); // Force rest for 2 days
+            }
+            // Don't restore stamina here - it will be done after the video plays
+        } else if (Stamina <= 10) {
+            UIManager.Instance.ShowTip("You are exhausted! Find a place to rest soon.");
+            UIManager.Instance.HideTipAfterDelay(1.5f); // Hide after 1.5 seconds
+            
+        } else{
+            UIManager.Instance.HideTip();
+        }
     }
 
     public static void RecoverStamina(int staminaGained) {
@@ -72,6 +93,8 @@ public class PlayerStats
         }
         
         Debug.Log($"[PlayerStats] Recovered {staminaGained} stamina. Current: {Stamina}/{MaxStamina}");
+
+
     }
 
     // Fully restore stamina (e.g., after sleeping)

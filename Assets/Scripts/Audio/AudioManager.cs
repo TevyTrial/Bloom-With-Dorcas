@@ -30,6 +30,8 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip wateringSFX;
     [SerializeField] private AudioClip plowingSFX;
     [SerializeField] private AudioClip seedSFX;
+    [SerializeField] private AudioClip spendSFX;
+    [SerializeField] private AudioClip reciveSFX;
 
     [Header("Seasonal Instrument System")]
     [SerializeField] private SeasonalSongData springSong;
@@ -498,6 +500,17 @@ public class AudioManager : MonoBehaviour
     {
         PlaySFX(seedSFX, 0.8f);
     }
+
+    public void PlaySpendSFX()
+    {
+        PlaySFX(spendSFX, 1f);
+    }
+
+    public void PlayReciveSFX()
+    {
+        PlaySFX(reciveSFX, 0.8f);
+    }
+
     #endregion
 
     #region Volume Controls

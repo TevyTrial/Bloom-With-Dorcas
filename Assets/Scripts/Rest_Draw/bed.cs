@@ -19,19 +19,13 @@ public class bed : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
-        // Check if the player entered the trigger
-        if (other.CompareTag("Player"))
-        {
-            UIManager.Instance.ShowSleepingTooltip();
-        }
-
         // Check if player presses Q while in the trigger
         if (other.CompareTag("Player") && Input.GetKeyDown(KeyCode.Q) && canInteract)
         {
             canInteract = false; // Prevent multiple interactions
             UIManager.Instance.HideSleepingTooltip();
             UIManager.Instance.TriggerYesNoPrompt("Do you want to sleep?", SleepAction);
-        }
+        } 
     }
 
     void OnTriggerExit(Collider other)
@@ -49,6 +43,7 @@ public class bed : MonoBehaviour
         UIManager.Instance.HideSleepingTooltip();
         TimeManager.Instance.Sleep();
         StartCoroutine(ResetInteraction());
+        PlayerStats.RecoverStamina(10);
     }
 
     private IEnumerator ResetInteraction()

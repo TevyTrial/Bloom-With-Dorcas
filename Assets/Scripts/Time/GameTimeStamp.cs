@@ -78,7 +78,9 @@ public class GameTimeStamp
     }
 
     public DayOfWeek GetDayOfWeek(){
-        int dayPassed = ConvertDaysToHours(ConvertYearsToDays(year) + ConvertSeasonsToDays((int)season) + day);
+        //int dayPassed = ConvertDaysToHours(ConvertYearsToDays(year) + ConvertSeasonsToDays((int)season) + (day-1));
+
+        int dayPassed = ConvertYearsToDays(year) + ConvertSeasonsToDays((int)season) + (day - 1);
 
         //Remainder when divided by 7 gives the day of the week
         int dayOfWeekIndex = dayPassed % 7;
