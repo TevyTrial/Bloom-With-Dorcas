@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9147996d92eccb4b8c175b932008c52, type: 3}
   m_Name: Strawberry Seeds
   m_EditorClassIdentifier: Assembly-CSharp::SeedData
-  description: 
+  description: "Bright and sweet, full of life. Needs 3 days to ripen and plays a
+    smooth bass tone that grounds the garden\u2019s tune. Loves warm spring sunlight. "
   icon: {fileID: -347336888, guid: ad0170412b9aaba4298aba9934b8c250, type: 3}
   onHandModel: {fileID: 4709425489127217626, guid: ea182204022a60b46a3fffadebde1670, type: 3}
   cost: 15
@@ -26,5 +27,5 @@ MonoBehaviour:
   WiltedModel: {fileID: 2669905090786056823, guid: 48cafe4d4be054f43a97242d00fb4e63, type: 3}
   specificInstrument:
     audioClip: {fileID: 8300000, guid: 05eda27d0ed78b248ad8c9d44840c52c, type: 3}
-    volume: 0.5
+    volume: 0.8
   cropSeason: 0

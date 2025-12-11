@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9147996d92eccb4b8c175b932008c52, type: 3}
   m_Name: Broccoli Seeds
   m_EditorClassIdentifier: Assembly-CSharp::SeedData
-  description: 
+  description: "Strong and steady, thrives through frost. Grows in 3 days, adding
+    a smooth bass layer to winter\u2019s quiet. Best planted Winter. "
   icon: {fileID: -967493864, guid: ab7af8c09d0724c448d524ead916bcd4, type: 3}
   onHandModel: {fileID: 4709425489127217626, guid: ea182204022a60b46a3fffadebde1670, type: 3}
   cost: 50
@@ -26,5 +27,5 @@ MonoBehaviour:
   WiltedModel: {fileID: 7208412574698559031, guid: 6c4e6226c2142bf41857a83cfcbcee5c, type: 3}
   specificInstrument:
     audioClip: {fileID: 8300000, guid: 4becafa56ecb6cb48a994413de2973ae, type: 3}
-    volume: 0.5
+    volume: 0.8
   cropSeason: 3

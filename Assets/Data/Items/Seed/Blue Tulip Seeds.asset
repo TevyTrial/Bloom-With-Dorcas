@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9147996d92eccb4b8c175b932008c52, type: 3}
   m_Name: Blue Tulip Seeds
   m_EditorClassIdentifier: Assembly-CSharp::SeedData
-  description: 
+  description: 'A rare flower said to sing when touched by dawn light. Blooms in
+    3 days, releasing a faint bell chime sound. Best grown in gentle spring mornings. '
   icon: {fileID: 284279184, guid: 6f03f4cecac9d7d4bb06b9f540d90b71, type: 3}
   onHandModel: {fileID: 4709425489127217626, guid: ea182204022a60b46a3fffadebde1670, type: 3}
   cost: 25
@@ -26,5 +27,5 @@ MonoBehaviour:
   WiltedModel: {fileID: 1000010824186820, guid: 0c8ed4a35fbcd874aa3d60b143892e43, type: 3}
   specificInstrument:
     audioClip: {fileID: 8300000, guid: c81c6f22195beae4eaec61552523100d, type: 3}
-    volume: 0.5
+    volume: 0.8
   cropSeason: 0

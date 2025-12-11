@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fb7bcf1b2fcb2346ad77f367252afff, type: 3}
   m_Name: Rake
   m_EditorClassIdentifier: Assembly-CSharp::EquipmentData
-  description: To clear wiltered plant
+  description: "To clear wiltered plant. \r\n Resets soil so it\u2019s ready for
+    new beginnings."
   icon: {fileID: -849655410, guid: eca998b49f535114bacd9d7cc23e4541, type: 3}
   onHandModel: {fileID: 0}
+  cost: 0
   toolType: 4
