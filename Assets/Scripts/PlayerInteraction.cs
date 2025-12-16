@@ -153,6 +153,12 @@ void OnInteractWithObject(RaycastHit hit) {
                         StartCoroutine(PlayAnimationAndInteract("Watering", 1.5f));
                         AudioManager.Instance.PlayWateringSFX();
                         break;
+                    case EquipmentData.ToolType.Rake:
+                        isBusy = true;
+                        playerController.enabled = false;
+                        StartCoroutine(PlayAnimationAndInteract("Raking", 1f));
+                        AudioManager.Instance.PlayRakingSFX();
+                        break;
                     default:
                         isBusy = false;
                         playerController.enabled = true;

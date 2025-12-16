@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b87dfba68196dc468781867129091a9, type: 3}
   m_Name: Carrot
   m_EditorClassIdentifier: Assembly-CSharp::NewScriptableObjectScript
-  description: Carrot
+  description: Quick-growing root crop that thrives in cool soil. Sweet and crisp
   icon: {fileID: 1031206479, guid: 98cd4abe7df1a024d8f917dc05bdb114, type: 3}
   onHandModel: {fileID: 3654242880184669010, guid: cfb45b707b81a514f87d55ccc2267f65, type: 3}
   cost: 110

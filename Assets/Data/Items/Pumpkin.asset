@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b87dfba68196dc468781867129091a9, type: 3}
   m_Name: Pumpkin
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  description: 
+  description: 'Large and colorful, classic autumn harvest. '
   icon: {fileID: -1781462101, guid: 98cd4abe7df1a024d8f917dc05bdb114, type: 3}
   onHandModel: {fileID: 9156669541236288519, guid: ebc144b1fa28ff949bf028e83743713b, type: 3}
   cost: 140

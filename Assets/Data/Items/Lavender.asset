@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b87dfba68196dc468781867129091a9, type: 3}
   m_Name: Lavender
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  description: 
+  description: 'Aromatic herb that fills the air with calm. '
   icon: {fileID: 511096321, guid: fb52ae8dfa72d5d4a884fb138df4816f, type: 3}
   onHandModel: {fileID: 7848511616698787471, guid: e6d95d3c2665de14daf4c9bff80f4b2a, type: 3}
+  cost: 0

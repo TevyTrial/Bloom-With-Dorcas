@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 8af780358f7fa97428dcb811e97c6b65
+guid: 84d812032911c2646910cf68a127a19a
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -97,13 +97,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Gemini_Generated_Image_2r970n2r970n2r97_0
+      name: Gemini_Generated_Image_l2v5czl2v5czl2v5_0
       rect:
         serializedVersion: 2
-        x: 24
-        y: 10
-        width: 648
-        height: 875
+        x: 0
+        y: 0
+        width: 630
+        height: 661
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -112,8 +112,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3d59963da37fd254ba0825cc3edadf95
-      internalID: 290814329
+      spriteID: 6a9adf0e1e8efeb499735e4566a09b50
+      internalID: 1790698996
       vertices: []
       indices: 
       edges: []
@@ -122,7 +122,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: f4f5b215e71882145b3c600c2b2fd0f1
+    spriteID: 87657ca8ae675f54590ceaca96437cb5
     internalID: 0
     vertices: []
     indices: 
@@ -134,7 +134,7 @@ TextureImporter:
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      Gemini_Generated_Image_2r970n2r970n2r97_0: 290814329
+      Gemini_Generated_Image_l2v5czl2v5czl2v5_0: 1790698996
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

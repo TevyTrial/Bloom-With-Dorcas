@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b87dfba68196dc468781867129091a9, type: 3}
   m_Name: Cabbage
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  description: 
+  description: 'Leafy green that loves gentle rain and cool air. '
   icon: {fileID: 918518718, guid: 98cd4abe7df1a024d8f917dc05bdb114, type: 3}
   onHandModel: {fileID: 8463234720757738185, guid: 5175c6d70bac09441b7d78d4f75fabd2, type: 3}
   cost: 45

@@ -80,6 +80,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -1.398
       objectReference: {fileID: 0}
+    - target: {fileID: 2799547837679043499, guid: c380c02cb9589ea4e891b6f827a30b23, type: 3}
+      propertyPath: particleSystemObject
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3895029546088867062, guid: c380c02cb9589ea4e891b6f827a30b23, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.0163492
@@ -187,7 +191,8 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 8574375634097193892, guid: c380c02cb9589ea4e891b6f827a30b23, type: 3}
     - {fileID: 830308843515435661, guid: c380c02cb9589ea4e891b6f827a30b23, type: 3}
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 580131210065422498, guid: c380c02cb9589ea4e891b6f827a30b23, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c380c02cb9589ea4e891b6f827a30b23, type: 3}

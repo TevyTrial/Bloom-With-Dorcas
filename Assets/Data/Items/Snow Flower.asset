@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b87dfba68196dc468781867129091a9, type: 3}
   m_Name: Snow Flower
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  description: 
+  description: 'Mythical bloom that glows faintly in moonlight. '
   icon: {fileID: 341858098, guid: fb52ae8dfa72d5d4a884fb138df4816f, type: 3}
   onHandModel: {fileID: 4085074775097249924, guid: 4ad185ece6ee25b44bce6a3aab99dd4f, type: 3}
   cost: 300

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b87dfba68196dc468781867129091a9, type: 3}
   m_Name: Pepper
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  description: 
+  description: 'Colorful and crisp, thrives in the heat. '
   icon: {fileID: -1370449095, guid: fb52ae8dfa72d5d4a884fb138df4816f, type: 3}
   onHandModel: {fileID: 248149955528036275, guid: e490f26135f48b043b88cbdb025a14e7, type: 3}
   cost: 95

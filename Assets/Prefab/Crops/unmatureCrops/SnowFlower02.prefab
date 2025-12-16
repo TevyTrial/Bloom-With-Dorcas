@@ -32,6 +32,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.5773603
       objectReference: {fileID: 0}
+    - target: {fileID: 4851647068633902604, guid: 42f0b71f396b749419202fe305be1d60, type: 3}
+      propertyPath: particleSystemObject
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5211711878643496814, guid: 42f0b71f396b749419202fe305be1d60, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.84901327
@@ -143,7 +147,8 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 8340971116063175066, guid: 42f0b71f396b749419202fe305be1d60, type: 3}
     - {fileID: -5492006700169660743, guid: 42f0b71f396b749419202fe305be1d60, type: 3}
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 7488443799400202412, guid: 42f0b71f396b749419202fe305be1d60, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 42f0b71f396b749419202fe305be1d60, type: 3}

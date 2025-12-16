@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b87dfba68196dc468781867129091a9, type: 3}
   m_Name: Mushroom
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  description: 
+  description: 'Grows in shade and moisture, mysterious. '
   icon: {fileID: -461442496, guid: 98cd4abe7df1a024d8f917dc05bdb114, type: 3}
   onHandModel: {fileID: 6169399941429467857, guid: 1a3cf3ce7d9e6644d90d833f1c5d1f1f, type: 3}
   cost: 95

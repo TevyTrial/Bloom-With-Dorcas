@@ -29,6 +29,7 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip walkingSFX;
     [SerializeField] private AudioClip wateringSFX;
     [SerializeField] private AudioClip plowingSFX;
+    [SerializeField] private AudioClip rakingSFX;
     [SerializeField] private AudioClip seedSFX;
     [SerializeField] private AudioClip spendSFX;
     [SerializeField] private AudioClip reciveSFX;
@@ -486,6 +487,11 @@ public class AudioManager : MonoBehaviour
     public void PlayPlowingSFX()
     {
         PlaySFX(plowingSFX, 0.6f);
+    }
+
+    public void PlayRakingSFX()
+    {
+        PlaySFX(rakingSFX, 0.6f);
     }
 
     public void StopWalkingSFX()

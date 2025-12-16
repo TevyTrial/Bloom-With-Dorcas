@@ -162211,8 +162211,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4435178882956714872, guid: 3b2ff6cb160aa6d4c8c543e23f77c2c5, type: 3}
       propertyPath: m_text
-      value: "Used to till the soil and prepare empty land for planting. \r\nEvery
-        garden begins with a single stroke."
+      value: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo
+        ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis
+        parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec,
+        pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. '
       objectReference: {fileID: 0}
     - target: {fileID: 4635103979464873862, guid: 3b2ff6cb160aa6d4c8c543e23f77c2c5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -162877,10 +162879,6 @@ PrefabInstance:
     - target: {fileID: 8491293172919420577, guid: 3b2ff6cb160aa6d4c8c543e23f77c2c5, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8693268802312618250, guid: 3b2ff6cb160aa6d4c8c543e23f77c2c5, type: 3}
-      propertyPath: m_text
-      value: 'Hoe '
       objectReference: {fileID: 0}
     - target: {fileID: 8725072774740347112, guid: 3b2ff6cb160aa6d4c8c543e23f77c2c5, type: 3}
       propertyPath: m_AnchorMax.y

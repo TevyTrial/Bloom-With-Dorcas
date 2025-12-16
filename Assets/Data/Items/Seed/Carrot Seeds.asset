@@ -27,5 +27,5 @@ MonoBehaviour:
   WiltedModel: {fileID: 8861379113781653186, guid: 35ba0983ab2a3be43833199ad1cce6b1, type: 3}
   specificInstrument:
     audioClip: {fileID: 8300000, guid: cc06398de8bc374428e8daa1e8135ec1, type: 3}
-    volume: 0.8
+    volume: 1
   cropSeason: 0

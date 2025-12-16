@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b87dfba68196dc468781867129091a9, type: 3}
   m_Name: Blue Tulip
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  description: 
+  description: 'Rare flower that opens to soft morning sunlight '
   icon: {fileID: -143006387, guid: 98cd4abe7df1a024d8f917dc05bdb114, type: 3}
   onHandModel: {fileID: 8445662232565064272, guid: 3d94f5e5e03a565428b517e7b9b37127, type: 3}
   cost: 80

@@ -26,11 +26,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2811121415323834017, guid: 4d9332aaa8b4788468ff187648aecd3b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.23
       objectReference: {fileID: 0}
     - target: {fileID: 2811121415323834017, guid: 4d9332aaa8b4788468ff187648aecd3b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0.08
       objectReference: {fileID: 0}
     - target: {fileID: 2811121415323834017, guid: 4d9332aaa8b4788468ff187648aecd3b, type: 3}
       propertyPath: m_LocalRotation.w
@@ -72,10 +72,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wheat01
       objectReference: {fileID: 0}
+    - target: {fileID: 8078125037044379535, guid: 4d9332aaa8b4788468ff187648aecd3b, type: 3}
+      propertyPath: particleSystemObject
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 9116482966208398769, guid: 4d9332aaa8b4788468ff187648aecd3b, type: 3}
     - {fileID: -6315395593647236603, guid: 4d9332aaa8b4788468ff187648aecd3b, type: 3}
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 480066858917249591, guid: 4d9332aaa8b4788468ff187648aecd3b, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4d9332aaa8b4788468ff187648aecd3b, type: 3}

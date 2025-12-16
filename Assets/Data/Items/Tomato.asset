@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b87dfba68196dc468781867129091a9, type: 3}
   m_Name: Tomato
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  description: A Juicy tomato
+  description: 'Loves sunlight and rich soil, vibrant and juicy. '
   icon: {fileID: 1169662353, guid: 98cd4abe7df1a024d8f917dc05bdb114, type: 3}
   onHandModel: {fileID: 8332756904029499269, guid: 672881cb3318a70499dc40949e483722, type: 3}
   cost: 170

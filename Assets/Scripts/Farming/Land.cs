@@ -113,7 +113,7 @@ public class Land : MonoBehaviour, ITimeTracker
                     break;
                 case EquipmentData.ToolType.Rake:
                     //Remove crop
-                    if(cropPlanted != null) {
+                    if(cropPlanted != null && cropPlanted.gameObject != null) {
                         cropPlanted.RemoveCrop();
                         cropPlanted = null;
                     } 
@@ -162,9 +162,14 @@ public class Land : MonoBehaviour, ITimeTracker
         }
         return cropPlanted;
     }
-
+#region ITimeTracker Implementation
     public void ClockUpdate(GameTimeStamp currentTime)
     {
+        //Check if cropPlanted reference is valid
+        if(cropPlanted != null && cropPlanted.gameObject == null) {
+            cropPlanted = null; // Reset reference if the crop has been destroyed
+        }
+
         //If the land is watered, check if 4 hours have passed since it was watered
         if (landstate == LandState.Watered)
         {
@@ -186,11 +191,12 @@ public class Land : MonoBehaviour, ITimeTracker
 
         if (landstate == LandState.Tilled && cropPlanted != null)
             {
-                //if 36 or more hours have passed, the crop wilts
+                //if 24 or more hours have passed, the crop wilts
                     cropPlanted.wilted();
                 
             }
     }
+#endregion
     private void OnDestroy() {
         // Unsubscribe from the list on destroy
         TimeManager.Instance.UnregisterListener(this);

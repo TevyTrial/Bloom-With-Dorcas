@@ -26,7 +26,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6179494887436114755, guid: 643c8a281daabb14080f5ce78cd32ddd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.24
       objectReference: {fileID: 0}
     - target: {fileID: 6179494887436114755, guid: 643c8a281daabb14080f5ce78cd32ddd, type: 3}
       propertyPath: m_LocalPosition.z
@@ -64,6 +64,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Apple02
       objectReference: {fileID: 0}
+    - target: {fileID: 8586323235003428946, guid: 643c8a281daabb14080f5ce78cd32ddd, type: 3}
+      propertyPath: particleSystemObject
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6243774934087166301, guid: 643c8a281daabb14080f5ce78cd32ddd, type: 3}
     - {fileID: -7663252702601496389, guid: 643c8a281daabb14080f5ce78cd32ddd, type: 3}
@@ -74,6 +78,7 @@ PrefabInstance:
     - {fileID: 7412724858361681402, guid: 643c8a281daabb14080f5ce78cd32ddd, type: 3}
     - {fileID: 5107772511489739387, guid: 643c8a281daabb14080f5ce78cd32ddd, type: 3}
     - {fileID: 1581684970386364434, guid: 643c8a281daabb14080f5ce78cd32ddd, type: 3}
+    - {fileID: 8023756060273586674, guid: 643c8a281daabb14080f5ce78cd32ddd, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 643c8a281daabb14080f5ce78cd32ddd, type: 3}
