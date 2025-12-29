@@ -63,16 +63,8 @@ void InitializeSlots()
     //movement of item from inventory to hand
     public void InventoryToHand(int boxIndex, InventoryBox.InventoryType boxType)
     {
-        //The slot data in hand
-        ItemSlotData handEquip = equippedToolSlot;
-        //The array to change
-        ItemSlotData[] inventoryArr = toolSlots;
-
-        if(boxType == InventoryBox.InventoryType.Item) {
-            //Store the item to a temp variable
-            handEquip = equippedItemSlot;
-            inventoryArr = itemSlots;
-        }
+        ItemSlotData handEquip = boxType == InventoryBox.InventoryType.Item ? equippedItemSlot : equippedToolSlot;
+        ItemSlotData[] inventoryArr = boxType == InventoryBox.InventoryType.Item ? itemSlots : toolSlots;
 
         //Check if nothing is in the inventory slot
         if(inventoryArr[boxIndex].IsEmpty()) {
@@ -100,25 +92,15 @@ void InitializeSlots()
             EquipHandSlot(slotToEquip);
 
         }
-        //Update in scenes
-        RenderEquippedItem();
-        //Update the inventory UI
-        UIManager.Instance.RenderInventory();
+        RefreshUIAndHand();
 
     }
 
     //movement of item from hand to inventory
     public void HandToInventory(InventoryBox.InventoryType boxType)
     {
-        //The slot data in hand
-        ItemSlotData handEquip = equippedToolSlot;
-        //The array to change
-        ItemSlotData[] inventoryArr = toolSlots;
-
-        if(boxType == InventoryBox.InventoryType.Item) {
-            handEquip = equippedItemSlot;
-            inventoryArr = itemSlots;
-        }
+        ItemSlotData handEquip = boxType == InventoryBox.InventoryType.Item ? equippedItemSlot : equippedToolSlot;
+        ItemSlotData[] inventoryArr = boxType == InventoryBox.InventoryType.Item ? itemSlots : toolSlots;
 
         //Check if stackable
         if(!StackableToInventory(handEquip, inventoryArr)) {
@@ -133,12 +115,7 @@ void InitializeSlots()
 
         }
 
-         //Update in scenes
-        if(boxType == InventoryBox.InventoryType.Item) {
-            RenderEquippedItem();
-        }
-        //Update the inventory UI
-        UIManager.Instance.RenderInventory();
+        RefreshUIAndHand();
 
 
        
@@ -163,9 +140,7 @@ void InitializeSlots()
 
         //Check if stackable
         if(StackableToInventory(itemSlotToMove, inventoryArr)) {
-            //Update the inventory UI
-            UIManager.Instance.RenderInventory();
-            RenderEquippedItem();
+            RefreshUIAndHand();
             return true;
         }
 
@@ -173,9 +148,7 @@ void InitializeSlots()
         for(int i = 0; i < inventoryArr.Length; i++) {
             if(inventoryArr[i].IsEmpty()) {
                 inventoryArr[i] = new ItemSlotData(itemSlotToMove);
-                //Update the inventory UI
-                UIManager.Instance.RenderInventory();
-                RenderEquippedItem();
+                RefreshUIAndHand();
                 return true;
             }
         }
@@ -183,38 +156,49 @@ void InitializeSlots()
         return false;
     }
 
+    // Centralized UI/hand refresh to keep visuals in sync
+    private void RefreshUIAndHand()
+    {
+        RenderEquippedItem();
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.RenderInventory();
+        }
+    }
+
 
     //Render the item in the player's hand
     public void RenderEquippedItem()
     {
-        //Reset object in hand
-        if(handPoint.childCount > 0)
-        {
-            Destroy(handPoint.GetChild(0).gameObject);
-        }
+        if (handPoint == null) return;
 
-        //Check if the player has an item equipped
-        if(SlotEquipped(InventoryBox.InventoryType.Item))
+        ClearHandPoint();
+
+        // Prefer showing item, then tool
+        if (SlotEquipped(InventoryBox.InventoryType.Item))
         {
-            //Instantiate the item model at the hand point
-            ItemData data = GetEquippedItemSlots(InventoryBox.InventoryType.Item);
-            if (data != null && data.onHandModel != null)
-            {
-                GameObject inst = Instantiate(data.onHandModel, handPoint);
-            }
+            SpawnInHand(GetEquippedItemSlots(InventoryBox.InventoryType.Item));
             return;
         }
 
-        //Check if the player has an tool equipped
-        if(SlotEquipped(InventoryBox.InventoryType.Tool))
+        if (SlotEquipped(InventoryBox.InventoryType.Tool))
         {
-            //Instantiate the tool model at the hand point
-            ItemData data = GetEquippedItemSlots(InventoryBox.InventoryType.Tool);
-            if (data != null && data.onHandModel != null)
-            {
-                GameObject inst = Instantiate(data.onHandModel, handPoint);
-            }
-            return;
+            SpawnInHand(GetEquippedItemSlots(InventoryBox.InventoryType.Tool));
+        }
+    }
+
+    private void SpawnInHand(ItemData data)
+    {
+        if (data == null || data.onHandModel == null) return;
+        Instantiate(data.onHandModel, handPoint);
+    }
+
+    private void ClearHandPoint()
+    {
+        // Destroy any existing children to avoid ghost hand models
+        for (int i = handPoint.childCount - 1; i >= 0; i--)
+        {
+            Destroy(handPoint.GetChild(i).gameObject);
         }
     }
 
@@ -281,37 +265,47 @@ void InitializeSlots()
     //Equip the hand slot with the specified item
     public void EquipHandSlot(ItemData item)
     {
+        if (item == null) return;
+
         bool isTool = IsTool(item);
-        if(isTool) {
-            equippedToolSlot = new ItemSlotData(item);
-            return;
-        } else {
-            equippedItemSlot = new ItemSlotData(item);
+        ItemSlotData target = isTool ? equippedToolSlot : equippedItemSlot;
+
+        // Stack if the same item is already equipped
+        if (target != null && !target.IsEmpty() && target.itemData == item)
+        {
+            target.AddQuantity(1);
         }
+        else
+        {
+            if (isTool) equippedToolSlot = new ItemSlotData(item);
+            else equippedItemSlot = new ItemSlotData(item);
+        }
+
+        RefreshUIAndHand();
     }
 
-    public void EquipHandSlot(ItemSlotData slotData)
-    {
-        //Get the item data from the slot
+    public void EquipHandSlot(ItemSlotData slotData) {
+        if (slotData == null || slotData.IsEmpty()) return;
         ItemData itemData = slotData.itemData;
         bool isTool = IsTool(itemData);
-        if(isTool) {
-            equippedToolSlot = new ItemSlotData(slotData);
-            return;
+        ItemSlotData target = isTool ? equippedToolSlot : equippedItemSlot;
+
+        if (target != null && target.Stackable(slotData)) {
+            target.AddQuantity(slotData.quantity);
         } else {
-            equippedItemSlot = new ItemSlotData(slotData);
+            if (isTool) equippedToolSlot = new ItemSlotData(slotData);
+            else equippedItemSlot = new ItemSlotData(slotData);
         }
+
+        RefreshUIAndHand();
     }
 
-    public void ConsumeItem(ItemSlotData itemSlot) {
-        if(itemSlot.IsEmpty()) {
-            Debug.Log("No item to consume");
-            return;
-        }
-
-        itemSlot.Remove(1);
-        RenderEquippedItem();
-        UIManager.Instance.RenderInventory();
+    // Consume a quantity from a given slot (e.g., seeds when planting)
+    public void ConsumeItem(ItemSlotData slot, int amount = 1)
+    {
+        if (slot == null || slot.IsEmpty()) return;
+        slot.Remove(amount);
+        RefreshUIAndHand();
     }
 
     public void OnValidate() {
