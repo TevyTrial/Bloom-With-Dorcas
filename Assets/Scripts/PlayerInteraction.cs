@@ -4,20 +4,14 @@ using System.Collections.Generic;
 
 public class PlayerInteraction : MonoBehaviour
 {
-    PlayerController playerController;
+    [SerializeField] private PlayerController playerController;
+    [SerializeField] private Animator animator;
 
-    Animator animator;
-    EquipmentData equipmentTool;
+    private bool isBusy = false;
 
-    bool isBusy = false;
-
-    Land selectedLand = null;
-
-    //The interactable object the player is currently looking at
-    InteractableObject selectedInteractable = null;
-
-    //The NPC the player is currently looking at
-    DialogueScript selectedNPC = null;
+    private Land selectedLand = null;
+    private InteractableObject selectedInteractable = null;
+    private DialogueScript selectedNPC = null;
 
     [Header("Interactables")]
     [SerializeField] private float interactableDetectionRadius = 1.5f;
@@ -27,9 +21,14 @@ public class PlayerInteraction : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        playerController = transform.parent.GetComponent<PlayerController>();
-
-        animator = GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>();
+        if (playerController == null)
+        {
+            playerController = GetComponentInParent<PlayerController>();
+        }
+        if (animator == null)
+        {
+            animator = GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>();
+        }
     }
 
 // Update is called once per frame
@@ -48,12 +47,9 @@ void Update()
     
     RaycastHit hit;
     
-    // Check forward raycast for land
-    if (Physics.Raycast(transform.position, transform.forward, out hit, 3f)) {
-        OnInteractWithObject(hit);
-    }
-    // Check downward raycast for land
-    else if (Physics.Raycast(transform.position, Vector3.down, out hit, 2f)) {
+    // Check forward raycast for land, then downward as fallback
+    if (Physics.Raycast(transform.position, transform.forward, out hit, 3f) ||
+        Physics.Raycast(transform.position, Vector3.down, out hit, 2f)) {
         OnInteractWithObject(hit);
     }
     else {
@@ -142,26 +138,15 @@ void OnInteractWithObject(RaycastHit hit) {
 
                 switch (toolType) {
                     case EquipmentData.ToolType.Hoe:
-                        isBusy = true;
-                        playerController.enabled = false;
-                        StartCoroutine(PlayAnimationAndInteract("Plowing", 1.5f));
-                        AudioManager.Instance.PlayPlowingSFX();
+                        StartCoroutine(PlayAnimationAndInteract("Plowing", 1.5f, AudioManager.Instance.PlayPlowingSFX));
                         break;
                     case EquipmentData.ToolType.WaterCan:
-                        isBusy = true;
-                        playerController.enabled = false;
-                        StartCoroutine(PlayAnimationAndInteract("Watering", 1.5f));
-                        AudioManager.Instance.PlayWateringSFX();
+                        StartCoroutine(PlayAnimationAndInteract("Watering", 1.5f, AudioManager.Instance.PlayWateringSFX));
                         break;
                     case EquipmentData.ToolType.Rake:
-                        isBusy = true;
-                        playerController.enabled = false;
-                        StartCoroutine(PlayAnimationAndInteract("Raking", 1f));
-                        AudioManager.Instance.PlayRakingSFX();
+                        StartCoroutine(PlayAnimationAndInteract("Raking", 1f, AudioManager.Instance.PlayRakingSFX));
                         break;
                     default:
-                        isBusy = false;
-                        playerController.enabled = true;
                         Debug.Log("Equipped tool is not handled");
                         break;
                 }
@@ -180,37 +165,44 @@ void OnInteractWithObject(RaycastHit hit) {
         }
     }
 
-    private System.Collections.IEnumerator PlayAnimationAndInteract(string triggerName, float duration) {
-        
-        // Get CharacterController to disable movement
-        CharacterController controller = playerController.GetComponent<CharacterController>();
-        
-        // Trigger animation
-        animator.SetTrigger(triggerName);
+    private IEnumerator PlayAnimationAndInteract(string triggerName, float duration, System.Action playSfx)
+    {
+        if (isBusy) yield break;
+        isBusy = true;
 
-        // Disable character movement
-        if(controller != null) {
-            controller.enabled = false;
-        }
-        
-        // Wait for animation to finish
+        DisableMovement();
+
+        animator.SetTrigger(triggerName);
+        playSfx?.Invoke();
+
         yield return new WaitForSeconds(duration);
-        
-        // Execute the land interaction
+
         if(selectedLand != null) {
             selectedLand.Interact();
         }
-        
-        // Re-enable character movement
-        if(controller != null) {
-            controller.enabled = true;
-        }
 
-        if(playerController != null) {
+        EnableMovement();
+        isBusy = false;
+    }
+
+    private void DisableMovement()
+    {
+        if (playerController != null)
+        {
+            playerController.enabled = false;
+            var controller = playerController.GetComponent<CharacterController>();
+            if (controller != null) controller.enabled = false;
+        }
+    }
+
+    private void EnableMovement()
+    {
+        if (playerController != null)
+        {
+            var controller = playerController.GetComponent<CharacterController>();
+            if (controller != null) controller.enabled = true;
             playerController.enabled = true;
         }
-        
-        isBusy = false;
     }
 
     void UpdateInteractableSelection() {
@@ -289,15 +281,6 @@ void OnInteractWithObject(RaycastHit hit) {
         InteractableObject interactable = selectedInteractable;
         ClearSelectedInteractable();
         interactable.Pickup();
-    }
-
-
-    public void ItemKeep() {
-        //Hand -> Inventory
-        if(InventoryManager.Instance.SlotEquipped(InventoryBox.InventoryType.Tool)) {
-            InventoryManager.Instance.HandToInventory(InventoryBox.InventoryType.Item);
-            return;
-        }
     }
 
 }

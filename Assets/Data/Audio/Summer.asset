@@ -16,12 +16,12 @@ MonoBehaviour:
   songLengthInSeconds: 187
   instrumentTracks:
   - audioClip: {fileID: 8300000, guid: 72276e93978e3df48bfaf4fa90215db7, type: 3}
-    volume: 0
+    volume: 0.632
   - audioClip: {fileID: 8300000, guid: b36f81665af63e4459cbbc12d80bb89f, type: 3}
-    volume: 0
+    volume: 0.638
   - audioClip: {fileID: 8300000, guid: ceb2e4740beb3ed45979fed33700f4bf, type: 3}
-    volume: 0
+    volume: 0.649
   - audioClip: {fileID: 8300000, guid: b37be280f8ce9604cb5281ab0ca79ffc, type: 3}
-    volume: 0
+    volume: 0.654
   - audioClip: {fileID: 8300000, guid: 5af269c1bd089c746a8f1e48004a7c1c, type: 3}
-    volume: 0
+    volume: 0.692

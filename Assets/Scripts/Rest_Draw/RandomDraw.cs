@@ -28,9 +28,19 @@ public class RandomDraw : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
+        // Prevent multiple interactions in quick succession
+        if (!canInteract)
+            return; 
+        // Show tooltip when player is in the trigger
+        if (other.CompareTag("Player"))
+        {
+            UIManager.Instance.ShowDrawingTooltip();
+        }
+
         // Check if player presses Q while in the trigger
         if (other.CompareTag("Player") && Input.GetKeyDown(KeyCode.Q))
         {           
+            canInteract = false; // Prevent further interaction until reset
             UIManager.Instance.HideDrawingTooltip();
             UIManager.Instance.TriggerYesNoPrompt("Do you want to get food from the pond Cost $20?", DrawFoodAction);
         } 
@@ -42,6 +52,8 @@ public class RandomDraw : MonoBehaviour
         if(PlayerStats.Money < 20)
         {
             UIManager.Instance.ShowTip("Not enough money to draw food!");
+            UIManager.Instance.HideDrawingTooltip();
+            UIManager.Instance.HideTipAfterDelay(1.5f); // Hide tip after delay
             StartCoroutine(ResetInteraction());
             return;
         }
@@ -118,6 +130,7 @@ public class RandomDraw : MonoBehaviour
 
     private IEnumerator ResetInteraction()
     {
+        UIManager.Instance.HideDrawingTooltip();
         yield return new WaitForSeconds(interactionCooldown);
         canInteract = true;
     }

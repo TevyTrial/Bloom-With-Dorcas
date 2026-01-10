@@ -87,11 +87,6 @@ public class PlayerController : MonoBehaviour
             lastInteractionTime = Time.time;
         }
 
-        //Keep items
-        if(Input.GetButtonDown("Fire3")) {
-            PlayerInteraction.ItemKeep();
-            lastInteractionTime = Time.time;
-        }
     }
 
     void Move()

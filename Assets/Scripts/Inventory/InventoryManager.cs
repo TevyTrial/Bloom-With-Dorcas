@@ -89,7 +89,15 @@ void InitializeSlots()
             //Change the inventory slot to the hand slot
             inventoryArr[boxIndex] = new ItemSlotData(handEquip);
 
-            EquipHandSlot(slotToEquip);
+            //Equip directly without re-stashing what we've just swapped in
+            if (boxType == InventoryBox.InventoryType.Item)
+            {
+                equippedItemSlot = slotToEquip;
+            }
+            else
+            {
+                equippedToolSlot = slotToEquip;
+            }
 
         }
         RefreshUIAndHand();
@@ -130,6 +138,32 @@ void InitializeSlots()
                 return true;
             }
         }
+        return false;
+    }
+
+    // Move equipped slot contents into inventory (stack or empty slot). Returns true if stored or already empty.
+    private bool MoveEquippedToInventory(InventoryBox.InventoryType type)
+    {
+        ItemSlotData equipped = type == InventoryBox.InventoryType.Item ? equippedItemSlot : equippedToolSlot;
+        ItemSlotData[] inventoryArr = type == InventoryBox.InventoryType.Item ? itemSlots : toolSlots;
+
+        if (equipped == null || equipped.IsEmpty()) return true;
+
+        // Try stacking first (empties equipped on success)
+        if (StackableToInventory(equipped, inventoryArr)) return true;
+
+        // Try placing into an empty slot
+        for (int i = 0; i < inventoryArr.Length; i++)
+        {
+            if (inventoryArr[i].IsEmpty())
+            {
+                inventoryArr[i] = new ItemSlotData(equipped);
+                equipped.Empty();
+                return true;
+            }
+        }
+
+        // No space
         return false;
     }
     
@@ -277,6 +311,13 @@ void InitializeSlots()
         }
         else
         {
+            // Before replacing, stash the currently equipped item into inventory to avoid loss
+            if (!MoveEquippedToInventory(isTool ? InventoryBox.InventoryType.Tool : InventoryBox.InventoryType.Item))
+            {
+                Debug.LogWarning("No space to store currently equipped item; cannot equip new item.");
+                return;
+            }
+
             if (isTool) equippedToolSlot = new ItemSlotData(item);
             else equippedItemSlot = new ItemSlotData(item);
         }
@@ -293,6 +334,13 @@ void InitializeSlots()
         if (target != null && target.Stackable(slotData)) {
             target.AddQuantity(slotData.quantity);
         } else {
+            // stash current equipped item before replacing to avoid losing it
+            if (!MoveEquippedToInventory(isTool ? InventoryBox.InventoryType.Tool : InventoryBox.InventoryType.Item))
+            {
+                Debug.LogWarning("No space to store currently equipped item; cannot equip new item.");
+                return;
+            }
+
             if (isTool) equippedToolSlot = new ItemSlotData(slotData);
             else equippedItemSlot = new ItemSlotData(slotData);
         }

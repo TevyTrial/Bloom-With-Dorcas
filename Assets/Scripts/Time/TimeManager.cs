@@ -9,7 +9,7 @@ public class TimeManager : MonoBehaviour
     [Header("Time Settings")]
     [SerializeField] 
     private GameTimeStamp currentTime;
-    public float timeScale = 1.0f;
+    public float timeScale = 5f;
 
     [Header("Sun Settings")]
     public Transform sunTransform; // Sun's Transform to rotate
@@ -60,7 +60,7 @@ public class TimeManager : MonoBehaviour
     {
         while(true)
         {
-            yield return new WaitForSeconds(1/timeScale); //1 real second = 1 in-game minute, wait to tick
+            yield return new WaitForSeconds(1/timeScale); //1 real second = 5 in-game minute, wait to tick
             Tick();
         }
     }
