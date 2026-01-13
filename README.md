@@ -3,6 +3,7 @@
 Bloom with Dorcas is a cozy third-person farming game that combines life-simulation mechanics with music-driven gameplay. Inspired by titles such as *Harvest Moon*, *Stardew Valley*, and *Mutazione*, the game focuses on calm exploration, farming routines, and a gentle sense of progression.
 
 The player takes control of **Dorcas**, a sheep character based on a real handmade doll created by my aunt. This project was developed as part of a university coursework module and also acts as a side project that complements my Final Year Project, which explores interactive storytelling and character-driven design.
+https://github.com/user-attachments/assets/bd743ae2-1d59-4cbd-bea8-2b6ae6409136<!-- Failed to upload "P3D_ShowReel.mp4" -->
 
 ---
 
